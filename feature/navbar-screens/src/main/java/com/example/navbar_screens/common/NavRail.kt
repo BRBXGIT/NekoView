@@ -21,7 +21,7 @@ fun NavRail(
     navController: NavController
 ) {
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
-    val currentRoute = if(currentDestination != null) currentDestination.toString().split(".")[6] else "HomeScreenRoute"
+    val currentRoute = if(currentDestination != null) currentDestination.toString().split(".")[5] else "HomeScreenRoute"
 
     NavigationRail(
         containerColor = mColors.surfaceContainer

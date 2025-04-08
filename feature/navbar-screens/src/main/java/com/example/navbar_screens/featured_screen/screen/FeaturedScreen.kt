@@ -8,9 +8,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
+import com.example.navbar_screens.common.NavRail
 
 @Composable
 fun FeaturedScreen(
@@ -18,9 +20,20 @@ fun FeaturedScreen(
     bigScreen: Boolean
 ) {
     Scaffold(
-        bottomBar = { NavBar(navController) },
+        bottomBar = {
+            if(!bigScreen) {
+                NavBar(navController)
+            }
+        },
         modifier = Modifier
             .fillMaxSize()
+            .then(
+                if(bigScreen) {
+                    Modifier.padding(start = 80.dp)
+                } else {
+                    Modifier.padding(start = 0.dp)
+                }
+            )
             .background(mColors.background)
     ) { innerPadding ->
         Column(
@@ -30,5 +43,9 @@ fun FeaturedScreen(
         ) {
             Text("FeaturedScreen")
         }
+    }
+
+    if(bigScreen) {
+        NavRail(navController)
     }
 }
