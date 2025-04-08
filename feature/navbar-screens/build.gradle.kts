@@ -3,10 +3,12 @@ plugins {
     alias(libs.plugins.kotlin.android)
     //Compose
     alias(libs.plugins.kotlin.compose)
+    //Nav
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    namespace = "com.example.design_system"
+    namespace = "com.example.navbar_screens"
     compileSdk = 35
 
     defaultConfig {
@@ -26,9 +28,15 @@ android {
 
 dependencies {
 
+    //Modules
+    implementation(project(":core:design-system"))
+
     //Material 3
     implementation(libs.androidx.material3)
     //Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    //Nav
+    implementation(libs.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
 }
