@@ -43,6 +43,8 @@ hazeMaterials = "1.5.2"
 
 #Datastore
 datastorePreferences = "1.1.4"
+appcompat = "1.7.0"
+material = "1.12.0"
 
 
 [libraries]
@@ -94,6 +96,8 @@ haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 
 #Datastore
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 
 [plugins]
@@ -109,3 +113,4 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndro
 
 #Ksp
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspPlugin" }
+android-library = { id = "com.android.library", version.ref = "agp" }
