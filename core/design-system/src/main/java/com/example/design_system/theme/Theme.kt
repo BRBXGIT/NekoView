@@ -89,7 +89,7 @@ val darkLavenderScheme = darkColorScheme(
 @Composable
 fun NekoViewTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -108,3 +108,7 @@ fun NekoViewTheme(
         content = content
     )
 }
+
+val mColors @Composable get() = MaterialTheme.colorScheme
+val mTypography @Composable get() = MaterialTheme.typography
+val mShapes @Composable get() = MaterialTheme.shapes
