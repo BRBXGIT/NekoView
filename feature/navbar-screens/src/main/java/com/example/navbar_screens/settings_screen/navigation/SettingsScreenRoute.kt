@@ -10,7 +10,11 @@ import kotlinx.serialization.Serializable
 data object SettingsScreenRoute
 
 fun NavGraphBuilder.settingsScreen(
-    navController: NavController
+    navController: NavController,
+    bigScreen: Boolean
 ) = composable<SettingsScreenRoute> {
-    SettingsScreen(navController)
+    SettingsScreen(
+        navController = navController,
+        bigScreen = bigScreen
+    )
 }

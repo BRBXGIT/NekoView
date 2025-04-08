@@ -9,17 +9,28 @@ import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
 
 @Composable
-fun NavGraph() {
+fun NavGraph(
+    bigScreen: Boolean
+) {
     val navController = rememberNavController()
 
     NavHost(
         navController = navController,
         startDestination = HomeScreenRoute
     ) {
-        homeScreen(navController)
+        homeScreen(
+            navController = navController,
+            bigScreen = bigScreen
+        )
 
-        featuredScreen(navController)
+        featuredScreen(
+            navController = navController,
+            bigScreen = bigScreen
+        )
 
-        settingsScreen(navController)
+        settingsScreen(
+            navController = navController,
+            bigScreen = bigScreen
+        )
     }
 }

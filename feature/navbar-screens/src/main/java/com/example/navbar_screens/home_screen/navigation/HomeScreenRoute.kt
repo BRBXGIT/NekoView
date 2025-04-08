@@ -10,7 +10,11 @@ import kotlinx.serialization.Serializable
 data object HomeScreenRoute
 
 fun NavGraphBuilder.homeScreen(
-    navController: NavController
+    navController: NavController,
+    bigScreen: Boolean
 ) = composable<HomeScreenRoute> {
-    HomeScreen(navController)
+    HomeScreen(
+        navController = navController,
+        bigScreen = bigScreen
+    )
 }

@@ -51,6 +51,8 @@ dependencies {
     //Nav
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    //Material window size
+    implementation(libs.androidx.material3.window.size.class1)
 
     //Basic dependencies
     implementation(libs.androidx.core.ktx)

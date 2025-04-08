@@ -14,7 +14,8 @@ import com.example.navbar_screens.common.NavBar
 
 @Composable
 fun HomeScreen(
-    navController: NavController
+    navController: NavController,
+    bigScreen: Boolean
 ) {
     Scaffold(
         bottomBar = { NavBar(navController) },

@@ -10,7 +10,11 @@ import kotlinx.serialization.Serializable
 data object FeaturedScreenRoute
 
 fun NavGraphBuilder.featuredScreen(
-    navController: NavController
+    navController: NavController,
+    bigScreen: Boolean
 ) = composable<FeaturedScreenRoute> {
-    FeaturedScreen(navController)
+    FeaturedScreen(
+        navController = navController,
+        bigScreen = bigScreen
+    )
 }
