@@ -10,12 +10,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
 import com.example.design_system.theme.mColors
+import com.example.navbar_screens.common.NavBar
 
 @Composable
 fun SettingsScreen(
     navController: NavController
 ) {
     Scaffold(
+        bottomBar = { NavBar(navController) },
         modifier = Modifier
             .fillMaxSize()
             .background(mColors.background)
