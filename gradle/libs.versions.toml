@@ -46,6 +46,9 @@ datastorePreferences = "1.1.4"
 appcompat = "1.7.0"
 material = "1.12.0"
 
+#Ktor
+ktor = "3.1.1"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -99,6 +102,13 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
+#Ktor
+ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
+ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
+ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktor" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -114,3 +124,14 @@ hilt-android = { id = "com.google.dagger.hilt.android", version.ref = "hiltAndro
 #Ksp
 ksp = { id = "com.google.devtools.ksp", version.ref = "kspPlugin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+
+[bundles]
+#Ktor
+ktor = [
+    "ktor-client-core",
+    "ktor-client-content-negotiation",
+    "ktor-client-auth",
+    "ktor-client-logging",
+    "ktor-serialization-kotlinx-json",
+]
