@@ -5,6 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     //Nav
     alias(libs.plugins.kotlin.serialization)
+    //Hilt
+    alias(libs.plugins.hilt.android)
+    //Ksp
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -31,9 +35,12 @@ dependencies {
     //Modules
     implementation(project(":core:design-system"))
     implementation(project(":core:data"))
+    implementation(project(":core:common"))
 
-    //Hilt navigation
+    //Hilt
     implementation(libs.androidx.hilt.navigation.compose)
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
     //Material 3
     implementation(libs.androidx.material3)
     //Compose
