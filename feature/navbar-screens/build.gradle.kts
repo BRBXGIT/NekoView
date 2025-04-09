@@ -30,7 +30,10 @@ dependencies {
 
     //Modules
     implementation(project(":core:design-system"))
+    implementation(project(":core:data"))
 
+    //Hilt navigation
+    implementation(libs.androidx.hilt.navigation.compose)
     //Material 3
     implementation(libs.androidx.material3)
     //Compose

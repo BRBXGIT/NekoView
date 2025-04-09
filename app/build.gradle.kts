@@ -4,6 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     //Nav
     alias(libs.plugins.kotlin.serialization)
+    //Ksp
+    alias(libs.plugins.ksp)
+    //Hilt
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -53,6 +57,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
     //Material window size
     implementation(libs.androidx.material3.window.size.class1)
+    //Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     //Basic dependencies
     implementation(libs.androidx.core.ktx)
