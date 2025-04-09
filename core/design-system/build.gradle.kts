@@ -28,6 +28,8 @@ dependencies {
 
     //Material 3
     implementation(libs.androidx.material3)
+    //Coil
+    implementation(libs.coil.compose)
     //Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

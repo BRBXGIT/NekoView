@@ -9,4 +9,5 @@ object NekoViewIcons {
     val SettingsFilled = R.drawable.ic_settins_filled
     val Star = R.drawable.ic_star
     val StarFilled = R.drawable.ic_star_filled
+    val Magnifier = R.drawable.ic_magnifier
 }

@@ -43,9 +43,9 @@ class HomeScreenVM @Inject constructor(
             response.onError { error ->
                 SnackbarController.sendEvent(
                     SnackbarEvent(
-                        message = "Retry",
+                        message = processNetworkErrorsForUi(error),
                         action = SnackbarAction(
-                            name = processNetworkErrorsForUi(error),
+                            name = "Retry",
                             action = { sendIntent(HomeScreenIntent.RetryFetch) }
                         )
                     )

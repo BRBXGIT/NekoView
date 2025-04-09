@@ -4,7 +4,7 @@ import com.example.data.remote.utils.NetworkError
 
 fun processNetworkErrorsForUi(error: NetworkError): String {
     return when(error) {
-        NetworkError.REQUEST_TIMEOUT -> "Error: timeout"
+        NetworkError.REQUEST_TIMEOUT -> "ERROR: TIMEOUT"
         NetworkError.UNAUTHORIZED -> "Error: unauthorized"
         NetworkError.CONFLICT -> "Error: conflict"
         NetworkError.TOO_MANY_REQUESTS -> "Give AniLibria a little rest, try in 5 minutes :)"
