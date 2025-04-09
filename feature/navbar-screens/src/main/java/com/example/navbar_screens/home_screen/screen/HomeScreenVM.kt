@@ -1,6 +1,5 @@
 package com.example.navbar_screens.home_screen.screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.dispatchers.AniKunDispatchers
@@ -47,6 +46,7 @@ class HomeScreenVM @Inject constructor(
 
     fun fetchTitlesUpdates() {
         viewModelScope.launch(dispatcherIo) {
+            _titlesUpdatesLoading.value = true
             val response = repository.getTitleUpdates(limit, page)
             response.onError { error ->
                 SnackbarController.sendEvent(
