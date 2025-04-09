@@ -16,7 +16,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.design_system.snackbars.ObserveAsEvents
@@ -52,9 +51,7 @@ fun HomeScreen(
         }
     }
 
-    //TODO REWRITE TO MVI
-    val titlesUpdates by viewModel.titlesUpdates.collectAsStateWithLifecycle()
-
+    val homeScreenState by viewModel.homeScreenState.collectAsStateWithLifecycle()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         bottomBar = {
@@ -78,7 +75,7 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Text(titlesUpdates.toString())
+            Text(homeScreenState.titlesUpdates.toString())
         }
     }
 

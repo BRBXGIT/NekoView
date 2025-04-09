@@ -6,7 +6,6 @@ import com.example.common.dispatchers.AniKunDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.common.functions.processNetworkErrorsForUi
 import com.example.data.domain.HomeScreenRepo
-import com.example.data.remote.models.titles_updates_response.Item1
 import com.example.data.remote.utils.onError
 import com.example.data.remote.utils.onSuccess
 import com.example.design_system.snackbars.SnackbarAction
@@ -17,57 +16,61 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-//TODO REWRITE TO MVI
 @HiltViewModel
 class HomeScreenVM @Inject constructor(
     private val repository: HomeScreenRepo,
     @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
-    //Something like a paging :)
-    private val _titlesUpdates = MutableStateFlow<List<Item1>>(emptyList())
-    val titlesUpdates = _titlesUpdates.stateIn(
+    private val _homeScreenState = MutableStateFlow(HomeScreenState())
+    val homeScreenState = _homeScreenState.stateIn(
         viewModelScope,
-        SharingStarted.Lazily,
-        emptyList()
-    )
-    private val _titlesUpdatesLoading = MutableStateFlow(true)
-    val titlesUpdatesLoading = _titlesUpdatesLoading.stateIn(
-        viewModelScope,
-        SharingStarted.Lazily,
-        true
+        SharingStarted.Lazily, //Lazily to don't rewrite value every single time screen recomposed
+        HomeScreenState()
     )
 
     private val limit = 10
     private var page = 1
 
-    fun fetchTitlesUpdates() {
+    private fun fetchTitlesUpdates() {
         viewModelScope.launch(dispatcherIo) {
-            _titlesUpdatesLoading.value = true
+            _homeScreenState.update { it.copy(isLoading = true) }
             val response = repository.getTitleUpdates(limit, page)
             response.onError { error ->
                 SnackbarController.sendEvent(
                     SnackbarEvent(
-                        message = processNetworkErrorsForUi(error),
+                        message = "Retry",
                         action = SnackbarAction(
-                            name = "Refresh",
-                            action = { fetchTitlesUpdates() }
+                            name = processNetworkErrorsForUi(error),
+                            action = { sendIntent(HomeScreenIntent.RetryFetch) }
                         )
                     )
                 )
             }
             response.onSuccess { data ->
-                _titlesUpdates.value += data.list
-                _titlesUpdatesLoading.value = false
+                _homeScreenState.update { state ->
+                    state.copy(
+                        titlesUpdates = state.titlesUpdates + data.list,
+                        isLoading = false
+                    )
+                }
                 page += 1
             }
         }
     }
 
+    fun sendIntent(intent: HomeScreenIntent) {
+        when(intent) {
+            is HomeScreenIntent.LoadTitles -> fetchTitlesUpdates()
+            is HomeScreenIntent.RetryFetch -> fetchTitlesUpdates()
+        }
+    }
+
     init {
-        fetchTitlesUpdates()
+        sendIntent(HomeScreenIntent.LoadTitles)
     }
 }
