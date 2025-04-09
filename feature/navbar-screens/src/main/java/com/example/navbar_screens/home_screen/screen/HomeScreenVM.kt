@@ -28,10 +28,6 @@ class HomeScreenVM @Inject constructor(
     @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
-    init {
-        fetchTitlesUpdates()
-    }
-
     //Something like a paging :)
     private val _titlesUpdates = MutableStateFlow<List<Item1>>(emptyList())
     val titlesUpdates = _titlesUpdates.stateIn(
@@ -66,8 +62,12 @@ class HomeScreenVM @Inject constructor(
             response.onSuccess { data ->
                 _titlesUpdates.value += data.list
                 _titlesUpdatesLoading.value = false
-                page += limit
+                page += 1
             }
         }
+    }
+
+    init {
+        fetchTitlesUpdates()
     }
 }

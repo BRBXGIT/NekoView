@@ -8,6 +8,7 @@ import com.example.data.remote.utils.processNetworkErrors
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
+import io.ktor.network.sockets.SocketTimeoutException
 import kotlinx.io.IOException
 
 class HomeScreenKtorClient(
@@ -21,10 +22,10 @@ class HomeScreenKtorClient(
             httpClient.get(
                 urlString = "${Utils.BASE_URL}/title/updates?limit=${limit}&page=${page}"
             )
-        } catch(e: IOException) { //TODO REWRITE NETWORK ERRORS
+        } catch(e: IOException) {
             return when(e) {
-                is java.net.SocketTimeoutException -> Result.Error(NetworkError.NO_INTERNET)
-                else -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+                is SocketTimeoutException -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+                else -> Result.Error(NetworkError.NO_INTERNET)
             }
         }
 
