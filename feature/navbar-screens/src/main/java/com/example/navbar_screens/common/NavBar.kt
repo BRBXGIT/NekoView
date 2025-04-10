@@ -9,9 +9,14 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
 import com.example.design_system.theme.mColors
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
@@ -21,22 +26,37 @@ fun NavBar(
 ) {
     NavigationBar {
         navItems.forEachIndexed { index, navItem ->
-            val selected = index == selectedItemIndex
+            val isSelected = index == selectedItemIndex
+            var animatedSelection by rememberSaveable { mutableStateOf(false) }
+
+            //Change local state to start animation
+            LaunchedEffect(isSelected) {
+                when(isSelected) {
+                    true -> {
+                        animatedSelection = true
+                    }
+                    false -> {
+                        animatedSelection = false
+                        delay(800)
+                    }
+                }
+            }
+
+            val animatedImage = AnimatedImageVector.animatedVectorResource(navItem.icon)
+            val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = animatedSelection)
 
             NavigationBarItem(
-                selected = selected,
+                selected = isSelected,
                 onClick = {
-                    if(!selected) {
+                    if(!isSelected) {
                         onNavItemClick(index, navItem.destination)
                     }
                 },
                 icon = {
-                    val image = AnimatedImageVector.animatedVectorResource(navItem.icon)
                     Image(
-                        colorFilter = ColorFilter.tint(mColors.onSecondaryContainer),
-                        painter = rememberAnimatedVectorPainter(image, selected),
+                        painter = animatedPainter,
                         contentDescription = null,
-                        contentScale = ContentScale.Crop
+                        colorFilter = ColorFilter.tint(mColors.onSecondaryContainer)
                     )
                 },
                 label = {
