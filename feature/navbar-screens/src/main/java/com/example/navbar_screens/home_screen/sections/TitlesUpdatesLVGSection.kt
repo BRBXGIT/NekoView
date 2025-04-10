@@ -33,8 +33,8 @@ fun TitlesUpdatesLVGSection(
         itemsIndexed(titles) { index, title ->
             AnimeCard(
                 index = index,
-                posterPath = Utils.BASE_POSTERS_URL + title,
-                genresString = title.genres.joinToString { ", " },
+                posterPath = Utils.BASE_POSTERS_URL + title.posters.small.url,
+                genresString = title.genres.joinToString(", "),
                 title = title.names.ru,
                 onCardClick = {  }
             )
