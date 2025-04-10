@@ -1,21 +1,27 @@
 package com.example.navbar_screens.common
 
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.design_system.theme.mColors
 
+@OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun NavRail(
     navController: NavController
@@ -43,9 +49,12 @@ fun NavRail(
                         }
                     },
                     icon = {
-                        Icon(
-                            painter = painterResource(id = if(chosen) navItem.iconChosen else navItem.iconDefault),
-                            contentDescription = null
+                        val image = AnimatedImageVector.animatedVectorResource(navItem.icon)
+                        Image(
+                            colorFilter = ColorFilter.tint(mColors.onSecondaryContainer),
+                            painter = rememberAnimatedVectorPainter(image, chosen),
+                            contentDescription = "Timer",
+                            contentScale = ContentScale.Crop
                         )
                     },
                     label = {

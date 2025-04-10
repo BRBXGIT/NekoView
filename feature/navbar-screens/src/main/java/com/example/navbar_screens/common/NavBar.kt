@@ -1,18 +1,21 @@
 package com.example.navbar_screens.common
 
-import androidx.compose.material3.Icon
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
+import androidx.compose.foundation.Image
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.design_system.theme.NekoViewIcons
-import com.example.navbar_screens.featured_screen.navigation.FeaturedScreenRoute
-import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
-import com.example.navbar_screens.settings_screen.navigation.SettingsScreenRoute
+import com.example.design_system.theme.mColors
 
+@OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun NavBar(
     navController: NavController
@@ -32,9 +35,12 @@ fun NavBar(
                     }
                 },
                 icon = {
-                    Icon(
-                        painter = painterResource(id = if(chosen) navItem.iconChosen else navItem.iconDefault),
-                        contentDescription = null
+                    val image = AnimatedImageVector.animatedVectorResource(navItem.icon)
+                    Image(
+                        colorFilter = ColorFilter.tint(mColors.onSecondaryContainer),
+                        painter = rememberAnimatedVectorPainter(image, chosen),
+                        contentDescription = "Timer",
+                        contentScale = ContentScale.Crop
                     )
                 },
                 label = {

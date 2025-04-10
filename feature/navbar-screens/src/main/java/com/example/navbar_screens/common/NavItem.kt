@@ -7,8 +7,7 @@ import com.example.navbar_screens.settings_screen.navigation.SettingsScreenRoute
 
 data class NavItem(
     val label: String,
-    val iconDefault: Int,
-    val iconChosen: Int,
+    val icon: Int, //Icon already animated from filled to outlined
     val route: String,
     val destination: Any
 )
@@ -16,22 +15,19 @@ data class NavItem(
 val navItems = listOf(
     NavItem(
         label = "Аниме",
-        iconDefault = NekoViewIcons.Home,
-        iconChosen = NekoViewIcons.HomeFilled,
+        icon = NekoViewIcons.HomeAnimated,
         route = "HomeScreenRoute",
         destination = HomeScreenRoute
     ),
     NavItem(
         label = "Избранное",
-        iconDefault = NekoViewIcons.Star,
-        iconChosen = NekoViewIcons.StarFilled,
+        icon = NekoViewIcons.StarAnimated,
         route = "FeaturedScreenRoute",
         destination = FeaturedScreenRoute
     ),
     NavItem(
         label = "Настройки",
-        iconDefault = NekoViewIcons.Settings,
-        iconChosen = NekoViewIcons.SettingsFilled,
+        icon = NekoViewIcons.SettingsAnimated,
         route = "SettingsScreenRoute",
         destination = SettingsScreenRoute
     )

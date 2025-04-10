@@ -49,4 +49,6 @@ dependencies {
     //Nav
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
+    //Animated icons(compose animation graphics)
+    implementation(libs.androidx.animation.graphics)
 }
