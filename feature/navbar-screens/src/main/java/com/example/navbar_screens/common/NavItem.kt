@@ -21,7 +21,7 @@ val navItems = listOf(
     ),
     NavItem(
         label = "Избранное",
-        icon = NekoViewIcons.StarAnimated,
+        icon = NekoViewIcons.HeartAnimated,
         route = "FeaturedScreenRoute",
         destination = FeaturedScreenRoute
     ),

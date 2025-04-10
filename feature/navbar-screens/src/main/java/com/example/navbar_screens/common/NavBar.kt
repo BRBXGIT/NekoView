@@ -25,12 +25,10 @@ fun NavBar(
 
     NavigationBar {
         navItems.forEach { navItem ->
-            val chosen = currentRoute == navItem.route
-
             NavigationBarItem(
                 selected = currentRoute == navItem.route,
                 onClick = {
-                    if(!chosen) {
+                    if(currentRoute != navItem.route) {
                         navController.navigate(navItem.destination)
                     }
                 },
@@ -38,7 +36,7 @@ fun NavBar(
                     val image = AnimatedImageVector.animatedVectorResource(navItem.icon)
                     Image(
                         colorFilter = ColorFilter.tint(mColors.onSecondaryContainer),
-                        painter = rememberAnimatedVectorPainter(image, chosen),
+                        painter = rememberAnimatedVectorPainter(image, currentRoute == navItem.route),
                         contentDescription = "Timer",
                         contentScale = ContentScale.Crop
                     )
