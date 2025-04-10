@@ -59,7 +59,7 @@ fun AnimeCard(
             modifier = Modifier
                 .align(Alignment.BottomStart)
                 .fillMaxWidth()
-                .background(mColors.primaryContainer)
+                .background(mColors.secondaryContainer)
                 .padding(8.dp)
         ) {
             Text(
