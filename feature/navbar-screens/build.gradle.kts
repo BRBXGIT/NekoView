@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":core:design-system"))
     implementation(project(":core:data"))
     implementation(project(":core:common"))
+    implementation(project(":feature:common"))
 
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose)

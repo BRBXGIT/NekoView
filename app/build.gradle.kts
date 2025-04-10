@@ -52,6 +52,7 @@ dependencies {
     implementation(project(":core:design-system"))
     //Feature modules
     implementation(project(":feature:navbar-screens"))
+    implementation(project(":feature:common"))
 
     //Nav
     implementation(libs.navigation.compose)

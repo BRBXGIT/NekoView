@@ -9,20 +9,32 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.common.CommonVM
 import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
+import androidx.compose.runtime.getValue
 
 @Composable
 fun FeaturedScreen(
     navController: NavController,
-    bigScreen: Boolean
+    bigScreen: Boolean,
+    commonVM: CommonVM
 ) {
+    val selectedNavBarIndex by commonVM.selectedNavIndex.collectAsStateWithLifecycle()
+
     Scaffold(
         bottomBar = {
             if(!bigScreen) {
-                NavBar(navController)
+                NavBar(
+                    selectedItemIndex = selectedNavBarIndex,
+                    onNavItemClick = { index, destination ->
+                        commonVM.setNavIndex(index)
+                        navController.navigate(destination)
+                    }
+                )
             }
         },
         modifier = Modifier
@@ -46,6 +58,12 @@ fun FeaturedScreen(
     }
 
     if(bigScreen) {
-        NavRail(navController)
+        NavRail(
+            selectedItemIndex = selectedNavBarIndex,
+            onNavItemClick = { index, destination ->
+                commonVM.setNavIndex(index)
+                navController.navigate(destination)
+            }
+        )
     }
 }

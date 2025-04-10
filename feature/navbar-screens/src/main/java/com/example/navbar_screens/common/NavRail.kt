@@ -17,18 +17,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.design_system.theme.mColors
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun NavRail(
-    navController: NavController
+    onNavItemClick:(Int, Any) -> Unit,
+    selectedItemIndex: Int
 ) {
-    val currentDestination = navController.currentBackStackEntryAsState().value?.destination?.route
-    val currentRoute = if(currentDestination != null) currentDestination.toString().split(".")[5] else "HomeScreenRoute"
-
     NavigationRail(
         containerColor = mColors.surfaceContainer
     ) {
@@ -38,22 +34,22 @@ fun NavRail(
                 .padding(top = 12.dp)
                 .fillMaxHeight(),
         ) {
-            navItems.forEach { navItem ->
-                val chosen = currentRoute == navItem.route
+            navItems.forEachIndexed { index, navItem ->
+                val selected = index == selectedItemIndex
 
                 NavigationRailItem(
-                    selected = currentRoute == navItem.route,
+                    selected = selected,
                     onClick = {
-                        if(!chosen) {
-                            navController.navigate(navItem.destination)
+                        if(!selected) {
+                            onNavItemClick(index, navItem.destination)
                         }
                     },
                     icon = {
                         val image = AnimatedImageVector.animatedVectorResource(navItem.icon)
                         Image(
                             colorFilter = ColorFilter.tint(mColors.onSecondaryContainer),
-                            painter = rememberAnimatedVectorPainter(image, chosen),
-                            contentDescription = "Timer",
+                            painter = rememberAnimatedVectorPainter(image, selected),
+                            contentDescription = null,
                             contentScale = ContentScale.Crop
                         )
                     },

@@ -7,6 +7,7 @@ import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.common.CommonVM
 import com.example.navbar_screens.featured_screen.screen.FeaturedScreen
 import kotlinx.serialization.Serializable
 
@@ -15,13 +16,15 @@ data object FeaturedScreenRoute
 
 fun NavGraphBuilder.featuredScreen(
     navController: NavController,
-    bigScreen: Boolean
+    bigScreen: Boolean,
+    commonVM: CommonVM
 ) = composable<FeaturedScreenRoute>(
     enterTransition = { fadeIn(tween(300)) },
     exitTransition = { fadeOut(tween(300)) }
 ) {
     FeaturedScreen(
         navController = navController,
-        bigScreen = bigScreen
+        bigScreen = bigScreen,
+        commonVM = commonVM
     )
 }
