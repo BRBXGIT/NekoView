@@ -24,22 +24,22 @@
                 android:strokeWidth="1"/>
         </vector>
     </aapt:attr>
-    <target android:name="path_1">
+    <target android:name="path">
         <aapt:attr name="android:animation">
             <objectAnimator
-                android:propertyName="fillAlpha"
-                android:duration="800"
+                android:propertyName="trimPathEnd"
+                android:duration="500"
                 android:valueFrom="0"
                 android:valueTo="1"
                 android:valueType="floatType"
                 android:interpolator="@android:interpolator/fast_out_slow_in"/>
         </aapt:attr>
     </target>
-    <target android:name="path">
+    <target android:name="path_1">
         <aapt:attr name="android:animation">
             <objectAnimator
-                android:propertyName="trimPathEnd"
-                android:duration="800"
+                android:propertyName="fillAlpha"
+                android:duration="500"
                 android:valueFrom="0"
                 android:valueTo="1"
                 android:valueType="floatType"
