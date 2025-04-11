@@ -10,7 +10,7 @@ import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.data.remote.models.titles_updates_response.Item1
+import com.example.data.remote.models.titles_list_response.Item1
 import com.example.design_system.cards.AnimeCard
 import com.example.design_system.cards.Utils
 

@@ -1,7 +1,7 @@
 package com.example.data.di
 
 import com.example.data.domain.HomeScreenRepo
-import com.example.data.domain.HomeScreenRepoImpl
+import com.example.data.repositories.HomeScreenRepoImpl
 import com.example.data.remote.ktor.HomeScreenKtorClient
 import com.example.data.remote.ktor.createHttpClient
 import dagger.Module

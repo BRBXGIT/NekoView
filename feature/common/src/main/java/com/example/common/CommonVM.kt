@@ -1,6 +1,5 @@
 package com.example.common
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.dispatchers.AniKunDispatchers
@@ -82,7 +81,7 @@ class CommonVM @Inject constructor(
                 }
 
                 if(data.err == "ok") {
-                    repository.saveUserSessionToken(data.key)
+                    repository.saveUserSessionToken(data.sessionId)
                 } else if(data.err == "error") {
                     if(data.key == "invalidUser") {
                         SnackbarController.sendEvent(

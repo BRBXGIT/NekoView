@@ -1,6 +1,6 @@
 package com.example.data.remote.ktor
 
-import com.example.data.remote.models.titles_updates_response.TitlesUpdatesResponse
+import com.example.data.remote.models.titles_list_response.TitlesListResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
 import com.example.data.remote.utils.Utils
@@ -17,7 +17,7 @@ class HomeScreenKtorClient(
     suspend fun getTitlesUpdates(
         limit: Int,
         page: Int
-    ): Result<TitlesUpdatesResponse, NetworkError> {
+    ): Result<TitlesListResponse, NetworkError> {
         val response = try {
             httpClient.get(
                 urlString = "${Utils.BASE_URL}/title/updates?limit=${limit}&page=${page}"
@@ -30,7 +30,7 @@ class HomeScreenKtorClient(
         }
 
         return if(response.status.value in 200..299) {
-            Result.Success(response.body<TitlesUpdatesResponse>())
+            Result.Success(response.body<TitlesListResponse>())
         } else {
             processNetworkErrors(response.status.value)
         }

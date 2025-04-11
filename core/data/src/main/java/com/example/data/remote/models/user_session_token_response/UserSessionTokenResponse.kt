@@ -10,5 +10,7 @@ data class UserSessionTokenResponse(
     @SerialName("key")
     val key: String = "",
     @SerialName("mes")
-    val mes: String = ""
+    val mes: String = "",
+    @SerialName("sessionId")
+    val sessionId: String = ""
 )

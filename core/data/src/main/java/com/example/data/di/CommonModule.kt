@@ -2,7 +2,7 @@ package com.example.data.di
 
 import android.content.Context
 import com.example.data.domain.CommonRepo
-import com.example.data.domain.CommonRepoImpl
+import com.example.data.repositories.CommonRepoImpl
 import com.example.data.local.data_store.NekoViewDataStore
 import com.example.data.remote.ktor.CommonKtorClient
 import com.example.data.remote.ktor.createHttpClient
@@ -39,9 +39,9 @@ object CommonModule {
     @Provides
     @Singleton
     fun provideCommonRepo(
-        ktorClient: CommonKtorClient,
+        commonKtorClient: CommonKtorClient,
         dataStore: NekoViewDataStore
     ): CommonRepo {
-        return CommonRepoImpl(ktorClient, dataStore)
+        return CommonRepoImpl(commonKtorClient, dataStore)
     }
 }
