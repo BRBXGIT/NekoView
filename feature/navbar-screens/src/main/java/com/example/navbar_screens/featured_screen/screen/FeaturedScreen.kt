@@ -17,6 +17,7 @@ import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
 import androidx.compose.runtime.getValue
 import com.example.common.CommonIntent
+import com.example.navbar_screens.featured_screen.sections.UserNotAuthorizedSection
 
 @Composable
 fun FeaturedScreen(
@@ -56,7 +57,7 @@ fun FeaturedScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
+            UserNotAuthorizedSection {  }
         }
     }
 
