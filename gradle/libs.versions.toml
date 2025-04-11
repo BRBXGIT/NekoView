@@ -105,8 +105,6 @@ haze-materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 
 #Datastore
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
-androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 #Ktor
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }

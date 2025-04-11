@@ -16,7 +16,6 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.ColorFilter
 import com.example.design_system.theme.mColors
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
@@ -31,15 +30,7 @@ fun NavBar(
 
             //Change local state to start animation
             LaunchedEffect(isSelected) {
-                when(isSelected) {
-                    true -> {
-                        animatedSelection = true
-                    }
-                    false -> {
-                        animatedSelection = false
-                        delay(800)
-                    }
-                }
+                animatedSelection = isSelected
             }
 
             val animatedImage = AnimatedImageVector.animatedVectorResource(navItem.icon)

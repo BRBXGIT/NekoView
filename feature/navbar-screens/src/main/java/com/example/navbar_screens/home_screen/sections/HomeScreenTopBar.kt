@@ -1,6 +1,5 @@
 package com.example.navbar_screens.home_screen.sections
 
-import androidx.collection.scatterSetOf
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
