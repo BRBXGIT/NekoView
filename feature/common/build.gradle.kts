@@ -36,12 +36,17 @@ dependencies {
     //Modules
     implementation(project(":core:data"))
     implementation(project(":core:common"))
+    implementation(project(":core:design-system"))
 
     //Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    //Material 3
+    implementation(libs.androidx.material3)
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    //Animated icons(compose animation graphics)
+    implementation(libs.androidx.animation.graphics)
 }

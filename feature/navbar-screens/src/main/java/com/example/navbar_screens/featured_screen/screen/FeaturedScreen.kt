@@ -16,6 +16,10 @@ import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import com.example.common.AuthBS
 import com.example.common.CommonIntent
 import com.example.navbar_screens.featured_screen.sections.UserNotAuthorizedSection
 
@@ -57,7 +61,19 @@ fun FeaturedScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            UserNotAuthorizedSection {  }
+            var authBSOpened by rememberSaveable { mutableStateOf(false) }
+            if(authBSOpened) {
+                AuthBS(
+                    onDismissRequest = { authBSOpened = false },
+                    onAuthButtonClick = { email, password ->
+
+                    }
+                )
+            }
+
+            UserNotAuthorizedSection(
+                onAuthButtonClick = { authBSOpened = true }
+            )
         }
     }
 
