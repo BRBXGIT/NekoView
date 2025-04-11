@@ -46,7 +46,9 @@ class HomeScreenVM @Inject constructor(
                         message = processNetworkErrorsForUi(error),
                         action = SnackbarAction(
                             name = "Retry",
-                            action = { sendIntent(HomeScreenIntent.RetryFetch) }
+                            action = {
+                                sendIntent(HomeScreenIntent.RetryFetch)
+                            }
                         )
                     )
                 )

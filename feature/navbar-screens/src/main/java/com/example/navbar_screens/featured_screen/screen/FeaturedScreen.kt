@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -17,6 +17,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -26,6 +27,7 @@ import com.example.common.CommonVM
 import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
+import com.example.navbar_screens.featured_screen.sections.FeatureScreenTopBar
 import com.example.navbar_screens.featured_screen.sections.UserFeaturedLVGSection
 import com.example.navbar_screens.featured_screen.sections.UserNotAuthorizedSection
 
@@ -49,7 +51,15 @@ fun FeaturedScreen(
         }
     }
 
+    val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
+        topBar = {
+            FeatureScreenTopBar(
+                onSearchClick = {  },
+                scrollBehavior = topBarScrollBehavior,
+                loadingState = commonState.isSessionTokenLoading or featureScreenState.isLoading
+            )
+        },
         bottomBar = {
             if(!bigScreen) {
                 NavBar(
@@ -73,6 +83,7 @@ fun FeaturedScreen(
                 }
             )
             .background(mColors.background)
+            .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         Column(
             modifier = Modifier
@@ -111,14 +122,9 @@ fun FeaturedScreen(
                     titles = featureScreenState.userFeaturedTitles
                 )
             } else {
-                PullToRefreshBox(
-                    isRefreshing = commonState.isSessionTokenLoading,
-                    onRefresh = {  }
-                ) {
-                    UserNotAuthorizedSection(
-                        onAuthButtonClick = { authBSOpened = true }
-                    )
-                }
+                UserNotAuthorizedSection(
+                    onAuthButtonClick = { authBSOpened = true }
+                )
             }
         }
     }
