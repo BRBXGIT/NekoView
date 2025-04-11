@@ -2,7 +2,6 @@ package com.example.nekoview
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.common.CommonVM
@@ -20,7 +19,7 @@ fun NavGraph(
 
     //Initialize values here to don't avoid recompositions
     val homeScreenVM = hiltViewModel<HomeScreenVM>()
-    val commonVM = viewModel<CommonVM>()
+    val commonVM = hiltViewModel<CommonVM>()
 
     NavHost(
         navController = navController,
