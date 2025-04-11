@@ -23,6 +23,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.common.CommonIntent
 import com.example.common.CommonVM
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarController
@@ -61,7 +62,7 @@ fun HomeScreen(
         }
     }
 
-    val selectedNavBarIndex by commonVM.selectedNavIndex.collectAsStateWithLifecycle()
+    val commonState by commonVM.commonState.collectAsStateWithLifecycle()
     val homeScreenState by viewModel.homeScreenState.collectAsStateWithLifecycle()
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -76,9 +77,11 @@ fun HomeScreen(
         bottomBar = {
             if(!bigScreen) {
                 NavBar(
-                    selectedItemIndex = selectedNavBarIndex,
+                    selectedItemIndex = commonState.selectedNavIndex,
                     onNavItemClick = { index, destination ->
-                        commonVM.setNavIndex(index)
+                        commonVM.sendIntent(
+                            CommonIntent.SetNavIndex(index)
+                        )
                         navController.navigate(destination)
                     }
                 )
@@ -121,9 +124,11 @@ fun HomeScreen(
 
     if(bigScreen) {
         NavRail(
-            selectedItemIndex = selectedNavBarIndex,
+            selectedItemIndex = commonState.selectedNavIndex,
             onNavItemClick = { index, destination ->
-                commonVM.setNavIndex(index)
+                commonVM.sendIntent(
+                    CommonIntent.SetNavIndex(index)
+                )
                 navController.navigate(destination)
             }
         )

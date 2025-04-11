@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -21,28 +22,36 @@ class CommonVM @Inject constructor(
     @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
-    private val _selectedNavIndex = MutableStateFlow(0)
-    val selectedNavIndex = _selectedNavIndex.stateIn(
+    private val _commonState = MutableStateFlow(CommonState())
+    val commonState = _commonState.stateIn(
         viewModelScope,
         SharingStarted.Lazily,
-        0
+        CommonState()
     )
 
-    fun setNavIndex(index: Int) {
-        _selectedNavIndex.value = index
+    private fun fetchUserTokenFromDataStore() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getUserSessionTokenFromDataStore().collect { sessionToken ->
+                _commonState.update { state ->
+                    state.copy(
+                        sessionToken = sessionToken
+                    )
+                }
+            }
+        }
     }
 
-    val userSessionToken = repository.getUserSessionTokenFromDataStore().stateIn(
-        viewModelScope,
-        SharingStarted.Lazily,
-        ""
-    )
+    private fun setNavIndex(index: Int) {
+        _commonState.update { state ->
+            state.copy(index)
+        }
+    }
 
-    fun getUserToken(
+    private fun getUserToken(
         email: String,
         password: String,
-        onError: () -> Unit,
-        onSuccess: () -> Unit
+        onError: () -> Unit = {},
+        onSuccess: () -> Unit = {}
     ) {
         viewModelScope.launch(dispatcherIo) {
             val response = repository.getUserSessionToken(email, password)
@@ -58,5 +67,21 @@ class CommonVM @Inject constructor(
                 }
             }
         }
+    }
+
+    fun sendIntent(intent: CommonIntent) {
+        when(intent) {
+            is CommonIntent.SetNavIndex -> setNavIndex(intent.index)
+            is CommonIntent.GetUserToken -> {
+                getUserToken(
+                    email = intent.email,
+                    password = intent.password
+                )
+            }
+        }
+    }
+
+    init {
+        fetchUserTokenFromDataStore()
     }
 }

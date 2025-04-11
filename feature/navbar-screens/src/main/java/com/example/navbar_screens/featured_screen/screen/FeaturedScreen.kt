@@ -16,6 +16,7 @@ import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
 import androidx.compose.runtime.getValue
+import com.example.common.CommonIntent
 
 @Composable
 fun FeaturedScreen(
@@ -23,15 +24,17 @@ fun FeaturedScreen(
     bigScreen: Boolean,
     commonVM: CommonVM
 ) {
-    val selectedNavBarIndex by commonVM.selectedNavIndex.collectAsStateWithLifecycle()
+    val commonState by commonVM.commonState.collectAsStateWithLifecycle()
 
     Scaffold(
         bottomBar = {
             if(!bigScreen) {
                 NavBar(
-                    selectedItemIndex = selectedNavBarIndex,
+                    selectedItemIndex = commonState.selectedNavIndex,
                     onNavItemClick = { index, destination ->
-                        commonVM.setNavIndex(index)
+                        commonVM.sendIntent(
+                            CommonIntent.SetNavIndex(index)
+                        )
                         navController.navigate(destination)
                     }
                 )
@@ -53,15 +56,17 @@ fun FeaturedScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Text("FeaturedScreen")
+
         }
     }
 
     if(bigScreen) {
         NavRail(
-            selectedItemIndex = selectedNavBarIndex,
+            selectedItemIndex = commonState.selectedNavIndex,
             onNavItemClick = { index, destination ->
-                commonVM.setNavIndex(index)
+                commonVM.sendIntent(
+                    CommonIntent.SetNavIndex(index)
+                )
                 navController.navigate(destination)
             }
         )
