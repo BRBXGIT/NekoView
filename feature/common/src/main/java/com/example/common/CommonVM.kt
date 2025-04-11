@@ -1,5 +1,6 @@
 package com.example.common
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.dispatchers.AniKunDispatchers
@@ -7,6 +8,9 @@ import com.example.common.dispatchers.Dispatcher
 import com.example.data.domain.CommonRepo
 import com.example.data.remote.utils.onError
 import com.example.data.remote.utils.onSuccess
+import com.example.design_system.snackbars.SnackbarAction
+import com.example.design_system.snackbars.SnackbarController
+import com.example.design_system.snackbars.SnackbarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -50,20 +54,53 @@ class CommonVM @Inject constructor(
     private fun getUserToken(
         email: String,
         password: String,
-        onError: () -> Unit = {},
-        onSuccess: () -> Unit = {}
     ) {
         viewModelScope.launch(dispatcherIo) {
+            _commonState.update { state ->
+                state.copy(isSessionTokenLoading = true)
+            }
+
             val response = repository.getUserSessionToken(email, password)
             response.onError { error ->
-                onError()
+                _commonState.update { state ->
+                    state.copy(isSessionTokenLoading = false)
+                }
+
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        message = "ERROR: $error",
+                        action = SnackbarAction(
+                            name = "Retry",
+                            action = { getUserToken(email, password) }
+                        )
+                    )
+                )
             }
             response.onSuccess { data ->
+                _commonState.update { state ->
+                    state.copy(isSessionTokenLoading = false)
+                }
+
                 if(data.err == "ok") {
                     repository.saveUserSessionToken(data.key)
-                    onSuccess()
-                } else {
-                    onError()
+                } else if(data.err == "error") {
+                    if(data.key == "invalidUser") {
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                message = "Check you email and password :)"
+                            )
+                        )
+                    } else {
+                        SnackbarController.sendEvent(
+                            SnackbarEvent(
+                                message = "Something went wrong on server",
+                                action = SnackbarAction(
+                                    name = "Retry",
+                                    action = { getUserToken(email, password) }
+                                )
+                            )
+                        )
+                    }
                 }
             }
         }
