@@ -12,5 +12,5 @@ data class Blocked(
     @SerialName("geoip")
     val geoip: Boolean = false,
     @SerialName("geoip_list")
-    val geoipList: List<Boolean?> = listOf()
+    val geoipList: List<String?> = listOf()
 )

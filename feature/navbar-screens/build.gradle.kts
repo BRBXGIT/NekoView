@@ -50,6 +50,9 @@ dependencies {
     //Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
+    //Paging
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime.ktx)
     //Nav
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)

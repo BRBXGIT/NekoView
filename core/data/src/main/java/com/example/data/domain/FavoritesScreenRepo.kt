@@ -1,14 +1,10 @@
 package com.example.data.domain
 
-import com.example.data.remote.models.titles_list_response.TitlesListResponse
-import com.example.data.remote.utils.NetworkError
-import com.example.data.remote.utils.Result
+import androidx.paging.PagingData
+import com.example.data.remote.models.titles_list_response.Item1
+import kotlinx.coroutines.flow.Flow
 
 interface FavoritesScreenRepo {
 
-    suspend fun getUserFavorites(
-        sessionToken: String = "",
-        limit: Int = 10,
-        page: Int = 1
-    ): Result<TitlesListResponse, NetworkError>
+    fun getUserFavorites(sessionToken: String = ""): Flow<PagingData<Item1>>
 }
