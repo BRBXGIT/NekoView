@@ -11,6 +11,7 @@ import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
 import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.home_screen.screen.HomeScreenVM
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
+import com.example.navbar_screens.settings_screen.screen.SettingsScreenVM
 
 @Composable
 fun NavGraph(
@@ -18,10 +19,11 @@ fun NavGraph(
 ) {
     val navController = rememberNavController()
 
-    //Initialize values here to don't avoid recompositions
+    //Initialize values here to avoid recompositions
     val commonVM = hiltViewModel<CommonVM>()
     val homeScreenVM = hiltViewModel<HomeScreenVM>()
     val featuredScreenVM = hiltViewModel<FeaturedScreenVM>()
+    val settingsScreenVM = hiltViewModel<SettingsScreenVM>()
 
     NavHost(
         navController = navController,
@@ -44,7 +46,8 @@ fun NavGraph(
         settingsScreen(
             navController = navController,
             bigScreen = bigScreen,
-            commonVM = commonVM
+            commonVM = commonVM,
+            settingsScreenVM = settingsScreenVM
         )
     }
 }

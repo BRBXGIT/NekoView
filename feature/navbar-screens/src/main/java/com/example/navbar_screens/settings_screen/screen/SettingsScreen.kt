@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -17,16 +18,32 @@ import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
 import androidx.compose.runtime.getValue
 import com.example.common.CommonIntent
+import com.example.navbar_screens.settings_screen.sections.SettingsScreenTopBar
 
 @Composable
 fun SettingsScreen(
     navController: NavController,
     bigScreen: Boolean,
-    commonVM: CommonVM
+    commonVM: CommonVM,
+    viewModel: SettingsScreenVM
 ) {
     val commonState by commonVM.commonState.collectAsStateWithLifecycle()
+    val settingsScreenState by viewModel.settingsScreenState.collectAsStateWithLifecycle()
+    LaunchedEffect(commonState.sessionToken, settingsScreenState) {
+        if((commonState.sessionToken != "") and (settingsScreenState == SettingsScreenState())) {
+            viewModel.sendIntent(SettingsScreenIntent.LoadUserDetails(commonState.sessionToken))
+        }
+    }
 
     Scaffold(
+        topBar = {
+            SettingsScreenTopBar(
+                userName = settingsScreenState.userName,
+                userImageUrl = settingsScreenState.userImageUrl,
+                loadingState = settingsScreenState.userDetailsLoading,
+                onExitClick = {  }
+            )
+        },
         bottomBar = {
             if(!bigScreen) {
                 NavBar(
@@ -56,7 +73,7 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            Text("SettingsScreen")
+
         }
     }
 

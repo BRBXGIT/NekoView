@@ -103,7 +103,6 @@ fun AuthBS(
                             Image(
                                 painter = animatedPainter,
                                 contentDescription = null,
-                                colorFilter = ColorFilter.tint(mColors.onSurfaceVariant)
                             )
                         }
                     }

@@ -10,4 +10,5 @@ object NekoViewIcons {
     val Password = R.drawable.ic_password
     val User = R.drawable.ic_user
     val EyeAnimated = R.drawable.ic_eye_animated
+    val Exit = R.drawable.ic_exit
 }
