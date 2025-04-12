@@ -49,6 +49,9 @@ class SettingsScreenVM @Inject constructor(
                 }
             }
             response.onError { error ->
+                _settingsScreenState.update { state ->
+                    state.copy(userDetailsLoading = false)
+                }
                 SnackbarController.sendEvent(
                     SnackbarEvent(
                         message = "ERROR: $error",

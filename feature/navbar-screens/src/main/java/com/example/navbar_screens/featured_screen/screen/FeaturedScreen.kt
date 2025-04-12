@@ -69,9 +69,16 @@ fun FeaturedScreen(
         }
     }
 
+    val commonState by commonVM.commonState.collectAsStateWithLifecycle()
+    LaunchedEffect(commonState.sessionToken) {
+        if(commonState.sessionToken != "") {
+            viewModel.setUserSessionToken(commonState.sessionToken)
+        }
+    }
+
     val userFavorites = viewModel.userFavorites.collectAsLazyPagingItems()
-    LaunchedEffect(userFavorites.loadState.refresh) {
-        if(userFavorites.loadState.refresh is LoadState.Error) {
+    LaunchedEffect(userFavorites.loadState.refresh, commonState.sessionToken) {
+        if((userFavorites.loadState.refresh is LoadState.Error) and (commonState.sessionToken != "")) {
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = (userFavorites.loadState.refresh as LoadState.Error).error.message.toString(),
@@ -84,12 +91,6 @@ fun FeaturedScreen(
         }
     }
 
-    val commonState by commonVM.commonState.collectAsStateWithLifecycle()
-    LaunchedEffect(commonState.sessionToken) {
-        if(commonState.sessionToken != "") {
-            viewModel.setUserSessionToken(commonState.sessionToken)
-        }
-    }
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -97,7 +98,7 @@ fun FeaturedScreen(
             FeatureScreenTopBar(
                 onSearchClick = {  },
                 scrollBehavior = topBarScrollBehavior,
-                loadingState = userFavorites.loadState.refresh is LoadState.Loading
+                loadingState = (userFavorites.loadState.refresh is LoadState.Loading) and (commonState.sessionToken != "")
             )
         },
         bottomBar = {
