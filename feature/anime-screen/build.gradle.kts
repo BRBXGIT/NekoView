@@ -38,6 +38,7 @@ dependencies {
     //Modules
     implementation(project(":core:data"))
     implementation(project(":core:design-system"))
+    implementation(project(":core:common"))
 
     //Compose
     implementation(libs.androidx.activity.compose)
