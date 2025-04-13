@@ -53,6 +53,7 @@ dependencies {
     //Feature modules
     implementation(project(":feature:navbar-screens"))
     implementation(project(":feature:common"))
+    implementation(project(":feature:anime-screen"))
 
     //Nav
     implementation(libs.navigation.compose)
