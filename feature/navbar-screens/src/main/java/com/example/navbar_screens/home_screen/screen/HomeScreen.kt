@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
 import com.example.design_system.snackbars.ObserveAsEvents
@@ -120,7 +121,10 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            TitlesUpdatesLVGSection(titlesUpdates)
+            TitlesUpdatesLVGSection(
+                titles = titlesUpdates,
+                onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+            )
         }
     }
 

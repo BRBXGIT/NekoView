@@ -15,7 +15,8 @@ import com.example.design_system.cards.Utils
 
 @Composable
 fun TitlesUpdatesLVGSection(
-    titles: LazyPagingItems<Item1>
+    titles: LazyPagingItems<Item1>,
+    onTitleClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -36,7 +37,7 @@ fun TitlesUpdatesLVGSection(
                     posterPath = Utils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,
-                    onCardClick = {  }
+                    onCardClick = { onTitleClick(currentTitle.id) }
                 )
             }
         }

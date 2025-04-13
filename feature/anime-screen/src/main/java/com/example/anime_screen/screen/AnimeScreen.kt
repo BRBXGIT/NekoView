@@ -8,12 +8,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.example.data.remote.models.titles_list_response.Item1
+import androidx.navigation.NavController
 import com.example.design_system.theme.mColors
 
 @Composable
 fun AnimeScreen(
-    title: Item1
+    navController: NavController,
+    titleId: Int
 ) {
     Scaffold(
         modifier = Modifier
@@ -23,7 +24,7 @@ fun AnimeScreen(
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            Text(title.names.ru)
+            Text(text = titleId.toString())
         }
     }
 }

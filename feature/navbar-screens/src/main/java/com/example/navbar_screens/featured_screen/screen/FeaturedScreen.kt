@@ -28,6 +28,8 @@ import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.Logger
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.anime_screen.navigation.AnimeScreenRoute
+import com.example.anime_screen.screen.AnimeScreen
 import com.example.common.AuthBS
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
@@ -148,7 +150,10 @@ fun FeaturedScreen(
             }
 
             if(commonState.sessionToken.isNotEmpty()) {
-                UserFeaturedLVGSection(userFavorites)
+                UserFeaturedLVGSection(
+                    titles = userFavorites,
+                    onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                )
             } else {
                 UserNotAuthorizedSection(
                     onAuthButtonClick = { authBSOpened = true }

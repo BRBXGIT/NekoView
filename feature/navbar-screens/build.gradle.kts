@@ -40,6 +40,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:common"))
     implementation(project(":feature:common"))
+    implementation(project(":feature:anime-screen"))
 
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose)

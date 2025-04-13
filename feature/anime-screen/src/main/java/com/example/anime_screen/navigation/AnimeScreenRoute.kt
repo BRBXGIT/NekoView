@@ -5,18 +5,20 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.anime_screen.screen.AnimeScreen
-import com.example.data.remote.models.titles_list_response.Item1
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class AnimeScreenRoute(
-    val title: Item1
+    val titleId: Int
 )
 
 fun NavGraphBuilder.animeScreen(
     navController: NavController
 ) = composable<AnimeScreenRoute> {
-    val title = it.toRoute<AnimeScreenRoute>().title
+    val titleId = it.toRoute<AnimeScreenRoute>().titleId
 
-    AnimeScreen(title)
+    AnimeScreen(
+        navController = navController,
+        titleId = titleId
+    )
 }

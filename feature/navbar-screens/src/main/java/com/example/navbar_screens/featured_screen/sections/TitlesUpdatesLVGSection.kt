@@ -17,7 +17,8 @@ import com.example.design_system.cards.Utils
 
 @Composable
 fun UserFeaturedLVGSection(
-    titles: LazyPagingItems<Item1>
+    titles: LazyPagingItems<Item1>,
+    onTitleClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -38,7 +39,7 @@ fun UserFeaturedLVGSection(
                     posterPath = Utils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,
-                    onCardClick = {  }
+                    onCardClick = { onTitleClick(currentTitle.id) }
                 )
             }
         }
