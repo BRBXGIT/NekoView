@@ -101,7 +101,7 @@ fun SettingsItem(
         modifier = Modifier
             .fillMaxWidth()
             .clip(mShapes.small)
-            .clickable { onClick }
+            .clickable { onClick() }
             .padding(16.dp)
     ) {
         Icon(

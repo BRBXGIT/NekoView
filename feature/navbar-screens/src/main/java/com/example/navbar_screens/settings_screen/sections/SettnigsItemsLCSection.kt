@@ -15,7 +15,7 @@ import com.example.design_system.theme.NekoViewIcons
 @Composable
 fun SettingsItemsLCSection(
     innerPadding: PaddingValues,
-    onSettingsItmClick: (Any) -> Unit,
+    onSettingsItemClick: (Any) -> Unit,
     onLinkItemClick: (String) -> Unit
 ) {
     LazyColumn(
@@ -49,13 +49,12 @@ fun SettingsItemsLCSection(
             HorizontalDivider()
         }
 
-        //TODO change anilibria icon
         items(linkItems) { linkItem ->
             SettingsItem(
                 fromLink = true,
                 name = linkItem.name,
                 icon = linkItem.icon,
-                onClick = {  }
+                onClick = { onLinkItemClick(linkItem.url) }
             )
         }
     }
