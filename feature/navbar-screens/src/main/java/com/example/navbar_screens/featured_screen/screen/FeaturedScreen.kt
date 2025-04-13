@@ -1,5 +1,6 @@
 package com.example.navbar_screens.featured_screen.screen
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.paging.LoadState
+import androidx.paging.Logger
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.common.AuthBS
 import com.example.common.CommonIntent
@@ -72,6 +74,7 @@ fun FeaturedScreen(
     val commonState by commonVM.commonState.collectAsStateWithLifecycle()
     LaunchedEffect(commonState.sessionToken) {
         if(commonState.sessionToken != "") {
+            Log.d("CCCC", commonState.sessionToken)
             viewModel.setUserSessionToken(commonState.sessionToken)
         }
     }

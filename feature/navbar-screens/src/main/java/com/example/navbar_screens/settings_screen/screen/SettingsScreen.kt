@@ -25,6 +25,7 @@ import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
+import com.example.navbar_screens.settings_screen.sections.SettingsItemsLCSection
 import com.example.navbar_screens.settings_screen.sections.SettingsScreenTopBar
 import kotlinx.coroutines.launch
 
@@ -97,13 +98,11 @@ fun SettingsScreen(
             )
             .background(mColors.background)
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding)
-        ) {
-
-        }
+        SettingsItemsLCSection(
+            innerPadding = innerPadding,
+            onSettingsItmClick = {  },
+            onLinkItemClick = {  }
+        )
     }
 
     if(bigScreen) {
