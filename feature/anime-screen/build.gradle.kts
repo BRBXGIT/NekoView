@@ -54,4 +54,8 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     //Material 3
     implementation(libs.androidx.material3)
+    //Haze(blur)
+    implementation(libs.haze.materials)
+    //Animated icons(compose animation graphics)
+    implementation(libs.androidx.animation.graphics)
 }

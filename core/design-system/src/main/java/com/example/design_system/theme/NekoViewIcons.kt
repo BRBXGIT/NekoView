@@ -20,4 +20,5 @@ object NekoViewIcons {
     val TelegramMulticolored = R.drawable.ic_telegram_multicolored
     val DiscordMulticolored = R.drawable.ic_discord_multicolored
     val AniLibriaMulticolored = R.drawable.ic_anilibria_multicolored
+    val ArrowLeft = R.drawable.ic_arrow_left
 }

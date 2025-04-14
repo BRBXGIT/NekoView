@@ -9,7 +9,7 @@ data class Type(
     @SerialName("code")
     val code: Int = 0,
     @SerialName("episodes")
-    val episodes: String? = "",
+    val episodes: Int = 0,
     @SerialName("full_string")
     val fullString: String = "",
     @SerialName("length")

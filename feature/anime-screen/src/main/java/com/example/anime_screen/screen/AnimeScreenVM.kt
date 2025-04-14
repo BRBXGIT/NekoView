@@ -1,7 +1,9 @@
 package com.example.anime_screen.screen
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import coil.util.Logger
 import com.example.common.dispatchers.AniKunDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.data.domain.AnimeScreenRepo
@@ -10,6 +12,7 @@ import com.example.data.remote.utils.onSuccess
 import com.example.design_system.snackbars.SnackbarAction
 import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.snackbars.SnackbarEvent
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -18,6 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class AnimeScreenVM @Inject constructor(
     private val repository: AnimeScreenRepo,
     @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
@@ -38,6 +42,9 @@ class AnimeScreenVM @Inject constructor(
 
             val response = repository.getTitleById(id)
             response.onError { error ->
+                _animeScreenState.update { state ->
+                    state.copy(isLoading = false)
+                }
                 SnackbarController.sendEvent(
                     SnackbarEvent(
                         message = "$error",
