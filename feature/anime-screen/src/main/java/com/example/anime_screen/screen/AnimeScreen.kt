@@ -1,13 +1,12 @@
 package com.example.anime_screen.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
@@ -25,8 +24,11 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.anime_screen.sections.AnimeScreenTopBar
+import com.example.anime_screen.sections.DescriptionSection
+import com.example.anime_screen.sections.GenresLRSection
 import com.example.anime_screen.sections.TitleHeader
-import com.example.data.remote.models.title_details_response.TitleDetailsResponse
+import com.example.anime_screen.sections.TitleTeamSection
+import com.example.anime_screen.sections.TorrentsSection
 import com.example.design_system.cards.Utils
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarController
@@ -102,6 +104,34 @@ fun AnimeScreen(
                         coverImageUrl = Utils.BASE_POSTERS_URL + title.posters.original.url,
                         topInnerPadding = innerPadding.calculateTopPadding() + 12.dp
                     )
+                }
+
+                item {
+                    GenresLRSection(title.genres)
+                }
+
+                item {
+                    TitleTeamSection(
+                        voiceActors = title.team.voice.joinToString(", "),
+                        timingWorkers = title.team.timing.joinToString(", "),
+                        subtitlesWorkers = title.team.decor.joinToString(", ")
+                    )
+                }
+
+                item {
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                }
+
+                item {
+                    DescriptionSection(title.description)
+                }
+
+                item {
+                    TorrentsSection(title.torrents)
+                }
+
+                item {
+                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
             }
         }

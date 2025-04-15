@@ -1,0 +1,104 @@
+package com.example.anime_screen.sections
+
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.example.data.remote.models.title_details_response.Torrents
+import com.example.design_system.theme.NekoViewIcons
+import com.example.design_system.theme.mTypography
+
+@Composable
+fun TorrentsSection(
+    torrents: Torrents
+) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        torrents.list.forEach { torrent ->
+            TorrentItem(
+                quality = torrent.quality.string,
+                episodes = torrent.episodes.string,
+                size = torrent.sizeString,
+                leechers = torrent.leechers,
+                seeders = torrent.seeders,
+                onCLick = {  }
+            )
+        }
+    }
+}
+
+@Composable
+private fun TorrentItem(
+    quality: String,
+    episodes: String,
+    size: String,
+    leechers: Int,
+    seeders: Int,
+    onCLick: () -> Unit
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        Column {
+            Text(
+                text = "$episodes $quality ",
+                style = mTypography.bodyLarge
+            )
+
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "$size  ",
+                    style = mTypography.bodyLarge
+                )
+
+                Icon(
+                    painter = painterResource(id = NekoViewIcons.DoubleArrowUp),
+                    contentDescription = null,
+                    tint = Color(0xff05da73)
+                )
+
+                Text(
+                    text = "$seeders ",
+                    style = mTypography.bodyLarge
+                )
+
+                Icon(
+                    painter = painterResource(id = NekoViewIcons.DoubleArrowDown),
+                    contentDescription = null,
+                    tint = Color(0xffff2729)
+                )
+
+                Text(
+                    text = leechers.toString(),
+                    style = mTypography.bodyLarge
+                )
+            }
+        }
+
+        IconButton(
+            onClick = onCLick
+        ) {
+            Icon(
+                painter = painterResource(id = NekoViewIcons.Download),
+                contentDescription = null
+            )
+        }
+    }
+}

@@ -8,7 +8,6 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import io.ktor.client.engine.okhttp.OkHttp
 import javax.inject.Singleton
 
 @Module
@@ -19,9 +18,7 @@ object AnimeScreenModule {
     @Singleton
     fun provideAnimeScreenKtorClient(): AnimeScreenKtorClient {
         return AnimeScreenKtorClient(
-            createHttpClient(
-                OkHttp.create()
-            )
+            createHttpClient()
         )
     }
 

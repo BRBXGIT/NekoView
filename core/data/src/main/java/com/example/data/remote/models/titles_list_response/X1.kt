@@ -13,7 +13,7 @@ data class X1(
     @SerialName("hls")
     val hls: Hls = Hls(),
     @SerialName("name")
-    val name: String? = null,
+    val name: String? = "",
     @SerialName("preview")
     val preview: String = "",
     @SerialName("skips")

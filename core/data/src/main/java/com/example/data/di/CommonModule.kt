@@ -2,17 +2,16 @@ package com.example.data.di
 
 import android.content.Context
 import com.example.data.domain.CommonRepo
-import com.example.data.repositories.CommonRepoImpl
 import com.example.data.local.data_store.NekoViewDataStore
 import com.example.data.remote.ktor.CommonKtorClient
 import com.example.data.remote.ktor.createHttpClient
+import com.example.data.repositories.CommonRepoImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.components.SingletonComponent
-import io.ktor.client.engine.okhttp.OkHttp
-import javax.inject.Singleton
 import dagger.hilt.android.qualifiers.ApplicationContext
+import dagger.hilt.components.SingletonComponent
+import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,9 +21,7 @@ object CommonModule {
     @Singleton
     fun provideCommonKtorClient(): CommonKtorClient {
         return CommonKtorClient(
-            createHttpClient(
-                OkHttp.create()
-            )
+            createHttpClient()
         )
     }
 

@@ -21,4 +21,8 @@ object NekoViewIcons {
     val DiscordMulticolored = R.drawable.ic_discord_multicolored
     val AniLibriaMulticolored = R.drawable.ic_anilibria_multicolored
     val ArrowLeft = R.drawable.ic_arrow_left
+    val ArrowDownAnimated = R.drawable.ic_arrow_down_animated
+    val Download = R.drawable.ic_download
+    val DoubleArrowUp = R.drawable.ic_double_arrow_up
+    val DoubleArrowDown = R.drawable.ic_double_arrow_down
 }

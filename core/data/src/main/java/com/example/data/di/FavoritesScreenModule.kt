@@ -9,7 +9,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
-import io.ktor.client.engine.okhttp.OkHttp
 
 
 @Module
@@ -20,9 +19,7 @@ object FavoritesScreenModule {
     @Singleton
     fun provideFavoritesScreenKtorClient(): FavoritesScreenKtorClient {
         return FavoritesScreenKtorClient(
-            createHttpClient(
-                OkHttp.create()
-            )
+            createHttpClient()
         )
     }
 

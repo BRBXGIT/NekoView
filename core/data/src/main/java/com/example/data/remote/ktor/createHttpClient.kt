@@ -1,15 +1,16 @@
 package com.example.data.remote.ktor
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.engine.okhttp.OkHttp
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
-fun createHttpClient(
-    engine: HttpClientEngine
-): HttpClient {
+fun createHttpClient(): HttpClient {
+    val engine = OkHttp.create()
     val httpClient = HttpClient(engine) {
         install(Logging)
         install(ContentNegotiation) {
@@ -19,6 +20,11 @@ fun createHttpClient(
                     coerceInputValues = true
                 }
             )
+        }
+        install(HttpTimeout) {
+            this.requestTimeoutMillis = 60000 //One minute
+            this.connectTimeoutMillis = 60000 //Minute again
+            this.socketTimeoutMillis = 60000 //And minute again :)
         }
     }
 
