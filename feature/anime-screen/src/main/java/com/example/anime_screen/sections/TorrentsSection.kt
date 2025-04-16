@@ -20,7 +20,8 @@ import com.example.design_system.theme.mTypography
 
 @Composable
 fun TorrentsSection(
-    torrents: Torrents
+    torrents: Torrents,
+    onTorrentDownloadClick: (String) -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -32,7 +33,7 @@ fun TorrentsSection(
                 size = torrent.sizeString,
                 leechers = torrent.leechers,
                 seeders = torrent.seeders,
-                onCLick = {  }
+                onCLick = { onTorrentDownloadClick(torrent.url) }
             )
         }
     }

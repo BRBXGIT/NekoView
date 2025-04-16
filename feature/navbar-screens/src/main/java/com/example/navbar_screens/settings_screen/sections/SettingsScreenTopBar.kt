@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -38,6 +39,7 @@ import com.example.design_system.theme.NekoViewIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreenTopBar(
+    scrollBehavior: TopAppBarScrollBehavior,
     userName: String,
     userImageUrl: String,
     loadingState: Boolean,
@@ -45,6 +47,7 @@ fun SettingsScreenTopBar(
 ) {
     Column {
         TopAppBar(
+            scrollBehavior = scrollBehavior,
             title = {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

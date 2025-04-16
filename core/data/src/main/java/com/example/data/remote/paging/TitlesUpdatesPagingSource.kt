@@ -16,7 +16,7 @@ class TitlesUpdatesPagingSource(
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item1> {
         val startPage = params.key ?: 1
-        val limit = 10
+        val limit = 5
 
         val response = ktorClient.getTitlesUpdates(limit, startPage)
         return when(response) {

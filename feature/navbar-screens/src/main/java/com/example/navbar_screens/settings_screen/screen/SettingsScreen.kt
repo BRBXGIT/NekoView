@@ -2,27 +2,30 @@ package com.example.navbar_screens.settings_screen.screen
 
 import android.content.Intent
 import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
+import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.theme.mColors
@@ -31,7 +34,9 @@ import com.example.navbar_screens.common.NavRail
 import com.example.navbar_screens.settings_screen.sections.SettingsItemsLCSection
 import com.example.navbar_screens.settings_screen.sections.SettingsScreenTopBar
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     navController: NavController,
@@ -67,14 +72,16 @@ fun SettingsScreen(
         }
     }
 
+    val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             SettingsScreenTopBar(
                 userName = settingsScreenState.userName,
-                userImageUrl = settingsScreenState.userImageUrl,
+                userImageUrl = DesignUtils.BASE_POSTERS_URL + settingsScreenState.userImageUrl,
                 loadingState = settingsScreenState.userDetailsLoading,
-                onExitClick = {  }
+                onExitClick = {  },
+                scrollBehavior = topBarScrollBehavior
             )
         },
         bottomBar = {
@@ -100,6 +107,7 @@ fun SettingsScreen(
                 }
             )
             .background(mColors.background)
+            .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
         val context = LocalContext.current
 
@@ -110,7 +118,7 @@ fun SettingsScreen(
                 context.startActivity(
                     Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse(link)
+                        link.toUri()
                     )
                 )
             }

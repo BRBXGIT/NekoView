@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
 import com.example.data.remote.models.titles_list_response.Item1
 import com.example.design_system.cards.AnimeCard
-import com.example.design_system.cards.Utils
+import com.example.design_system.cards.DesignUtils
 
 @Composable
 fun TitlesUpdatesLVGSection(
@@ -34,7 +34,7 @@ fun TitlesUpdatesLVGSection(
             currentTitle?.let {
                 AnimeCard(
                     index = index,
-                    posterPath = Utils.BASE_POSTERS_URL + currentTitle.posters.small.url,
+                    posterPath = DesignUtils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,
                     onCardClick = { onTitleClick(currentTitle.id) }

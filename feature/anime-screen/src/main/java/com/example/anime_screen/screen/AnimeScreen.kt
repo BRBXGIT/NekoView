@@ -1,8 +1,11 @@
 package com.example.anime_screen.screen
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -21,7 +24,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.anime_screen.sections.AnimeScreenTopBar
@@ -31,7 +36,8 @@ import com.example.anime_screen.sections.GenresLRSection
 import com.example.anime_screen.sections.TitleHeader
 import com.example.anime_screen.sections.TitleTeamSection
 import com.example.anime_screen.sections.TorrentsSection
-import com.example.design_system.cards.Utils
+import com.example.data.remote.utils.Utils
+import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.theme.mColors
@@ -80,7 +86,8 @@ fun AnimeScreen(
                 onBackClick = {  navController.navigateUp() },
                 onHeartIconClick = {  },
                 loadingState = animeScreenState.isLoading,
-                scrollBehavior = topBarScrollBehavior
+                scrollBehavior = topBarScrollBehavior,
+                titleName = animeScreenState.title.names.ru
             )
         },
         modifier = Modifier
@@ -88,6 +95,8 @@ fun AnimeScreen(
             .background(mColors.background)
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
+        val context = LocalContext.current
+
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(12.dp),
             modifier = Modifier.fillMaxSize()
@@ -102,8 +111,8 @@ fun AnimeScreen(
                         season = "${title.season.year} ${title.season.string}",
                         type = title.type.fullString,
                         releaseState = title.status.string,
-                        bannerImageUrl = Utils.BASE_POSTERS_URL + title.posters.original.url,
-                        coverImageUrl = Utils.BASE_POSTERS_URL + title.posters.original.url,
+                        bannerImageUrl = DesignUtils.BASE_POSTERS_URL + title.posters.original.url,
+                        coverImageUrl = DesignUtils.BASE_POSTERS_URL + title.posters.original.url,
                         topInnerPadding = innerPadding.calculateTopPadding() + 12.dp
                     )
                 }
@@ -125,7 +134,17 @@ fun AnimeScreen(
                 }
 
                 item {
-                    TorrentsSection(title.torrents)
+                    TorrentsSection(
+                        torrents = title.torrents,
+                        onTorrentDownloadClick = { torrentLink ->
+                            context.startActivity(
+                                Intent(
+                                    Intent.ACTION_VIEW,
+                                    (Utils.BASE_TORRENT_URL + torrentLink).toUri()
+                                )
+                            )
+                        }
+                    )
                 }
 
                 item {
@@ -139,6 +158,10 @@ fun AnimeScreen(
                         name = episode.name ?: "Кажется названия ещё нет :)",
                         onWatchButtonClick = {}
                     )
+                }
+
+                item {
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
         }
