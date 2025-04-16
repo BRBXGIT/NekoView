@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -25,6 +26,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.anime_screen.sections.AnimeScreenTopBar
 import com.example.anime_screen.sections.DescriptionSection
+import com.example.anime_screen.sections.EpisodeItem
 import com.example.anime_screen.sections.GenresLRSection
 import com.example.anime_screen.sections.TitleHeader
 import com.example.anime_screen.sections.TitleTeamSection
@@ -119,10 +121,6 @@ fun AnimeScreen(
                 }
 
                 item {
-                    HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
-                }
-
-                item {
                     DescriptionSection(title.description)
                 }
 
@@ -132,6 +130,15 @@ fun AnimeScreen(
 
                 item {
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
+                }
+
+
+                items(title.player.list.values.toList()) { episode ->
+                    EpisodeItem(
+                        episode = episode.episode,
+                        name = episode.name ?: "Кажется названия ещё нет :)",
+                        onWatchButtonClick = {}
+                    )
                 }
             }
         }
