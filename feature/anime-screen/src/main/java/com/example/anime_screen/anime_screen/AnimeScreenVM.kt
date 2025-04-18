@@ -1,9 +1,7 @@
-package com.example.anime_screen.screen
+package com.example.anime_screen.anime_screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import coil.util.Logger
 import com.example.common.dispatchers.AniKunDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.data.domain.AnimeScreenRepo

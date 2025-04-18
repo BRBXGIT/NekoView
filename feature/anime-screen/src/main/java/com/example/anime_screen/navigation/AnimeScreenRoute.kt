@@ -5,8 +5,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.anime_screen.screen.AnimeScreen
-import com.example.anime_screen.screen.AnimeScreenVM
+import com.example.anime_screen.anime_screen.AnimeScreen
+import com.example.anime_screen.anime_screen.AnimeScreenVM
 import kotlinx.serialization.Serializable
 
 @Serializable

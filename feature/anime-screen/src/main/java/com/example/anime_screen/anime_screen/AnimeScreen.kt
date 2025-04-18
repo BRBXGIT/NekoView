@@ -1,4 +1,4 @@
-package com.example.anime_screen.screen
+package com.example.anime_screen.anime_screen
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.anime_screen.navigation.PlayerScreenRoute
 import com.example.anime_screen.sections.AnimeScreenTopBar
 import com.example.anime_screen.sections.DescriptionSection
 import com.example.anime_screen.sections.EpisodeItem
@@ -151,12 +152,17 @@ fun AnimeScreen(
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
 
-
                 items(title.player.list.values.toList()) { episode ->
                     EpisodeItem(
                         episode = episode.episode,
                         name = episode.name ?: "Кажется названия ещё нет :)",
-                        onWatchButtonClick = {}
+                        onWatchButtonClick = {
+                            navController.navigate(
+                                PlayerScreenRoute(
+                                    videoUrl = "https://${title.player.host}${episode.hls.fhd}"
+                                )
+                            )
+                        }
                     )
                 }
 

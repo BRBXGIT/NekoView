@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.anime_screen.navigation.animeScreen
+import com.example.anime_screen.navigation.playerScreen
 import com.example.common.CommonVM
 import com.example.navbar_screens.featured_screen.navigation.featuredScreen
 import com.example.navbar_screens.featured_screen.screen.FeaturedScreenVM
@@ -52,5 +53,7 @@ fun NavGraph(
         )
 
         animeScreen(navController)
+
+        playerScreen(navController)
     }
 }

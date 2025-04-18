@@ -1,4 +1,4 @@
-package com.example.anime_screen.screen
+package com.example.anime_screen.anime_screen
 
 import com.example.data.remote.models.title_details_response.TitleDetailsResponse
 

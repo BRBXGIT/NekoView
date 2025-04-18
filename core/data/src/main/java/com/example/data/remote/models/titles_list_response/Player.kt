@@ -1,6 +1,5 @@
 package com.example.data.remote.models.titles_list_response
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -15,7 +14,7 @@ data class Player(
     @SerialName("is_rutube")
     val isRutube: Boolean = false,
     @SerialName("list")
-    val list: List = List(),
+    val list: Map<String, X1> = emptyMap(),
     @SerialName("rutube")
     val rutube: Rutube? = Rutube()
 )

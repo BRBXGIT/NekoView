@@ -58,4 +58,8 @@ dependencies {
     implementation(libs.haze.materials)
     //Animated icons(compose animation graphics)
     implementation(libs.androidx.animation.graphics)
+    //Exo player
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.exoplayer.hls)
 }

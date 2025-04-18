@@ -26,10 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.paging.LoadState
-import androidx.paging.Logger
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.anime_screen.navigation.AnimeScreenRoute
-import com.example.anime_screen.screen.AnimeScreen
 import com.example.common.AuthBS
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
