@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.example.anime_screen.common.AnimeScreenVM
+import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.anime_screen.navigation.animeScreen
 import com.example.anime_screen.navigation.playerScreenRoute
 import com.example.common.CommonVM
@@ -31,7 +32,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = HomeScreenRoute
+        startDestination = AnimeScreenRoute(9000)
     ) {
         homeScreen(
             navController = navController,

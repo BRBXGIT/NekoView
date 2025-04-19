@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
@@ -37,6 +37,7 @@ import com.example.anime_screen.anime_screen.sections.TitleHeader
 import com.example.anime_screen.anime_screen.sections.TitleTeamSection
 import com.example.anime_screen.anime_screen.sections.TorrentsSection
 import com.example.anime_screen.common.AnimeScreenVM
+import com.example.anime_screen.navigation.PlayerScreenRoute
 import com.example.data.remote.utils.Utils
 import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
@@ -152,12 +153,14 @@ fun AnimeScreen(
                     HorizontalDivider(modifier = Modifier.padding(horizontal = 16.dp))
                 }
 
-                items(title.player.list.values.toList()) { episode ->
+                itemsIndexed(title.player.list.values.toList()) { index, episode ->
                     EpisodeItem(
                         episode = episode.episode,
                         name = episode.name ?: "Кажется названия ещё нет :)",
                         onWatchButtonClick = {
-
+                            navController.navigate(
+                                PlayerScreenRoute(index)
+                            )
                         }
                     )
                 }
