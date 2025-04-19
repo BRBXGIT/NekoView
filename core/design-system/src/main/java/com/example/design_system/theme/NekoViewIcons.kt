@@ -25,6 +25,8 @@ object NekoViewIcons {
     val Download = R.drawable.ic_download
     val DoubleArrowUp = R.drawable.ic_double_arrow_up
     val DoubleArrowDown = R.drawable.ic_double_arrow_down
-    val PlayPauseAnimated = R.drawable.play_pause_animated //TODO change animation for icon
+    val PlayPauseAnimated = R.drawable.ic_play_pause_animated //TODO change animation for icon
     val Square = R.drawable.ic_square
+    val Next = R.drawable.ic_next
+    val Previous = R.drawable.ic_previous
 }
