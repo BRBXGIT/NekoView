@@ -1,4 +1,4 @@
-package com.example.anime_screen.anime_screen
+package com.example.anime_screen.anime_screen.screen
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -29,14 +29,14 @@ import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import com.example.anime_screen.navigation.PlayerScreenRoute
-import com.example.anime_screen.sections.AnimeScreenTopBar
-import com.example.anime_screen.sections.DescriptionSection
-import com.example.anime_screen.sections.EpisodeItem
-import com.example.anime_screen.sections.GenresLRSection
-import com.example.anime_screen.sections.TitleHeader
-import com.example.anime_screen.sections.TitleTeamSection
-import com.example.anime_screen.sections.TorrentsSection
+import com.example.anime_screen.anime_screen.sections.AnimeScreenTopBar
+import com.example.anime_screen.anime_screen.sections.DescriptionSection
+import com.example.anime_screen.anime_screen.sections.EpisodeItem
+import com.example.anime_screen.anime_screen.sections.GenresLRSection
+import com.example.anime_screen.anime_screen.sections.TitleHeader
+import com.example.anime_screen.anime_screen.sections.TitleTeamSection
+import com.example.anime_screen.anime_screen.sections.TorrentsSection
+import com.example.anime_screen.common.AnimeScreenVM
 import com.example.data.remote.utils.Utils
 import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
@@ -84,7 +84,7 @@ fun AnimeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             AnimeScreenTopBar(
-                onBackClick = {  navController.navigateUp() },
+                onBackClick = { navController.navigateUp() },
                 onHeartIconClick = {  },
                 loadingState = animeScreenState.isLoading,
                 scrollBehavior = topBarScrollBehavior,
@@ -157,11 +157,7 @@ fun AnimeScreen(
                         episode = episode.episode,
                         name = episode.name ?: "Кажется названия ещё нет :)",
                         onWatchButtonClick = {
-                            navController.navigate(
-                                PlayerScreenRoute(
-                                    videoUrl = "https://${title.player.host}${episode.hls.fhd}"
-                                )
-                            )
+
                         }
                     )
                 }

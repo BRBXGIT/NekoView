@@ -1,7 +1,9 @@
-package com.example.anime_screen.anime_screen
+package com.example.anime_screen.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.anime_screen.anime_screen.screen.AnimeScreenIntent
+import com.example.anime_screen.anime_screen.screen.AnimeScreenState
 import com.example.common.dispatchers.AniKunDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.data.domain.AnimeScreenRepo
@@ -19,6 +21,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+//Shared viewModel for anime screen and player screen
 @HiltViewModel
 class AnimeScreenVM @Inject constructor(
     private val repository: AnimeScreenRepo,
@@ -28,7 +31,7 @@ class AnimeScreenVM @Inject constructor(
     private val _animeScreenState = MutableStateFlow(AnimeScreenState())
     val animeScreenState = _animeScreenState.stateIn(
         viewModelScope,
-        SharingStarted.WhileSubscribed(5_000),
+        SharingStarted.Companion.WhileSubscribed(5_000),
         AnimeScreenState()
     )
 

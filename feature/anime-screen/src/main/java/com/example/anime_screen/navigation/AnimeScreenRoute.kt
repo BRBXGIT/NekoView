@@ -1,12 +1,11 @@
 package com.example.anime_screen.navigation
 
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.example.anime_screen.anime_screen.AnimeScreen
-import com.example.anime_screen.anime_screen.AnimeScreenVM
+import com.example.anime_screen.anime_screen.screen.AnimeScreen
+import com.example.anime_screen.common.AnimeScreenVM
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,10 +14,10 @@ data class AnimeScreenRoute(
 )
 
 fun NavGraphBuilder.animeScreen(
-    navController: NavController
+    navController: NavController,
+    animeScreenVM: AnimeScreenVM
 ) = composable<AnimeScreenRoute> {
     val titleId = it.toRoute<AnimeScreenRoute>().titleId
-    val animeScreenVM = hiltViewModel<AnimeScreenVM>()
 
     AnimeScreen(
         navController = navController,

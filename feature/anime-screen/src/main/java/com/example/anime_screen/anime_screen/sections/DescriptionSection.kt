@@ -1,4 +1,4 @@
-package com.example.anime_screen.sections
+package com.example.anime_screen.anime_screen.sections
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.animateContentSize

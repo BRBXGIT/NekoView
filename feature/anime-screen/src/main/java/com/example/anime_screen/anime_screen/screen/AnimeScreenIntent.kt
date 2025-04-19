@@ -1,4 +1,4 @@
-package com.example.anime_screen.anime_screen
+package com.example.anime_screen.anime_screen.screen
 
 sealed class AnimeScreenIntent {
     data class FetchTitleDetails(val id: Int): AnimeScreenIntent()
