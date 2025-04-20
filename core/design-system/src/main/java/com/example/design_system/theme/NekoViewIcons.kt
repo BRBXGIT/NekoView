@@ -30,4 +30,8 @@ object NekoViewIcons {
     val Next = R.drawable.ic_next
     val Previous = R.drawable.ic_previous
     val Menu = R.drawable.ic_menu
+    val FullScreen = R.drawable.ic_full_screen
+    val Lock = R.drawable.ic_lock
+    val QuitFullScreen = R.drawable.ic_quit_full_screen
+    val Unlock = R.drawable.ic_unlock
 }

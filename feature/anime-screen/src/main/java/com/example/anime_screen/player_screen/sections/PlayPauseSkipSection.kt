@@ -1,5 +1,9 @@
 package com.example.anime_screen.player_screen.sections
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.animation.graphics.res.animatedVectorResource
 import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
@@ -9,7 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -19,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import com.example.design_system.theme.NekoViewIcons
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
@@ -29,47 +33,56 @@ fun BoxScope.PlayPauseSkipSection(
     isPlaying: Boolean,
     onPlayClick: () -> Unit,
     onPreviousClick: () -> Unit,
-    onNextClick: () -> Unit
+    onNextClick: () -> Unit,
+    showPlayerFeatures: Boolean
 ) {
-    Row(
-        horizontalArrangement = Arrangement.spacedBy(32.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.align(Alignment.Center)
+    AnimatedVisibility(
+        visible = showPlayerFeatures,
+        enter = fadeIn(tween(300)),
+        exit = fadeOut(tween(300)),
+        modifier = Modifier
+            .align(Alignment.Center)
+            .zIndex(2f)
     ) {
-        IconButton(
-            onClick = onPreviousClick
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(32.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            Icon(
-                painter = painterResource(NekoViewIcons.Previous),
-                contentDescription = null,
-                modifier = Modifier.size(28.dp),
-                tint = if(index == 0) Color(0xffffffff).copy(alpha = 0.3f) else Color(0xffffffff)
-            )
-        }
+            IconButton(
+                onClick = onPreviousClick
+            ) {
+                Icon(
+                    painter = painterResource(NekoViewIcons.Previous),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp),
+                    tint = if(index == 0) Color(0xffffffff).copy(alpha = 0.3f) else Color(0xffffffff)
+                )
+            }
 
-        IconButton(
-            onClick = onPlayClick
-        ) {
-            val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.PlayPauseAnimated)
-            val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = isPlaying)
+            IconButton(
+                onClick = onPlayClick
+            ) {
+                val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.PlayPauseAnimated)
+                val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = isPlaying)
 
-            Image(
-                painter = animatedPainter,
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(Color(0xffffffff)),
-                modifier = Modifier.size(32.dp)
-            )
-        }
+                Image(
+                    painter = animatedPainter,
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color(0xffffffff)),
+                    modifier = Modifier.size(32.dp)
+                )
+            }
 
-        IconButton(
-            onClick = onNextClick
-        ) {
-            Icon(
-                painter = painterResource(NekoViewIcons.Next),
-                contentDescription = null,
-                modifier = Modifier.size(28.dp),
-                tint = if(index + 1 == size) Color(0xffffffff).copy(alpha = 0.3f) else Color(0xffffffff)
-            )
+            IconButton(
+                onClick = onNextClick
+            ) {
+                Icon(
+                    painter = painterResource(NekoViewIcons.Next),
+                    contentDescription = null,
+                    modifier = Modifier.size(28.dp),
+                    tint = if(index + 1 == size) Color(0xffffffff).copy(alpha = 0.3f) else Color(0xffffffff)
+                )
+            }
         }
     }
 }

@@ -18,7 +18,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
@@ -26,9 +28,11 @@ import androidx.navigation.NavController
 import com.example.anime_screen.common.AnimeScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
 import com.example.anime_screen.player_screen.sections.EpisodesDialog
+import com.example.anime_screen.player_screen.sections.LockedScreenButton
 import com.example.anime_screen.player_screen.sections.PlayPauseSkipSection
 import com.example.anime_screen.player_screen.sections.PlayerBottomBar
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
+import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
 import kotlinx.coroutines.delay
 
@@ -40,6 +44,7 @@ fun PlayerScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
+    val activity = context as? Activity
     val animeScreenState by viewModel.animeScreenState.collectAsStateWithLifecycle()
     val title = animeScreenState.title
 
@@ -83,8 +88,8 @@ fun PlayerScreen(
         }
     }
 
+    var isFullScreen by rememberSaveable { mutableStateOf(true) }
     DisposableEffect(Unit) {
-        val activity = context as? Activity
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
         onDispose {
@@ -99,22 +104,48 @@ fun PlayerScreen(
     }
 
     var episodesDialogOpen by rememberSaveable { mutableStateOf(false) }
+    var showPlayerFeatures by rememberSaveable { mutableStateOf(false) }
+    var isScreenLocked by rememberSaveable { mutableStateOf(false) }
+    var showUnlockButton by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(showUnlockButton) {
+        if(showUnlockButton) {
+            delay(3000)
+            showUnlockButton = false
+        }
+    }
     Scaffold(
         bottomBar = {
             PlayerBottomBar(
-                episodeTime = formatTime(currentPosition) + " / " + formatTime(duration)
+                showPlayerFeatures = showPlayerFeatures,
+                episodeTime = formatTime(currentPosition) + " / " + formatTime(duration),
+                onQuitFullScreenClick = {  },
+                onLockScreenClick = {
+                    isScreenLocked = true
+                    showPlayerFeatures = false
+                    showUnlockButton = true
+                }
             )
         },
         topBar = {
             PlayerTopBar(
                 onBackClick = { navController.navigateUp() },
                 episodeTitle = episodeTitle,
-                onMenuClick = { episodesDialogOpen = true }
+                onMenuClick = { episodesDialogOpen = true },
+                showPlayerFeatures = showPlayerFeatures
             )
         },
         modifier = Modifier
             .fillMaxSize()
             .background(mColors.background)
+            .noRippleClickable(
+                onClick = {
+                    if(!isScreenLocked) {
+                        showPlayerFeatures = !showPlayerFeatures
+                    } else {
+                        showUnlockButton = true
+                    }
+                }
+            )
     ) { innerPadding ->
         Box(
             modifier = Modifier
@@ -133,6 +164,7 @@ fun PlayerScreen(
             AnimePlayer(exoPlayer)
 
             PlayPauseSkipSection(
+                showPlayerFeatures = showPlayerFeatures,
                 size = animeScreenState.title.player.list.values.size,
                 index = index,
                 isPlaying = isPlaying,
@@ -150,6 +182,28 @@ fun PlayerScreen(
                 onNextClick = {
                     if (index + 1 < animeScreenState.title.player.list.values.size) index++
                 }
+            )
+
+            LockedScreenButton(
+                onClick = {
+                    isScreenLocked = false
+                    showUnlockButton = false
+                },
+                showUnlockButton = showUnlockButton,
+                bottomPadding = innerPadding.calculateBottomPadding()
+            )
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        if(showPlayerFeatures) {
+                            Color.Black.copy(alpha = 0.5f)
+                        } else {
+                            Color.Transparent
+                        }
+                    )
+                    .zIndex(1f)
             )
         }
     }

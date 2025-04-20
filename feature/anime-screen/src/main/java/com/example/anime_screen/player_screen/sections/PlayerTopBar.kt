@@ -1,5 +1,11 @@
 package com.example.anime_screen.player_screen.sections
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.slideInVertically
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -19,38 +25,45 @@ fun PlayerTopBar(
     onMenuClick: () -> Unit,
     onBackClick: () -> Unit,
     episodeTitle: String,
+    showPlayerFeatures: Boolean
 ) {
-    CenterAlignedTopAppBar(
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = Color.Transparent
-        ),
-        title = {
-            Text(
-                text = episodeTitle,
-                style = mTypography.bodyLarge,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        navigationIcon = {
-            IconButton(
-                onClick = onBackClick
-            ) {
-                Icon(
-                    painter = painterResource(NekoViewIcons.ArrowLeft),
-                    contentDescription = null
+    AnimatedVisibility(
+        visible = showPlayerFeatures,
+        enter = slideInVertically(tween(300)) + fadeIn(tween(300)),
+        exit = shrinkVertically(tween(300)) + fadeOut(tween(300))
+    ) {
+        CenterAlignedTopAppBar(
+            colors = TopAppBarDefaults.topAppBarColors(
+                containerColor = Color.Transparent
+            ),
+            title = {
+                Text(
+                    text = episodeTitle,
+                    style = mTypography.bodyLarge,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
                 )
+            },
+            navigationIcon = {
+                IconButton(
+                    onClick = onBackClick
+                ) {
+                    Icon(
+                        painter = painterResource(NekoViewIcons.ArrowLeft),
+                        contentDescription = null
+                    )
+                }
+            },
+            actions = {
+                IconButton(
+                    onClick = onMenuClick
+                ) {
+                    Icon(
+                        painter = painterResource(NekoViewIcons.Menu),
+                        contentDescription = null
+                    )
+                }
             }
-        },
-        actions = {
-            IconButton(
-                onClick = onMenuClick
-            ) {
-                Icon(
-                    painter = painterResource(NekoViewIcons.Menu),
-                    contentDescription = null
-                )
-            }
-        }
-    )
+        )
+    }
 }
