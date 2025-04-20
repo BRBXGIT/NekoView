@@ -5,6 +5,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -30,52 +32,57 @@ fun PlayerScreen(
     navController: NavController
 ) {
     val context = LocalContext.current
+    val animeScreenState by viewModel.animeScreenState.collectAsStateWithLifecycle()
+    var index by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
+    var isPlaying by rememberSaveable { mutableStateOf(true) }
+
+    val exoPlayer = remember {
+        ExoPlayer.Builder(context).build().apply {
+            playWhenReady = true
+        }
+    }
+
+    LaunchedEffect(index) {
+        val episode = animeScreenState.title.player.list.values.toList()[index]
+        val selectedEpisodeLink = "https://${animeScreenState.title.player.host}${episode.hls.fhd}"
+        val mediaItem = MediaItem.fromUri(selectedEpisodeLink)
+        exoPlayer.setMediaItem(mediaItem)
+        exoPlayer.prepare()
+        if(isPlaying) {
+            exoPlayer.play()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose {
+            exoPlayer.release()
+        }
+    }
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(mColors.background)
     ) {
-        val animeScreenState by viewModel.animeScreenState.collectAsStateWithLifecycle()
-        var index by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
-
-        var selectedEpisodeLink = "https://" +
-                animeScreenState.title.player.host +
-                animeScreenState.title.player.list.values.toList()[index].hls.fhd
-
-        val exoPlayer = remember {
-            ExoPlayer.Builder(context).build().apply {
-                val mediaItem = MediaItem.fromUri(selectedEpisodeLink)
-                setMediaItem(mediaItem)
-                prepare()
-                playWhenReady = true
-            }
-        }
-
         AnimePlayer(exoPlayer)
 
-        var isPlaying by rememberSaveable { mutableStateOf(true) }
         PlayPauseSkipSection(
             size = animeScreenState.title.player.list.values.size,
             index = index,
             isPlaying = isPlaying,
             onPlayClick = {
-                when (isPlaying) {
-                    true -> {
-                        isPlaying = false
-                        exoPlayer.pause()
-                    }
-                    false -> {
-                        isPlaying = true
-                        exoPlayer.play()
-                    }
+                isPlaying = !isPlaying
+                if (isPlaying) {
+                    exoPlayer.play()
+                } else {
+                    exoPlayer.pause()
                 }
             },
             onPreviousClick = {
-                index -= 1
+                if (index > 0) index--
             },
             onNextClick = {
-                index += 1
+                if (index + 1 < animeScreenState.title.player.list.values.size) index++
             },
         )
     }
