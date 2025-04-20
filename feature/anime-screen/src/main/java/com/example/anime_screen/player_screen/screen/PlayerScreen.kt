@@ -10,6 +10,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.currentComposer
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -24,6 +25,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.example.anime_screen.common.AnimeScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
+import com.example.anime_screen.player_screen.sections.EpisodesDialog
 import com.example.anime_screen.player_screen.sections.PlayPauseSkipSection
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
 import com.example.design_system.theme.mColors
@@ -76,12 +78,18 @@ fun PlayerScreen(
         }
     }
 
+    var episodesNamesList = mutableListOf<String>()
+    title.player.list.values.forEach {
+        episodesNamesList.add(if(it.name != null) it.name!! else "Кажется названия ещё нет :)")
+    }
+
+    var episodesDialogOpen by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         topBar = {
             PlayerTopBar(
                 onBackClick = { navController.navigateUp() },
                 episodeTitle = episodeTitle,
-                onMenuClick = {  }
+                onMenuClick = { episodesDialogOpen = true }
             )
         },
         modifier = Modifier
@@ -93,6 +101,15 @@ fun PlayerScreen(
                 .fillMaxSize()
                 .background(mColors.background)
         ) {
+            if(episodesDialogOpen) {
+                EpisodesDialog(
+                    onDismissRequest = { episodesDialogOpen = false },
+                    currentEpisodeIndex = index,
+                    episodes = episodesNamesList,
+                    onConfirmClick = { index = it }
+                )
+            }
+
             AnimePlayer(exoPlayer)
 
             PlayPauseSkipSection(
