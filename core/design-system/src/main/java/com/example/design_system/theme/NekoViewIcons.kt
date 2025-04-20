@@ -29,4 +29,5 @@ object NekoViewIcons {
     val Square = R.drawable.ic_square
     val Next = R.drawable.ic_next
     val Previous = R.drawable.ic_previous
+    val Menu = R.drawable.ic_menu
 }
