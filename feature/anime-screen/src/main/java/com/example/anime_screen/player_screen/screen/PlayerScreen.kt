@@ -33,8 +33,9 @@ import com.example.anime_screen.player_screen.sections.AnimePlayer
 import com.example.anime_screen.player_screen.sections.EpisodesDialog
 import com.example.anime_screen.player_screen.sections.LockedScreenButton
 import com.example.anime_screen.player_screen.sections.PlayPauseSkipSection
-import com.example.anime_screen.player_screen.sections.PlayerBottomBar
+import com.example.anime_screen.player_screen.sections.PlayerFeaturesBottomBar
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
+import com.example.anime_screen.player_screen.sections.PlayerUnlockButtonBottomBar
 import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
 import kotlinx.coroutines.delay
@@ -117,16 +118,26 @@ fun PlayerScreen(
     }
     Scaffold(
         bottomBar = {
-            PlayerBottomBar(
-                showPlayerFeatures = showPlayerFeatures,
-                episodeTime = formatTime(currentPosition) + " / " + formatTime(duration),
-                onQuitFullScreenClick = {  },
-                onLockScreenClick = {
-                    isScreenLocked = true
-                    showPlayerFeatures = false
-                    showUnlockButton = true
-                }
-            )
+            if(isScreenLocked) {
+                PlayerUnlockButtonBottomBar(
+                    showUnlockButton = showUnlockButton,
+                    onClick = {
+                        isScreenLocked = false
+                        showUnlockButton = false
+                    }
+                )
+            } else {
+                PlayerFeaturesBottomBar(
+                    showPlayerFeatures = showPlayerFeatures,
+                    episodeTime = formatTime(currentPosition) + " / " + formatTime(duration),
+                    onQuitFullScreenClick = {  },
+                    onLockScreenClick = {
+                        isScreenLocked = true
+                        showPlayerFeatures = false
+                        showUnlockButton = true
+                    }
+                )
+            }
         },
         topBar = {
             PlayerTopBar(
@@ -170,29 +181,18 @@ fun PlayerScreen(
                 size = animeScreenState.title.player.list.values.size,
                 index = episodeIndex,
                 isPlaying = isPlaying,
+                onPreviousClick = { if (episodeIndex > 0) episodeIndex-- },
+                onNextClick = {
+                    if (episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
+                },
                 onPlayClick = {
                     isPlaying = !isPlaying
-                    if (isPlaying) {
+                    if(isPlaying) {
                         exoPlayer.play()
                     } else {
                         exoPlayer.pause()
                     }
                 },
-                onPreviousClick = {
-                    if (episodeIndex > 0) episodeIndex--
-                },
-                onNextClick = {
-                    if (episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
-                }
-            )
-
-            LockedScreenButton(
-                onClick = {
-                    isScreenLocked = false
-                    showUnlockButton = false
-                },
-                showUnlockButton = showUnlockButton,
-                bottomPadding = innerPadding.calculateBottomPadding()
             )
 
             //Cover all screen except player features
