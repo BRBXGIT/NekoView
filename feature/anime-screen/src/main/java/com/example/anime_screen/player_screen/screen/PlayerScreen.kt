@@ -2,6 +2,8 @@ package com.example.anime_screen.player_screen.screen
 
 import android.app.Activity
 import android.content.pm.ActivityInfo
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -19,6 +21,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -48,7 +51,7 @@ fun PlayerScreen(
     val animeScreenState by viewModel.animeScreenState.collectAsStateWithLifecycle()
     val title = animeScreenState.title
 
-    var index by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
+    var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
     var isPlaying by rememberSaveable { mutableStateOf(true) }
 
     val exoPlayer = remember {
@@ -59,15 +62,15 @@ fun PlayerScreen(
 
     //Top bar info
     var episodeTitle by rememberSaveable { mutableStateOf("") }
-    LaunchedEffect(index) {
-        episodeTitle = if(title.player.list.values.toList()[index].name != null) {
-            "${title.player.list.keys.toList()[index]} · ${title.player.list.values.toList()[index].name}"
+    LaunchedEffect(episodeIndex) {
+        episodeTitle = if(title.player.list.values.toList()[episodeIndex].name != null) {
+            "${title.player.list.keys.toList()[episodeIndex]} · ${title.player.list.values.toList()[episodeIndex].name}"
         } else {
-            "${title.player.list.keys.toList()[index]} · Кажется названия ещё нет :)"
+            "${title.player.list.keys.toList()[episodeIndex]} · Кажется названия ещё нет :)"
         }
 
-        val episode = title.player.list.values.toList()[index]
-        val selectedEpisodeLink = "https://${title.player.host}${episode.hls.fhd}"
+        val episodeLinks = title.player.list.values.toList()[episodeIndex]
+        val selectedEpisodeLink = "https://${title.player.host}${episodeLinks.hls.fhd}"
         val mediaItem = MediaItem.fromUri(selectedEpisodeLink)
         exoPlayer.setMediaItem(mediaItem)
         exoPlayer.prepare()
@@ -79,16 +82,14 @@ fun PlayerScreen(
     //Bottom bar info
     var currentPosition by rememberSaveable { mutableLongStateOf(0L) }
     var duration by rememberSaveable { mutableLongStateOf(0L) }
-
     LaunchedEffect(exoPlayer) {
-        while (true) {
+        while(true) {
             currentPosition = exoPlayer.currentPosition
             duration = exoPlayer.duration
             delay(1000L)
         }
     }
 
-    var isFullScreen by rememberSaveable { mutableStateOf(true) }
     DisposableEffect(Unit) {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
 
@@ -104,6 +105,7 @@ fun PlayerScreen(
     }
 
     var episodesDialogOpen by rememberSaveable { mutableStateOf(false) }
+
     var showPlayerFeatures by rememberSaveable { mutableStateOf(false) }
     var isScreenLocked by rememberSaveable { mutableStateOf(false) }
     var showUnlockButton by rememberSaveable { mutableStateOf(false) }
@@ -155,9 +157,9 @@ fun PlayerScreen(
             if(episodesDialogOpen) {
                 EpisodesDialog(
                     onDismissRequest = { episodesDialogOpen = false },
-                    currentEpisodeIndex = index,
+                    currentEpisodeIndex = episodeIndex,
                     episodes = episodesNamesList,
-                    onConfirmClick = { index = it }
+                    onConfirmClick = { episodeIndex = it }
                 )
             }
 
@@ -166,7 +168,7 @@ fun PlayerScreen(
             PlayPauseSkipSection(
                 showPlayerFeatures = showPlayerFeatures,
                 size = animeScreenState.title.player.list.values.size,
-                index = index,
+                index = episodeIndex,
                 isPlaying = isPlaying,
                 onPlayClick = {
                     isPlaying = !isPlaying
@@ -177,10 +179,10 @@ fun PlayerScreen(
                     }
                 },
                 onPreviousClick = {
-                    if (index > 0) index--
+                    if (episodeIndex > 0) episodeIndex--
                 },
                 onNextClick = {
-                    if (index + 1 < animeScreenState.title.player.list.values.size) index++
+                    if (episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
                 }
             )
 
@@ -193,16 +195,19 @@ fun PlayerScreen(
                 bottomPadding = innerPadding.calculateBottomPadding()
             )
 
+            //Cover all screen except player features
+            val animatedCoverAlpha by animateFloatAsState(
+                targetValue = if(showPlayerFeatures) 0.5f else 0f,
+                animationSpec = tween(300),
+                label = "Animated alpha for box"
+            )
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(
-                        if(showPlayerFeatures) {
-                            Color.Black.copy(alpha = 0.5f)
-                        } else {
-                            Color.Transparent
-                        }
-                    )
+                    .graphicsLayer {
+                        alpha = animatedCoverAlpha
+                    }
+                    .background(Color.Black)
                     .zIndex(1f)
             )
         }
