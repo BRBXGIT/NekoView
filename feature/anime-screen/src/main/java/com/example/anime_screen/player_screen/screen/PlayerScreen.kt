@@ -31,7 +31,6 @@ import androidx.navigation.NavController
 import com.example.anime_screen.common.AnimeScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
 import com.example.anime_screen.player_screen.sections.EpisodesDialog
-import com.example.anime_screen.player_screen.sections.LockedScreenButton
 import com.example.anime_screen.player_screen.sections.PlayPauseSkipSection
 import com.example.anime_screen.player_screen.sections.PlayerFeaturesBottomBar
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
@@ -100,15 +99,10 @@ fun PlayerScreen(
         }
     }
 
-    var episodesNamesList = mutableListOf<String>()
-    title.player.list.values.forEach {
-        episodesNamesList.add(if(it.name != null) it.name!! else "Кажется названия ещё нет :)")
-    }
-
     var episodesDialogOpen by rememberSaveable { mutableStateOf(false) }
-
     var showPlayerFeatures by rememberSaveable { mutableStateOf(false) }
     var isScreenLocked by rememberSaveable { mutableStateOf(false) }
+
     var showUnlockButton by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(showUnlockButton) {
         if(showUnlockButton) {
@@ -165,6 +159,10 @@ fun PlayerScreen(
                 .fillMaxSize()
                 .background(mColors.background)
         ) {
+            var episodesNamesList = mutableListOf<String>()
+            title.player.list.values.forEach {
+                episodesNamesList.add(if(it.name != null) it.name!! else "Кажется названия ещё нет :)")
+            }
             if(episodesDialogOpen) {
                 EpisodesDialog(
                     onDismissRequest = { episodesDialogOpen = false },
