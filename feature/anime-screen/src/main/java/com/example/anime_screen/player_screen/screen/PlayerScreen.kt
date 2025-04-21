@@ -88,12 +88,15 @@ fun PlayerScreen(
     var isUserSeeking by remember { mutableStateOf(false) }
     LaunchedEffect(exoPlayer) {
         while(true) {
-            if (!isUserSeeking) {
+            if(!isUserSeeking) {
                 currentPosition = exoPlayer.currentPosition
                 duration = exoPlayer.duration
                 sliderPosition = if (duration > 0) currentPosition.toFloat() / duration else 0f
+                delay(1000L)
+            } else {
+                currentPosition = (duration * sliderPosition).toLong()
+                delay(10L)
             }
-            delay(1000L)
         }
     }
 
