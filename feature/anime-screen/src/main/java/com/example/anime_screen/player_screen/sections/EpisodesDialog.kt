@@ -128,7 +128,7 @@ private fun EpisodeItem(
             label = "Animated icon alpha"
         )
         Icon(
-            painter = painterResource(NekoViewIcons.Square),
+            painter = painterResource(NekoViewIcons.SquareFilled),
             contentDescription = null,
             tint = mColors.primary,
             modifier = Modifier

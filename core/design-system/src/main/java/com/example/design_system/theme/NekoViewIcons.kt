@@ -6,7 +6,7 @@ object NekoViewIcons {
     val HomeAnimated = R.drawable.ic_home_animated
     val HeartAnimated = R.drawable.ic_heart_animated
     val SettingsAnimated = R.drawable.ic_settings_animated
-    val Settings = R.drawable.ic_settings
+    val SettingsFilled = R.drawable.ic_settings_filled
     val Magnifier = R.drawable.ic_magnifier
     val Password = R.drawable.ic_password
     val User = R.drawable.ic_user
@@ -20,18 +20,20 @@ object NekoViewIcons {
     val TelegramMulticolored = R.drawable.ic_telegram_multicolored
     val DiscordMulticolored = R.drawable.ic_discord_multicolored
     val AniLibriaMulticolored = R.drawable.ic_anilibria_multicolored
-    val ArrowLeft = R.drawable.ic_arrow_left
+    val ArrowLeftFilled = R.drawable.ic_arrow_left_filled
     val ArrowDownAnimated = R.drawable.ic_arrow_down_animated
-    val Download = R.drawable.ic_download
-    val DoubleArrowUp = R.drawable.ic_double_arrow_up
-    val DoubleArrowDown = R.drawable.ic_double_arrow_down
-    val PlayPauseAnimated = R.drawable.ic_play_pause_animated //TODO change animation for icon
-    val Square = R.drawable.ic_square
-    val Next = R.drawable.ic_next
-    val Previous = R.drawable.ic_previous
+    val DownloadFilled = R.drawable.ic_download_filled
+    val DoubleArrowUpFilled = R.drawable.ic_double_arrow_up_filled
+    val DoubleArrowDownFilled = R.drawable.ic_double_arrow_down_filled
+    val PlayPauseAnimated = R.drawable.ic_play_pause_animated
+    val SquareFilled = R.drawable.ic_square_filled
+    val NextFilled = R.drawable.ic_next_filled
+    val PreviousFilled = R.drawable.ic_previous_filled
     val Menu = R.drawable.ic_menu
     val FullScreen = R.drawable.ic_full_screen
     val Lock = R.drawable.ic_lock
     val QuitFullScreen = R.drawable.ic_quit_full_screen
     val Unlock = R.drawable.ic_unlock
+    val Settings = R.drawable.ic_settings
+    val CropAnimated = R.drawable.ic_crop_animated
 }

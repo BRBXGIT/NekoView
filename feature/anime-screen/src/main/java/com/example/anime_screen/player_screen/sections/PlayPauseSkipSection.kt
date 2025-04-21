@@ -52,7 +52,7 @@ fun BoxScope.PlayPauseSkipSection(
                 onClick = onPreviousClick
             ) {
                 Icon(
-                    painter = painterResource(NekoViewIcons.Previous),
+                    painter = painterResource(NekoViewIcons.PreviousFilled),
                     contentDescription = null,
                     modifier = Modifier.size(28.dp),
                     tint = if(index == 0) Color(0xffffffff).copy(alpha = 0.3f) else Color(0xffffffff)
@@ -77,7 +77,7 @@ fun BoxScope.PlayPauseSkipSection(
                 onClick = onNextClick
             ) {
                 Icon(
-                    painter = painterResource(NekoViewIcons.Next),
+                    painter = painterResource(NekoViewIcons.NextFilled),
                     contentDescription = null,
                     modifier = Modifier.size(28.dp),
                     tint = if(index + 1 == size) Color(0xffffffff).copy(alpha = 0.3f) else Color(0xffffffff)

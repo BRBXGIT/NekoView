@@ -4,8 +4,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
+import androidx.compose.animation.graphics.res.animatedVectorResource
+import androidx.compose.animation.graphics.res.rememberAnimatedVectorPainter
+import androidx.compose.animation.graphics.vector.AnimatedImageVector
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -18,16 +23,21 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.NekoViewIcons
+import com.example.design_system.theme.mColors
 
+@OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun PlayerFeaturesBottomBar(
     episodeTime: String,
     showPlayerFeatures: Boolean,
     onQuitFullScreenClick: () -> Unit,
     onLockScreenClick: () -> Unit,
+    onFillScreenClick: () -> Unit,
+    fillScreen: Boolean
 ) {
     AnimatedVisibility(
         visible = showPlayerFeatures,
@@ -55,7 +65,7 @@ fun PlayerFeaturesBottomBar(
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
                 ) {
                     IconButton(
                         onClick = onLockScreenClick
@@ -67,11 +77,15 @@ fun PlayerFeaturesBottomBar(
                     }
 
                     IconButton(
-                        onClick = {  }
+                        onClick = onFillScreenClick
                     ) {
-                        Icon(
-                            painter = painterResource(NekoViewIcons.FullScreen),
-                            contentDescription = null
+                        val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.CropAnimated)
+                        val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = !fillScreen)
+
+                        Image(
+                            painter = animatedPainter,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(mColors.onSecondaryContainer)
                         )
                     }
 

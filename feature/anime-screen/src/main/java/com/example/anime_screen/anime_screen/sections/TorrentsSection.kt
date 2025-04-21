@@ -70,7 +70,7 @@ private fun TorrentItem(
                 )
 
                 Icon(
-                    painter = painterResource(id = NekoViewIcons.DoubleArrowUp),
+                    painter = painterResource(id = NekoViewIcons.DoubleArrowUpFilled),
                     contentDescription = null,
                     tint = Color(0xff05da73)
                 )
@@ -81,7 +81,7 @@ private fun TorrentItem(
                 )
 
                 Icon(
-                    painter = painterResource(id = NekoViewIcons.DoubleArrowDown),
+                    painter = painterResource(id = NekoViewIcons.DoubleArrowDownFilled),
                     contentDescription = null,
                     tint = Color(0xffff2729)
                 )
@@ -97,7 +97,7 @@ private fun TorrentItem(
             onClick = onCLick
         ) {
             Icon(
-                painter = painterResource(id = NekoViewIcons.Download),
+                painter = painterResource(id = NekoViewIcons.DownloadFilled),
                 contentDescription = null
             )
         }

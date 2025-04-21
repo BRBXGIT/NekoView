@@ -40,7 +40,7 @@ fun SettingsItemsLCSection(
         item {
             SettingsItem(
                 name = "Настройки",
-                icon = NekoViewIcons.Settings,
+                icon = NekoViewIcons.SettingsFilled,
                 onClick = {  }
             )
         }

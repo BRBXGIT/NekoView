@@ -110,6 +110,8 @@ fun PlayerScreen(
             showUnlockButton = false
         }
     }
+
+    var fillScreen by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
             if(isScreenLocked) {
@@ -129,7 +131,9 @@ fun PlayerScreen(
                         isScreenLocked = true
                         showPlayerFeatures = false
                         showUnlockButton = true
-                    }
+                    },
+                    onFillScreenClick = { fillScreen = !fillScreen },
+                    fillScreen = fillScreen
                 )
             }
         },
@@ -172,7 +176,10 @@ fun PlayerScreen(
                 )
             }
 
-            AnimePlayer(exoPlayer)
+            AnimePlayer(
+                exoPlayer = exoPlayer,
+                fillScreen = fillScreen
+            )
 
             PlayPauseSkipSection(
                 showPlayerFeatures = showPlayerFeatures,

@@ -49,7 +49,7 @@ fun PlayerTopBar(
                     onClick = onBackClick
                 ) {
                     Icon(
-                        painter = painterResource(NekoViewIcons.ArrowLeft),
+                        painter = painterResource(NekoViewIcons.ArrowLeftFilled),
                         contentDescription = null
                     )
                 }
