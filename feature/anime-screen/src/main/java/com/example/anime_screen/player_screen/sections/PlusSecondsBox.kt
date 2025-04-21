@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import kotlinx.coroutines.delay
 
@@ -41,11 +42,11 @@ fun BoxScope.PlusSecondsBox(
     }
     val animatedLabelAlpha by animateFloatAsState(
         targetValue = if(skip) 1f else 0f,
-        animationSpec = tween(300),
+        animationSpec = tween(250),
         label = "Animated alpha for label"
     )
     val animatedBoxColor by animateColorAsState(
-        targetValue = if(skip) Color.Gray.copy(alpha = 0.3f) else Color.Transparent,
+        targetValue = if(skip) mColors.primary.copy(alpha = 0.3f) else Color.Transparent,
         animationSpec = tween(300),
         label = "Animated color for box"
     )
@@ -77,6 +78,7 @@ fun BoxScope.PlusSecondsBox(
         contentAlignment = Alignment.Center
     ) {
         Text(
+            color = Color(0xffffffff),
             text = if(direction == Direction.Plus) "+5 секунд" else "-5 секунд",
             modifier = Modifier
                 .graphicsLayer {

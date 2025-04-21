@@ -84,7 +84,8 @@ fun PlayerFeaturesBottomBar(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = episodeTime
+                        text = episodeTime,
+                        color = Color(0xffffffff)
                     )
 
                     Row(
@@ -96,7 +97,8 @@ fun PlayerFeaturesBottomBar(
                         ) {
                             Icon(
                                 painter = painterResource(NekoViewIcons.Lock),
-                                contentDescription = null
+                                contentDescription = null,
+                                tint = Color(0xffffffff)
                             )
                         }
 
@@ -109,7 +111,7 @@ fun PlayerFeaturesBottomBar(
                             Image(
                                 painter = animatedPainter,
                                 contentDescription = null,
-                                colorFilter = ColorFilter.tint(mColors.onSecondaryContainer)
+                                colorFilter = ColorFilter.tint(Color(0xffffffff))
                             )
                         }
 
@@ -118,7 +120,8 @@ fun PlayerFeaturesBottomBar(
                         ) {
                             Icon(
                                 painter = painterResource(NekoViewIcons.Settings),
-                                contentDescription = null
+                                contentDescription = null,
+                                tint = Color(0xffffffff)
                             )
                         }
 
@@ -131,7 +134,7 @@ fun PlayerFeaturesBottomBar(
                             Image(
                                 painter = animatedPainter,
                                 contentDescription = null,
-                                colorFilter = ColorFilter.tint(mColors.onSecondaryContainer)
+                                colorFilter = ColorFilter.tint(Color(0xffffffff))
                             )
                         }
                     }

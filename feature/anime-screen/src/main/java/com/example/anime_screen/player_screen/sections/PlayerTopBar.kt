@@ -41,7 +41,8 @@ fun PlayerTopBar(
                     text = episodeTitle,
                     style = mTypography.bodyLarge,
                     maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color(0xffffffff)
                 )
             },
             navigationIcon = {
@@ -50,7 +51,8 @@ fun PlayerTopBar(
                 ) {
                     Icon(
                         painter = painterResource(NekoViewIcons.ArrowLeftFilled),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color(0xffffffff)
                     )
                 }
             },
@@ -60,7 +62,8 @@ fun PlayerTopBar(
                 ) {
                     Icon(
                         painter = painterResource(NekoViewIcons.Menu),
-                        contentDescription = null
+                        contentDescription = null,
+                        tint = Color(0xffffffff)
                     )
                 }
             }
