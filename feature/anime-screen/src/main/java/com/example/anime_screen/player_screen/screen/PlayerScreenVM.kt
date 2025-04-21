@@ -35,10 +35,34 @@ class PlayerScreenVM @Inject constructor(
         _playerScreenState.value = state
     }
 
+    private fun rewindEpisode(position: Long) {
+        player.seekTo(position)
+    }
+
+    private fun playPauseEpisode() {
+        if(_playerScreenState.value.isPlaying) {
+            updateScreenState(
+                _playerScreenState.value.copy(
+                    isPlaying = false
+                )
+            )
+            player.pause()
+        } else {
+            updateScreenState(
+                _playerScreenState.value.copy(
+                    isPlaying = true
+                )
+            )
+            player.play()
+        }
+    }
+
     fun sendIntent(intent: PlayerScreenIntent) {
         when(intent) {
             is PlayerScreenIntent.PlayEpisode -> playEpisode(intent.episodeLink)
             is PlayerScreenIntent.UpdateScreenState -> updateScreenState(intent.state)
+            is PlayerScreenIntent.RewindEpisode -> rewindEpisode(intent.position)
+            is PlayerScreenIntent.PlayPause -> playPauseEpisode()
         }
     }
 }

@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -48,16 +47,12 @@ fun PlayerScreen(
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
-    val animeScreenState by sharedViewModel.animeScreenState.collectAsStateWithLifecycle()
-    val title = animeScreenState.title
 
+    val animeScreenState by sharedViewModel.animeScreenState.collectAsStateWithLifecycle()
     val playerScreenState by viewModel.playerScreenState.collectAsStateWithLifecycle()
 
+    val title = animeScreenState.title
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
-
-    val exoPlayer = viewModel.player.apply {
-        playWhenReady = true
-    }
 
     //Top bar info
     LaunchedEffect(episodeIndex) {
@@ -77,17 +72,18 @@ fun PlayerScreen(
         viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
     }
 
+    val player = viewModel.player
     //Bottom bar info
-    LaunchedEffect(exoPlayer) {
+    LaunchedEffect(player) {
         while(true) {
-            val duration = exoPlayer.duration
-            val currentPosition = exoPlayer.currentPosition
+            val duration = player.duration
+            val currentPosition = player.currentPosition
 
             if(!playerScreenState.isUserSeeking) {
                 viewModel.sendIntent(
                     PlayerScreenIntent.UpdateScreenState(
                         playerScreenState.copy(
-                            currentPosition = exoPlayer.currentPosition,
+                            currentPosition = player.currentPosition,
                             duration = duration,
                             sliderPosition = if(duration > 0) currentPosition.toFloat() / duration else 0f
                         )
@@ -129,7 +125,6 @@ fun PlayerScreen(
         }
     }
 
-    var isCropped by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
             if(playerScreenState.isScreenLocked) {
@@ -182,8 +177,16 @@ fun PlayerScreen(
                             )
                         )
                     },
-                    onFillScreenClick = { isCropped = !isCropped },
-                    isCropped = isCropped,
+                    onFillScreenClick = {
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    isCropped = !playerScreenState.isCropped
+                                )
+                            )
+                        )
+                    },
+                    isCropped = playerScreenState.isCropped,
                     isLandscape = playerScreenState.isLandscape,
                     sliderPosition = playerScreenState.sliderPosition,
                     onSliderValueChange = {
@@ -198,7 +201,7 @@ fun PlayerScreen(
                     },
                     onSliderValueChangeFinished = {
                         val seekPosition = (playerScreenState.duration * playerScreenState.sliderPosition).toLong()
-                        exoPlayer.seekTo(seekPosition)
+                        viewModel.sendIntent(PlayerScreenIntent.RewindEpisode(seekPosition))
 
                         viewModel.sendIntent(
                             PlayerScreenIntent.UpdateScreenState(
@@ -216,7 +219,6 @@ fun PlayerScreen(
             PlayerTopBar(
                 onBackClick = {
                     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                    exoPlayer.release()
                     navController.navigateUp()
                 },
                 episodeTitle = playerScreenState.episodeTitle,
@@ -284,8 +286,8 @@ fun PlayerScreen(
             }
 
             AnimePlayer(
-                exoPlayer = exoPlayer,
-                isCropped = isCropped
+                exoPlayer = player,
+                isCropped = playerScreenState.isCropped
             )
 
             PlayPauseSkipSection(
@@ -298,32 +300,23 @@ fun PlayerScreen(
                     if (episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
                 },
                 onPlayClick = {
-                    viewModel.sendIntent(
-                        PlayerScreenIntent.UpdateScreenState(
-                            playerScreenState.copy(isPlaying = !playerScreenState.isPlaying)
-                        )
-                    )
-                    if(playerScreenState.isPlaying) {
-                        exoPlayer.play()
-                    } else {
-                        exoPlayer.pause()
-                    }
+                    viewModel.sendIntent(PlayerScreenIntent.PlayPause)
                 },
             )
 
             if(!playerScreenState.isScreenLocked) {
                 PlusSecondsBox(
                     onDoubleClick = {
-                        val newPosition = (exoPlayer.currentPosition - 5000).coerceAtMost(exoPlayer.duration)
-                        exoPlayer.seekTo(newPosition)
+                        val newPosition = (playerScreenState.currentPosition - 5000).coerceAtMost(playerScreenState.duration)
+                        viewModel.sendIntent(PlayerScreenIntent.RewindEpisode(newPosition))
                     },
                     direction = Direction.Minus
                 )
 
                 PlusSecondsBox(
                     onDoubleClick = {
-                        val newPosition = (exoPlayer.currentPosition + 5000).coerceAtMost(exoPlayer.duration)
-                        exoPlayer.seekTo(newPosition)
+                        val newPosition = (playerScreenState.currentPosition + 5000).coerceAtMost(playerScreenState.duration)
+                        viewModel.sendIntent(PlayerScreenIntent.RewindEpisode(newPosition))
                     },
                     direction = Direction.Plus
                 )
