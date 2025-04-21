@@ -1,5 +1,6 @@
 package com.example.anime_screen.player_screen.screen
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
 import androidx.compose.animation.core.animateFloatAsState
@@ -10,9 +11,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import com.example.design_system.theme.mColors
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PlayerScreen(
     viewModel: AnimeScreenVM,
@@ -82,20 +84,26 @@ fun PlayerScreen(
     //Bottom bar info
     var currentPosition by rememberSaveable { mutableLongStateOf(0L) }
     var duration by rememberSaveable { mutableLongStateOf(0L) }
+    var sliderPosition by remember { mutableFloatStateOf(0f) }
+    var isUserSeeking by remember { mutableStateOf(false) }
     LaunchedEffect(exoPlayer) {
         while(true) {
-            currentPosition = exoPlayer.currentPosition
-            duration = exoPlayer.duration
+            if (!isUserSeeking) {
+                currentPosition = exoPlayer.currentPosition
+                duration = exoPlayer.duration
+                sliderPosition = if (duration > 0) currentPosition.toFloat() / duration else 0f
+            }
             delay(1000L)
         }
     }
 
-    DisposableEffect(Unit) {
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-
-        onDispose {
+    //TODO change screen orientation when user navigates back with native android
+    var isLandscape by rememberSaveable { mutableStateOf(true) }
+    LaunchedEffect(isLandscape) {
+        if(isLandscape) {
+            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+        } else {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-            exoPlayer.release()
         }
     }
 
@@ -111,7 +119,7 @@ fun PlayerScreen(
         }
     }
 
-    var fillScreen by rememberSaveable { mutableStateOf(false) }
+    var isCropped by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
             if(isScreenLocked) {
@@ -126,20 +134,44 @@ fun PlayerScreen(
                 PlayerFeaturesBottomBar(
                     showPlayerFeatures = showPlayerFeatures,
                     episodeTime = formatTime(currentPosition) + " / " + formatTime(duration),
-                    onQuitFullScreenClick = {  },
+                    onQuitFullScreenClick = {
+                        if(isLandscape) {
+                            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                            isLandscape = false
+                        } else {
+                            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                            isLandscape = true
+                        }
+                    },
                     onLockScreenClick = {
                         isScreenLocked = true
                         showPlayerFeatures = false
                         showUnlockButton = true
                     },
-                    onFillScreenClick = { fillScreen = !fillScreen },
-                    fillScreen = fillScreen
+                    onFillScreenClick = { isCropped = !isCropped },
+                    isCropped = isCropped,
+                    isLandscape = isLandscape,
+                    sliderPosition = sliderPosition,
+                    onSliderValueChange = {
+                        isUserSeeking = true
+                        sliderPosition = it
+                    },
+                    onSliderValueChangeFinished = {
+                        val seekPosition = (duration * sliderPosition).toLong()
+                        exoPlayer.seekTo(seekPosition)
+                        currentPosition = seekPosition
+                        isUserSeeking = false
+                    }
                 )
             }
         },
         topBar = {
             PlayerTopBar(
-                onBackClick = { navController.navigateUp() },
+                onBackClick = {
+                    activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                    exoPlayer.release()
+                    navController.navigateUp()
+                },
                 episodeTitle = episodeTitle,
                 onMenuClick = { episodesDialogOpen = true },
                 showPlayerFeatures = showPlayerFeatures
@@ -178,7 +210,7 @@ fun PlayerScreen(
 
             AnimePlayer(
                 exoPlayer = exoPlayer,
-                fillScreen = fillScreen
+                isCropped = isCropped
             )
 
             PlayPauseSkipSection(

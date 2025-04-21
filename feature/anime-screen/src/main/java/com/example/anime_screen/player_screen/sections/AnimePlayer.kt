@@ -18,7 +18,7 @@ import androidx.media3.ui.PlayerView
 @Composable
 fun AnimePlayer(
     exoPlayer: ExoPlayer,
-    fillScreen: Boolean
+    isCropped: Boolean
 ) {
     val context = LocalContext.current
 
@@ -27,7 +27,7 @@ fun AnimePlayer(
             PlayerView(context).apply {
                 player = exoPlayer
                 useController = false
-                resizeMode = if(fillScreen) AspectRatioFrameLayout.RESIZE_MODE_ZOOM else AspectRatioFrameLayout.RESIZE_MODE_FIT
+                resizeMode = if(isCropped) AspectRatioFrameLayout.RESIZE_MODE_ZOOM else AspectRatioFrameLayout.RESIZE_MODE_FIT
                 layoutParams = FrameLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
@@ -35,7 +35,7 @@ fun AnimePlayer(
             }
         },
         update = {
-            it.resizeMode = if(fillScreen) {
+            it.resizeMode = if(isCropped) {
                 AspectRatioFrameLayout.RESIZE_MODE_ZOOM
             } else {
                 AspectRatioFrameLayout.RESIZE_MODE_FIT
