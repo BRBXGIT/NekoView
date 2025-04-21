@@ -31,11 +31,13 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.example.anime_screen.common.AnimeScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
+import com.example.anime_screen.player_screen.sections.Direction
 import com.example.anime_screen.player_screen.sections.EpisodesDialog
 import com.example.anime_screen.player_screen.sections.PlayPauseSkipSection
 import com.example.anime_screen.player_screen.sections.PlayerFeaturesBottomBar
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
 import com.example.anime_screen.player_screen.sections.PlayerUnlockButtonBottomBar
+import com.example.anime_screen.player_screen.sections.PlusSecondsBox
 import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
 import kotlinx.coroutines.delay
@@ -234,6 +236,24 @@ fun PlayerScreen(
                     }
                 },
             )
+
+            if(!isScreenLocked) {
+                PlusSecondsBox(
+                    onDoubleClick = {
+                        val newPosition = (exoPlayer.currentPosition - 5000).coerceAtMost(exoPlayer.duration)
+                        exoPlayer.seekTo(newPosition)
+                    },
+                    direction = Direction.Minus
+                )
+
+                PlusSecondsBox(
+                    onDoubleClick = {
+                        val newPosition = (exoPlayer.currentPosition + 5000).coerceAtMost(exoPlayer.duration)
+                        exoPlayer.seekTo(newPosition)
+                    },
+                    direction = Direction.Plus
+                )
+            }
 
             //Cover all screen except player features
             val animatedCoverAlpha by animateFloatAsState(
