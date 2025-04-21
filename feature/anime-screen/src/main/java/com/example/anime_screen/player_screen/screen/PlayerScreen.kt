@@ -13,11 +13,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -26,8 +23,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
@@ -56,115 +51,163 @@ fun PlayerScreen(
     val animeScreenState by sharedViewModel.animeScreenState.collectAsStateWithLifecycle()
     val title = animeScreenState.title
 
+    val playerScreenState by viewModel.playerScreenState.collectAsStateWithLifecycle()
+
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
-    var isPlaying by rememberSaveable { mutableStateOf(true) }
 
     val exoPlayer = viewModel.player.apply {
         playWhenReady = true
     }
 
     //Top bar info
-    var episodeTitle by rememberSaveable { mutableStateOf("") }
     LaunchedEffect(episodeIndex) {
-        episodeTitle = if(title.player.list.values.toList()[episodeIndex].name != null) {
+        val episodeTitle = if(title.player.list.values.toList()[episodeIndex].name != null) {
             "${title.player.list.keys.toList()[episodeIndex]} · ${title.player.list.values.toList()[episodeIndex].name}"
         } else {
             "${title.player.list.keys.toList()[episodeIndex]} · Кажется названия ещё нет :)"
         }
+        viewModel.sendIntent(
+            PlayerScreenIntent.UpdateScreenState(
+                playerScreenState.copy(episodeTitle = episodeTitle)
+            )
+        )
 
         val episodeLinks = title.player.list.values.toList()[episodeIndex]
         val selectedEpisodeLink = "https://${title.player.host}${episodeLinks.hls.fhd}"
-        val mediaItem = MediaItem.fromUri(selectedEpisodeLink)
-        exoPlayer.setMediaItem(mediaItem)
-        exoPlayer.prepare()
-        if(isPlaying) {
-            exoPlayer.play()
-        }
+        viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
     }
 
     //Bottom bar info
-    var currentPosition by rememberSaveable { mutableLongStateOf(0L) }
-    var duration by rememberSaveable { mutableLongStateOf(0L) }
-    var sliderPosition by remember { mutableFloatStateOf(0f) }
-    var isUserSeeking by remember { mutableStateOf(false) }
     LaunchedEffect(exoPlayer) {
         while(true) {
-            if(!isUserSeeking) {
-                currentPosition = exoPlayer.currentPosition
-                duration = exoPlayer.duration
-                sliderPosition = if (duration > 0) currentPosition.toFloat() / duration else 0f
+            val duration = exoPlayer.duration
+            val currentPosition = exoPlayer.currentPosition
+
+            if(!playerScreenState.isUserSeeking) {
+                viewModel.sendIntent(
+                    PlayerScreenIntent.UpdateScreenState(
+                        playerScreenState.copy(
+                            currentPosition = exoPlayer.currentPosition,
+                            duration = duration,
+                            sliderPosition = if(duration > 0) currentPosition.toFloat() / duration else 0f
+                        )
+                    )
+                )
                 delay(100L)
             } else {
-                currentPosition = (duration * sliderPosition).toLong()
+                viewModel.sendIntent(
+                    PlayerScreenIntent.UpdateScreenState(
+                        playerScreenState.copy(
+                            currentPosition = (duration * playerScreenState.sliderPosition).toLong(),
+                        )
+                    )
+                )
                 delay(10L)
             }
         }
     }
 
     //TODO change screen orientation when user navigates back with native android
-    var isLandscape by rememberSaveable { mutableStateOf(true) }
-    LaunchedEffect(isLandscape) {
-        if(isLandscape) {
+    LaunchedEffect(playerScreenState.isLandscape) {
+        if(playerScreenState.isLandscape) {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
         } else {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
         }
     }
 
-    var episodesDialogOpen by rememberSaveable { mutableStateOf(false) }
-    var showPlayerFeatures by rememberSaveable { mutableStateOf(false) }
-    var isScreenLocked by rememberSaveable { mutableStateOf(false) }
-
-    var showUnlockButton by rememberSaveable { mutableStateOf(false) }
-    LaunchedEffect(showUnlockButton) {
-        if(showUnlockButton) {
+    LaunchedEffect(playerScreenState.showUnlockButton) {
+        if(playerScreenState.showUnlockButton) {
             delay(3000)
-            showUnlockButton = false
+            viewModel.sendIntent(
+                PlayerScreenIntent.UpdateScreenState(
+                    playerScreenState.copy(
+                        showUnlockButton = false
+                    )
+                )
+            )
         }
     }
 
     var isCropped by rememberSaveable { mutableStateOf(false) }
     Scaffold(
         bottomBar = {
-            if(isScreenLocked) {
+            if(playerScreenState.isScreenLocked) {
                 PlayerUnlockButtonBottomBar(
-                    showUnlockButton = showUnlockButton,
+                    showUnlockButton = playerScreenState.showUnlockButton,
                     onClick = {
-                        isScreenLocked = false
-                        showUnlockButton = false
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    isScreenLocked = false,
+                                    showUnlockButton = false
+                                )
+                            )
+                        )
                     }
                 )
             } else {
                 PlayerFeaturesBottomBar(
-                    showPlayerFeatures = showPlayerFeatures,
-                    episodeTime = formatTime(currentPosition) + " / " + formatTime(duration),
+                    showPlayerFeatures = playerScreenState.showPlayerFeatures,
+                    episodeTime = formatTime(playerScreenState.currentPosition) + " / " + formatTime(playerScreenState.duration),
                     onQuitFullScreenClick = {
-                        if(isLandscape) {
+                        if(playerScreenState.isLandscape) {
                             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-                            isLandscape = false
+                            viewModel.sendIntent(
+                                PlayerScreenIntent.UpdateScreenState(
+                                    playerScreenState.copy(
+                                        isLandscape = false
+                                    )
+                                )
+                            )
                         } else {
                             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-                            isLandscape = true
+                            viewModel.sendIntent(
+                                PlayerScreenIntent.UpdateScreenState(
+                                    playerScreenState.copy(
+                                        isLandscape = true
+                                    )
+                                )
+                            )
                         }
                     },
                     onLockScreenClick = {
-                        isScreenLocked = true
-                        showPlayerFeatures = false
-                        showUnlockButton = true
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    isScreenLocked = true,
+                                    showPlayerFeatures = false,
+                                    showUnlockButton = true
+                                )
+                            )
+                        )
                     },
                     onFillScreenClick = { isCropped = !isCropped },
                     isCropped = isCropped,
-                    isLandscape = isLandscape,
-                    sliderPosition = sliderPosition,
+                    isLandscape = playerScreenState.isLandscape,
+                    sliderPosition = playerScreenState.sliderPosition,
                     onSliderValueChange = {
-                        isUserSeeking = true
-                        sliderPosition = it
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    isUserSeeking = true,
+                                    sliderPosition = it
+                                )
+                            )
+                        )
                     },
                     onSliderValueChangeFinished = {
-                        val seekPosition = (duration * sliderPosition).toLong()
+                        val seekPosition = (playerScreenState.duration * playerScreenState.sliderPosition).toLong()
                         exoPlayer.seekTo(seekPosition)
-                        currentPosition = seekPosition
-                        isUserSeeking = false
+
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    currentPosition = seekPosition,
+                                    isUserSeeking = false
+                                )
+                            )
+                        )
                     }
                 )
             }
@@ -176,9 +219,17 @@ fun PlayerScreen(
                     exoPlayer.release()
                     navController.navigateUp()
                 },
-                episodeTitle = episodeTitle,
-                onMenuClick = { episodesDialogOpen = true },
-                showPlayerFeatures = showPlayerFeatures
+                episodeTitle = playerScreenState.episodeTitle,
+                onMenuClick = {
+                    viewModel.sendIntent(
+                        PlayerScreenIntent.UpdateScreenState(
+                            playerScreenState.copy(
+                                episodeDialogOpen = true
+                            )
+                        )
+                    )
+                },
+                showPlayerFeatures = playerScreenState.showPlayerFeatures
             )
         },
         modifier = Modifier
@@ -186,10 +237,22 @@ fun PlayerScreen(
             .background(mColors.background)
             .noRippleClickable(
                 onClick = {
-                    if(!isScreenLocked) {
-                        showPlayerFeatures = !showPlayerFeatures
+                    if(!playerScreenState.isScreenLocked) {
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    showPlayerFeatures = !playerScreenState.showPlayerFeatures
+                                )
+                            )
+                        )
                     } else {
-                        showUnlockButton = true
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    showUnlockButton = true
+                                )
+                            )
+                        )
                     }
                 }
             )
@@ -203,9 +266,17 @@ fun PlayerScreen(
             title.player.list.values.forEach {
                 episodesNamesList.add(if(it.name != null) it.name!! else "Кажется названия ещё нет :)")
             }
-            if(episodesDialogOpen) {
+            if(playerScreenState.episodeDialogOpen) {
                 EpisodesDialog(
-                    onDismissRequest = { episodesDialogOpen = false },
+                    onDismissRequest = {
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    episodeDialogOpen = false
+                                )
+                            )
+                        )
+                    },
                     currentEpisodeIndex = episodeIndex,
                     episodes = episodesNamesList,
                     onConfirmClick = { episodeIndex = it }
@@ -218,17 +289,21 @@ fun PlayerScreen(
             )
 
             PlayPauseSkipSection(
-                showPlayerFeatures = showPlayerFeatures,
+                showPlayerFeatures = playerScreenState.showPlayerFeatures,
                 size = animeScreenState.title.player.list.values.size,
                 index = episodeIndex,
-                isPlaying = isPlaying,
+                isPlaying = playerScreenState.isPlaying,
                 onPreviousClick = { if (episodeIndex > 0) episodeIndex-- },
                 onNextClick = {
                     if (episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
                 },
                 onPlayClick = {
-                    isPlaying = !isPlaying
-                    if(isPlaying) {
+                    viewModel.sendIntent(
+                        PlayerScreenIntent.UpdateScreenState(
+                            playerScreenState.copy(isPlaying = !playerScreenState.isPlaying)
+                        )
+                    )
+                    if(playerScreenState.isPlaying) {
                         exoPlayer.play()
                     } else {
                         exoPlayer.pause()
@@ -236,7 +311,7 @@ fun PlayerScreen(
                 },
             )
 
-            if(!isScreenLocked) {
+            if(!playerScreenState.isScreenLocked) {
                 PlusSecondsBox(
                     onDoubleClick = {
                         val newPosition = (exoPlayer.currentPosition - 5000).coerceAtMost(exoPlayer.duration)
@@ -256,7 +331,7 @@ fun PlayerScreen(
 
             //Cover all screen except player features
             val animatedCoverAlpha by animateFloatAsState(
-                targetValue = if(showPlayerFeatures) 0.5f else 0f,
+                targetValue = if(playerScreenState.showPlayerFeatures) 0.5f else 0f,
                 animationSpec = tween(300),
                 label = "Animated alpha for box"
             )
