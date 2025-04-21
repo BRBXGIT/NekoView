@@ -1,6 +1,5 @@
 package com.example.anime_screen.player_screen.screen
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
@@ -28,7 +27,6 @@ class PlayerScreenVM @Inject constructor(
         player.setMediaItem(mediaItem)
         player.prepare()
         if(playerScreenState.value.isPlaying) {
-            Log.d("CCCC", "Play")
             player.play()
         }
     }

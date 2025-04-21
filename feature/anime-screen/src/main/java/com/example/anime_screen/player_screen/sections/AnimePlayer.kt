@@ -1,5 +1,7 @@
 package com.example.anime_screen.player_screen.sections
 
+import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -19,8 +21,14 @@ fun AnimePlayer(
 ) {
     AndroidView(
         factory = { context ->
-            PlayerView(context).also {
-                it.player = exoPlayer
+            PlayerView(context).apply {
+                player = exoPlayer
+                useController = false
+                resizeMode = if(isCropped) AspectRatioFrameLayout.RESIZE_MODE_ZOOM else AspectRatioFrameLayout.RESIZE_MODE_FIT
+                layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
             }
         },
         update = {
@@ -32,10 +40,4 @@ fun AnimePlayer(
         },
         modifier = Modifier.fillMaxSize()
     )
-
-    DisposableEffect(Unit) {
-        onDispose {
-            exoPlayer.release()
-        }
-    }
 }
