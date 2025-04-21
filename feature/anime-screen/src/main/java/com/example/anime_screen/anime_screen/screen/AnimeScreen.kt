@@ -36,7 +36,7 @@ import com.example.anime_screen.anime_screen.sections.GenresLRSection
 import com.example.anime_screen.anime_screen.sections.TitleHeader
 import com.example.anime_screen.anime_screen.sections.TitleTeamSection
 import com.example.anime_screen.anime_screen.sections.TorrentsSection
-import com.example.anime_screen.common.AnimeScreenVM
+import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.navigation.PlayerScreenRoute
 import com.example.data.remote.utils.Utils
 import com.example.design_system.cards.DesignUtils
@@ -50,7 +50,7 @@ import kotlinx.coroutines.launch
 fun AnimeScreen(
     navController: NavController,
     titleId: Int,
-    viewModel: AnimeScreenVM
+    viewModel: SharedAnimePlayerScreenVM
 ) {
     //Snackbars stuff
     val snackbarHostState = remember { SnackbarHostState() }

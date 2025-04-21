@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 //Shared viewModel for anime screen and player screen
 @HiltViewModel
-class AnimeScreenVM @Inject constructor(
+class SharedAnimePlayerScreenVM @Inject constructor(
     private val repository: AnimeScreenRepo,
     @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {

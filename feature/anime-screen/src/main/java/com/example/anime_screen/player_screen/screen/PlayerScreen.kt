@@ -29,7 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.navigation.NavController
-import com.example.anime_screen.common.AnimeScreenVM
+import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
 import com.example.anime_screen.player_screen.sections.Direction
 import com.example.anime_screen.player_screen.sections.EpisodesDialog
@@ -46,22 +46,21 @@ import kotlinx.coroutines.delay
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun PlayerScreen(
-    viewModel: AnimeScreenVM,
+    sharedViewModel: SharedAnimePlayerScreenVM,
     selectedEpisodeIndex: Int,
-    navController: NavController
+    navController: NavController,
+    viewModel: PlayerScreenVM
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
-    val animeScreenState by viewModel.animeScreenState.collectAsStateWithLifecycle()
+    val animeScreenState by sharedViewModel.animeScreenState.collectAsStateWithLifecycle()
     val title = animeScreenState.title
 
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
     var isPlaying by rememberSaveable { mutableStateOf(true) }
 
-    val exoPlayer = remember {
-        ExoPlayer.Builder(context).build().apply {
-            playWhenReady = true
-        }
+    val exoPlayer = viewModel.player.apply {
+        playWhenReady = true
     }
 
     //Top bar info

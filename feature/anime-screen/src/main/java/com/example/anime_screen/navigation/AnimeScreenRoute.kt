@@ -5,7 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.anime_screen.anime_screen.screen.AnimeScreen
-import com.example.anime_screen.common.AnimeScreenVM
+import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -15,13 +15,13 @@ data class AnimeScreenRoute(
 
 fun NavGraphBuilder.animeScreen(
     navController: NavController,
-    animeScreenVM: AnimeScreenVM
+    sharedAnimePlayerScreenVM: SharedAnimePlayerScreenVM
 ) = composable<AnimeScreenRoute> {
     val titleId = it.toRoute<AnimeScreenRoute>().titleId
 
     AnimeScreen(
         navController = navController,
         titleId = titleId,
-        viewModel = animeScreenVM
+        viewModel = sharedAnimePlayerScreenVM
     )
 }

@@ -4,14 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.example.anime_screen.common.AnimeScreenVM
+import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.anime_screen.navigation.animeScreen
 import com.example.anime_screen.navigation.playerScreenRoute
 import com.example.common.CommonVM
 import com.example.navbar_screens.featured_screen.navigation.featuredScreen
 import com.example.navbar_screens.featured_screen.screen.FeaturedScreenVM
-import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
 import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.home_screen.screen.HomeScreenVM
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
@@ -28,7 +27,7 @@ fun NavGraph(
     val homeScreenVM = hiltViewModel<HomeScreenVM>()
     val featuredScreenVM = hiltViewModel<FeaturedScreenVM>()
     val settingsScreenVM = hiltViewModel<SettingsScreenVM>()
-    val animeScreenVM = hiltViewModel<AnimeScreenVM>()
+    val sharedAnimePlayerScreenVM = hiltViewModel<SharedAnimePlayerScreenVM>()
 
     NavHost(
         navController = navController,
@@ -57,12 +56,12 @@ fun NavGraph(
 
         animeScreen(
             navController = navController,
-            animeScreenVM = animeScreenVM
+            sharedAnimePlayerScreenVM = sharedAnimePlayerScreenVM
         )
 
         playerScreenRoute(
             navController = navController,
-            animeScreenVM = animeScreenVM
+            sharedAnimePlayerScreenVM = sharedAnimePlayerScreenVM
         )
     }
 }

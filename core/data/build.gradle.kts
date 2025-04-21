@@ -44,4 +44,8 @@ dependencies {
     //Room
     implementation(libs.androidx.room.ktx)
     ksp(libs.androidx.room.compiler)
+    //Exo player
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.exoplayer.hls)
 }
