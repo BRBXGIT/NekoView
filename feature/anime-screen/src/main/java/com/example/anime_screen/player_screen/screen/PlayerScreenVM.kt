@@ -65,4 +65,8 @@ class PlayerScreenVM @Inject constructor(
             is PlayerScreenIntent.PlayPause -> playPauseEpisode()
         }
     }
+
+    init {
+        player.prepare()
+    }
 }

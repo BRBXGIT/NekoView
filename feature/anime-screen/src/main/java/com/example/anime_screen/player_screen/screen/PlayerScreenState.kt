@@ -12,5 +12,5 @@ data class PlayerScreenState(
     val isScreenLocked: Boolean = false,
     val showUnlockButton: Boolean = false,
     val isCropped: Boolean = false,
-    val episodeDialogOpen: Boolean = false
+    val episodeDialogOpen: Boolean = false,
 )

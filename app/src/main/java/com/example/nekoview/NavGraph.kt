@@ -31,7 +31,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = AnimeScreenRoute(9904)
+        startDestination = AnimeScreenRoute(9900)
     ) {
         homeScreen(
             navController = navController,

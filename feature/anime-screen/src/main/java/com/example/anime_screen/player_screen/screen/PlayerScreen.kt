@@ -32,6 +32,7 @@ import com.example.anime_screen.player_screen.sections.PlayerFeaturesBottomBar
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
 import com.example.anime_screen.player_screen.sections.PlayerUnlockButtonBottomBar
 import com.example.anime_screen.player_screen.sections.PlusSecondsBox
+import com.example.anime_screen.player_screen.sections.SkipOpeningButton
 import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
 import kotlinx.coroutines.delay
@@ -54,26 +55,13 @@ fun PlayerScreen(
     val title = animeScreenState.title
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
 
-    //Top bar info
     LaunchedEffect(episodeIndex) {
-        val episodeTitle = if(title.player.list.values.toList()[episodeIndex].name != null) {
-            "${title.player.list.keys.toList()[episodeIndex]} · ${title.player.list.values.toList()[episodeIndex].name}"
-        } else {
-            "${title.player.list.keys.toList()[episodeIndex]} · Кажется названия ещё нет :)"
-        }
-        viewModel.sendIntent(
-            PlayerScreenIntent.UpdateScreenState(
-                playerScreenState.copy(episodeTitle = episodeTitle)
-            )
-        )
-
         val episodeLinks = title.player.list.values.toList()[episodeIndex]
         val selectedEpisodeLink = "https://${title.player.host}${episodeLinks.hls.fhd}"
         viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
     }
 
     val player = viewModel.player
-    //Bottom bar info
     LaunchedEffect(player) {
         while(true) {
             val duration = player.duration
@@ -147,7 +135,6 @@ fun PlayerScreen(
                     episodeTime = formatTime(playerScreenState.currentPosition) + " / " + formatTime(playerScreenState.duration),
                     onQuitFullScreenClick = {
                         if(playerScreenState.isLandscape) {
-                            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                             viewModel.sendIntent(
                                 PlayerScreenIntent.UpdateScreenState(
                                     playerScreenState.copy(
@@ -156,7 +143,6 @@ fun PlayerScreen(
                                 )
                             )
                         } else {
-                            activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
                             viewModel.sendIntent(
                                 PlayerScreenIntent.UpdateScreenState(
                                     playerScreenState.copy(
@@ -216,6 +202,17 @@ fun PlayerScreen(
             }
         },
         topBar = {
+            val episodeTitle = if(title.player.list.values.toList()[episodeIndex].name != null) {
+                "${title.player.list.keys.toList()[episodeIndex]} · ${title.player.list.values.toList()[episodeIndex].name}"
+            } else {
+                "${title.player.list.keys.toList()[episodeIndex]} · Кажется названия ещё нет :)"
+            }
+            viewModel.sendIntent(
+                PlayerScreenIntent.UpdateScreenState(
+                    playerScreenState.copy(episodeTitle = episodeTitle)
+                )
+            )
+
             PlayerTopBar(
                 onBackClick = {
                     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -319,6 +316,32 @@ fun PlayerScreen(
                         viewModel.sendIntent(PlayerScreenIntent.RewindEpisode(newPosition))
                     },
                     direction = Direction.Plus
+                )
+            }
+
+            val openingSkips = title.player.list.values.toList()[episodeIndex].skips.opening
+            var timer by rememberSaveable { mutableIntStateOf(10) }
+            if((openingSkips[0] != null) and (openingSkips[1] != null)) {
+                val showButton = (playerScreenState.currentPosition in (openingSkips[0]!! * 1000)..(openingSkips[1]!! * 1000)) && timer > 0
+
+                LaunchedEffect(showButton) {
+                    while (showButton && timer > 0) {
+                        delay(1000)
+                        timer--
+                    }
+                }
+
+                SkipOpeningButton(
+                    onClick = {
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.RewindEpisode(
+                                (openingSkips[1]!! * 1000).toLong().coerceAtMost(playerScreenState.duration)
+                            )
+                        )
+                    },
+                    showButton = showButton,
+                    timer = timer,
+                    bottomPadding = innerPadding.calculateBottomPadding()
                 )
             }
 
