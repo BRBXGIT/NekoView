@@ -53,8 +53,8 @@ fun EpisodesDialog(
         )
     ) {
         Column(
-            verticalArrangement = Arrangement.spacedBy(16.dp),
             modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             Text(
                 text = "Выбор серии",
@@ -62,22 +62,26 @@ fun EpisodesDialog(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
 
-            HorizontalDivider()
-
-            LazyColumn(
-                contentPadding = PaddingValues(vertical = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                itemsIndexed(episodes) { index, episode ->
-                    EpisodeItem(
-                        onClick = { currentEpisodeIndexState = index },
-                        episode = "${index + 1} · $episode",
-                        isChosen = currentEpisodeIndexState == index
-                    )
-                }
-            }
+                HorizontalDivider()
 
-            HorizontalDivider()
+                LazyColumn(
+                    contentPadding = PaddingValues(vertical = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    itemsIndexed(episodes) { index, episode ->
+                        EpisodeItem(
+                            onClick = { currentEpisodeIndexState = index },
+                            episode = "${index + 1} · $episode",
+                            isChosen = currentEpisodeIndexState == index
+                        )
+                    }
+                }
+
+                HorizontalDivider()
+            }
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -91,8 +95,8 @@ fun EpisodesDialog(
 
                 TextButton(
                     onClick = {
-                        onConfirmClick(currentEpisodeIndexState)
                         onDismissRequest()
+                        onConfirmClick(currentEpisodeIndexState)
                     }
                 ) {
                     Text(text = "Выбрать")
