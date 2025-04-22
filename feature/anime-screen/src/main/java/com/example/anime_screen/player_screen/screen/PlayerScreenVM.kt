@@ -41,18 +41,10 @@ class PlayerScreenVM @Inject constructor(
 
     private fun playPauseEpisode() {
         if(_playerScreenState.value.isPlaying) {
-            updateScreenState(
-                _playerScreenState.value.copy(
-                    isPlaying = false
-                )
-            )
+            _playerScreenState.value = _playerScreenState.value.copy(isPlaying = false)
             player.pause()
         } else {
-            updateScreenState(
-                _playerScreenState.value.copy(
-                    isPlaying = true
-                )
-            )
+            _playerScreenState.value = _playerScreenState.value.copy(isPlaying = true)
             player.play()
         }
     }

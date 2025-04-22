@@ -35,6 +35,7 @@ import com.example.anime_screen.player_screen.sections.PlusSecondsBox
 import com.example.anime_screen.player_screen.sections.SkipOpeningButton
 import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalAnimationGraphicsApi::class)
@@ -55,10 +56,12 @@ fun PlayerScreen(
     val title = animeScreenState.title
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
 
+    val systemUiController = rememberSystemUiController()
     LaunchedEffect(episodeIndex) {
         val episodeLinks = title.player.list.values.toList()[episodeIndex]
         val selectedEpisodeLink = "https://${title.player.host}${episodeLinks.hls.fhd}"
         viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
+        systemUiController.isSystemBarsVisible = false
     }
 
     val player = viewModel.player
@@ -153,6 +156,7 @@ fun PlayerScreen(
                         }
                     },
                     onLockScreenClick = {
+                        systemUiController.isSystemBarsVisible = false
                         viewModel.sendIntent(
                             PlayerScreenIntent.UpdateScreenState(
                                 playerScreenState.copy(
@@ -244,6 +248,7 @@ fun PlayerScreen(
                                 )
                             )
                         )
+                        systemUiController.isSystemBarsVisible = !playerScreenState.showPlayerFeatures
                     } else {
                         viewModel.sendIntent(
                             PlayerScreenIntent.UpdateScreenState(
