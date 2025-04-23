@@ -1,17 +1,23 @@
 package com.example.anime_screen.player_screen.sections
 
+import android.graphics.Rect
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import androidx.annotation.OptIn
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toAndroidRect
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+
+//Used in MainActivity to create pip mode
+var videoViewBounds = Rect()
 
 @OptIn(UnstableApi::class)
 @Composable
@@ -38,6 +44,10 @@ fun AnimePlayer(
                 AspectRatioFrameLayout.RESIZE_MODE_FIT
             }
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .onGloballyPositioned {
+                videoViewBounds = it.boundsInWindow().toAndroidRect()
+            }
     )
 }

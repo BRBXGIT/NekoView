@@ -326,11 +326,11 @@ fun PlayerScreen(
 
             val openingSkips = title.player.list.values.toList()[episodeIndex].skips.opening
             var timer by rememberSaveable { mutableIntStateOf(10) }
-            if((openingSkips[0] != null) and (openingSkips[1] != null)) {
+            if((openingSkips[0] != null) and (openingSkips[1] != null) and (!playerScreenState.isScreenLocked)) {
                 val showButton = (playerScreenState.currentPosition in (openingSkips[0]!! * 1000)..(openingSkips[1]!! * 1000)) && timer > 0
 
-                LaunchedEffect(showButton) {
-                    while (showButton && timer > 0) {
+                LaunchedEffect(showButton, playerScreenState.isPlaying) {
+                    while(showButton and (timer > 0) and (playerScreenState.isPlaying)) {
                         delay(1000)
                         timer--
                     }

@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.OutlinedButton
@@ -33,7 +31,7 @@ fun BoxScope.SkipOpeningButton(
             .align(Alignment.BottomEnd)
             .padding(
                 end = 16.dp,
-                bottom = bottomPadding + 4.dp
+                bottom = bottomPadding + 32.dp
             )
             .zIndex(2f)
     ) {
