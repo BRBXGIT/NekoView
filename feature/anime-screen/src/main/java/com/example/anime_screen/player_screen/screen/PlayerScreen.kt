@@ -304,6 +304,13 @@ fun PlayerScreen(
                 isCropped = playerScreenState.isCropped
             )
 
+            LaunchedEffect(player.isLoading) {
+                viewModel.sendIntent(
+                    PlayerScreenIntent.UpdateScreenState(
+                        playerScreenState.copy(isLoading = player.isLoading)
+                    )
+                )
+            }
             PlayPauseSkipSection(
                 showPlayerFeatures = playerScreenState.showPlayerFeatures,
                 size = animeScreenState.title.player.list.values.size,
@@ -316,6 +323,7 @@ fun PlayerScreen(
                 onPlayClick = {
                     viewModel.sendIntent(PlayerScreenIntent.PlayPause)
                 },
+                isLoading = playerScreenState.isLoading
             )
 
             if(!playerScreenState.isScreenLocked) {

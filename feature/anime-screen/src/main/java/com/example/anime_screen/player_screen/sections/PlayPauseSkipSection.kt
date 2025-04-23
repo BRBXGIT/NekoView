@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
@@ -28,6 +29,7 @@ import com.example.design_system.theme.NekoViewIcons
 @OptIn(ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun BoxScope.PlayPauseSkipSection(
+    isLoading: Boolean,
     size: Int,
     index: Int,
     isPlaying: Boolean,
@@ -59,18 +61,25 @@ fun BoxScope.PlayPauseSkipSection(
                 )
             }
 
-            IconButton(
-                onClick = onPlayClick
-            ) {
-                val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.PlayPauseAnimated)
-                val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = isPlaying)
-
-                Image(
-                    painter = animatedPainter,
-                    contentDescription = null,
-                    colorFilter = ColorFilter.tint(Color(0xffffffff)),
-                    modifier = Modifier.size(32.dp)
+            if(isLoading) {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(32.dp),
+                    color = Color(0xffffffff)
                 )
+            } else {
+                IconButton(
+                    onClick = onPlayClick
+                ) {
+                    val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.PlayPauseAnimated)
+                    val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = isPlaying)
+
+                    Image(
+                        painter = animatedPainter,
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Color(0xffffffff)),
+                        modifier = Modifier.size(32.dp)
+                    )
+                }
             }
 
             IconButton(
