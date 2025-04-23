@@ -116,6 +116,18 @@ fun PlayerScreen(
         }
     }
 
+    LaunchedEffect(playerScreenState.showPlayerFeatures) {
+        if(playerScreenState.showPlayerFeatures) {
+            delay(3000)
+            viewModel.sendIntent(
+                PlayerScreenIntent.UpdateScreenState(
+                    playerScreenState.copy(showPlayerFeatures = false)
+                )
+            )
+            systemUiController.isSystemBarsVisible = false
+        }
+    }
+
     Scaffold(
         bottomBar = {
             if(playerScreenState.isScreenLocked) {
