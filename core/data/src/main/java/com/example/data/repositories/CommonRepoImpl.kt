@@ -28,4 +28,20 @@ class CommonRepoImpl @Inject constructor(
     override fun getUserSessionTokenFromDataStore(): Flow<String> {
         return dataStore.userSessionTokenFlow
     }
+
+    override fun getVideoQuality(): Flow<Int> {
+        return dataStore.videoQualityFlow
+    }
+
+    override suspend fun saveVideoQuality(quality: Int) {
+        dataStore.saveVideoQuality(quality)
+    }
+
+    override suspend fun saveSkipOpeningAutomatically(skip: Boolean) {
+        dataStore.saveSkipOpeningAutomatically(skip)
+    }
+
+    override fun getSkipOpeningAutomatically(): Flow<Boolean> {
+        return dataStore.skipOpeningAutomatically
+    }
 }

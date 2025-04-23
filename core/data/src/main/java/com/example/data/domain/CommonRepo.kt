@@ -17,4 +17,12 @@ interface CommonRepo {
     )
 
     fun getUserSessionTokenFromDataStore(): Flow<String>
+
+    suspend fun saveVideoQuality(quality: Int)
+
+    fun getVideoQuality(): Flow<Int>
+
+    suspend fun saveSkipOpeningAutomatically(skip: Boolean)
+
+    fun getSkipOpeningAutomatically(): Flow<Boolean>
 }

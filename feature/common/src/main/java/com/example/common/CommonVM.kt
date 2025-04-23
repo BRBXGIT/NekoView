@@ -2,7 +2,7 @@ package com.example.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.common.dispatchers.AniKunDispatchers
+import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.data.domain.CommonRepo
 import com.example.data.remote.utils.onError
@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class CommonVM @Inject constructor(
     private val repository: CommonRepo,
-    @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
+    @Dispatcher(NekoViewDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
     private val _commonState = MutableStateFlow(CommonState())

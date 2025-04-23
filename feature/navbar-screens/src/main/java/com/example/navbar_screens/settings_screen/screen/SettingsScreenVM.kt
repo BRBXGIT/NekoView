@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 import androidx.lifecycle.viewModelScope
-import com.example.common.dispatchers.AniKunDispatchers
+import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.data.remote.utils.onError
 import com.example.data.remote.utils.onSuccess
@@ -22,7 +22,7 @@ import kotlinx.coroutines.launch
 @HiltViewModel
 class SettingsScreenVM @Inject constructor(
     private val repository: SettingsScreenRepo,
-    @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
+    @Dispatcher(NekoViewDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
     private val _settingsScreenState = MutableStateFlow(SettingsScreenState())

@@ -4,15 +4,22 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import com.example.common.dispatchers.Dispatcher
+import com.example.common.dispatchers.NekoViewDispatchers
+import com.example.data.domain.CommonRepo
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class PlayerScreenVM @Inject constructor(
-    val player: ExoPlayer
+    val player: ExoPlayer,
+    val commonRepo: CommonRepo,
+    @Dispatcher(NekoViewDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
     private val _playerScreenState = MutableStateFlow(PlayerScreenState())
@@ -49,12 +56,21 @@ class PlayerScreenVM @Inject constructor(
         }
     }
 
+    private fun changeVideoQuality() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.getVideoQuality().collect {
+                _playerScreenState.value = _playerScreenState.value.copy(videoQuality = it)
+            }
+        }
+    }
+
     fun sendIntent(intent: PlayerScreenIntent) {
         when(intent) {
             is PlayerScreenIntent.PlayEpisode -> playEpisode(intent.episodeLink)
             is PlayerScreenIntent.UpdateScreenState -> updateScreenState(intent.state)
             is PlayerScreenIntent.RewindEpisode -> rewindEpisode(intent.position)
             is PlayerScreenIntent.PlayPause -> playPauseEpisode()
+            is PlayerScreenIntent.ChangeVideoQuality -> changeVideoQuality()
         }
     }
 

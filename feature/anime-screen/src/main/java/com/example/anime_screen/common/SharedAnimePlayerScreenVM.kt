@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anime_screen.anime_screen.screen.AnimeScreenIntent
 import com.example.anime_screen.anime_screen.screen.AnimeScreenState
-import com.example.common.dispatchers.AniKunDispatchers
+import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.common.dispatchers.Dispatcher
 import com.example.data.domain.AnimeScreenRepo
 import com.example.data.remote.utils.onError
@@ -25,7 +25,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SharedAnimePlayerScreenVM @Inject constructor(
     private val repository: AnimeScreenRepo,
-    @Dispatcher(AniKunDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
+    @Dispatcher(NekoViewDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
     private val _animeScreenState = MutableStateFlow(AnimeScreenState())

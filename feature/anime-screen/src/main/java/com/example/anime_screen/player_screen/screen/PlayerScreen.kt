@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -30,6 +31,7 @@ import com.example.anime_screen.player_screen.sections.Direction
 import com.example.anime_screen.player_screen.sections.EpisodesDialog
 import com.example.anime_screen.player_screen.sections.PlayPauseSkipSection
 import com.example.anime_screen.player_screen.sections.PlayerFeaturesBottomBar
+import com.example.anime_screen.player_screen.sections.PlayerSettingsBS
 import com.example.anime_screen.player_screen.sections.PlayerTopBar
 import com.example.anime_screen.player_screen.sections.PlayerUnlockButtonBottomBar
 import com.example.anime_screen.player_screen.sections.PlusSecondsBox
@@ -119,7 +121,7 @@ fun PlayerScreen(
 
     LaunchedEffect(playerScreenState.showPlayerFeatures) {
         if(playerScreenState.showPlayerFeatures) {
-            delay(3000)
+            delay(4000)
             viewModel.sendIntent(
                 PlayerScreenIntent.UpdateScreenState(
                     playerScreenState.copy(showPlayerFeatures = false)
@@ -129,6 +131,18 @@ fun PlayerScreen(
         }
     }
 
+    LaunchedEffect(playerScreenState.videoQuality) {
+        if(playerScreenState.videoQuality == 480) {
+            viewModel.sendIntent(PlayerScreenIntent.ChangeVideoQuality)
+        }
+    }
+
+    var settingsBSOpen by rememberSaveable { mutableStateOf(false) }
+    if(settingsBSOpen) {
+        PlayerSettingsBS(
+            onDismissRequest = { settingsBSOpen = false }
+        )
+    }
     Scaffold(
         bottomBar = {
             if(playerScreenState.isScreenLocked) {
@@ -214,7 +228,8 @@ fun PlayerScreen(
                                 )
                             )
                         )
-                    }
+                    },
+                    onSettingsClick = { settingsBSOpen = true }
                 )
             }
         },

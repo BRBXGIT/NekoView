@@ -4,9 +4,9 @@ import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)
-annotation class Dispatcher(val aniKunDispatcher: AniKunDispatchers)
+annotation class Dispatcher(val nekoViewDispatcher: NekoViewDispatchers)
 
-enum class AniKunDispatchers {
+enum class NekoViewDispatchers {
     Default,
     IO,
 }
