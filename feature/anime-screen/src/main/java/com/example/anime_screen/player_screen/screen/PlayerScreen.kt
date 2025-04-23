@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.media3.common.Player
 import androidx.navigation.NavController
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
@@ -304,13 +305,16 @@ fun PlayerScreen(
                 isCropped = playerScreenState.isCropped
             )
 
-            LaunchedEffect(player.isLoading) {
+            LaunchedEffect(player.playbackState, player.playWhenReady) {
+                val isStuckBuffering = player.playbackState == Player.STATE_BUFFERING && player.playWhenReady
+
                 viewModel.sendIntent(
                     PlayerScreenIntent.UpdateScreenState(
-                        playerScreenState.copy(isLoading = player.isLoading)
+                        playerScreenState.copy(isLoading = isStuckBuffering)
                     )
                 )
             }
+
             PlayPauseSkipSection(
                 showPlayerFeatures = playerScreenState.showPlayerFeatures,
                 size = animeScreenState.title.player.list.values.size,
