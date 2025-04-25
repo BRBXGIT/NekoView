@@ -44,4 +44,12 @@ class CommonRepoImpl @Inject constructor(
     override fun getSkipOpeningAutomatically(): Flow<Boolean> {
         return dataStore.skipOpeningAutomatically
     }
+
+    override fun getShowSkipOpeningButton(): Flow<Boolean> {
+        return dataStore.showSkipOpeningButton
+    }
+
+    override suspend fun saveShowSkipOpeningButton(show: Boolean) {
+        dataStore.saveShowSkipOpeningButton(show)
+    }
 }

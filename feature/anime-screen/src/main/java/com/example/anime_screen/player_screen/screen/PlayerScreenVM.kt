@@ -11,6 +11,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -28,6 +29,43 @@ class PlayerScreenVM @Inject constructor(
         SharingStarted.WhileSubscribed(5_000),
         PlayerScreenState()
     )
+
+    private val _videoQuality = MutableStateFlow<Int?>(null)
+    val videoQuality = _videoQuality.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun fetchVideoQuality() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.getVideoQuality().collect {
+                _videoQuality.value = it
+            }
+        }
+    }
+
+    private val _showSkipOpeningButton = MutableStateFlow<Boolean?>(null)
+    val showSkipOpeningButton = _showSkipOpeningButton.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun fetchShowSkipOpeningButton() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.getShowSkipOpeningButton().collect {
+                _showSkipOpeningButton.value = it
+            }
+        }
+    }
+
+    private fun setShowSkipOpeningButton() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.saveShowSkipOpeningButton(!_showSkipOpeningButton.value!!)
+        }
+        fetchShowSkipOpeningButton()
+    }
 
     private fun playEpisode(episodeLink: String) {
         val mediaItem = MediaItem.fromUri(episodeLink)
@@ -56,12 +94,11 @@ class PlayerScreenVM @Inject constructor(
         }
     }
 
-    private fun changeVideoQuality() {
+    private fun changeVideoQuality(quality: Int) {
         viewModelScope.launch(dispatcherIo) {
-            commonRepo.getVideoQuality().collect {
-                _playerScreenState.value = _playerScreenState.value.copy(videoQuality = it)
-            }
+            commonRepo.saveVideoQuality(quality)
         }
+        fetchVideoQuality()
     }
 
     fun sendIntent(intent: PlayerScreenIntent) {
@@ -70,7 +107,10 @@ class PlayerScreenVM @Inject constructor(
             is PlayerScreenIntent.UpdateScreenState -> updateScreenState(intent.state)
             is PlayerScreenIntent.RewindEpisode -> rewindEpisode(intent.position)
             is PlayerScreenIntent.PlayPause -> playPauseEpisode()
-            is PlayerScreenIntent.ChangeVideoQuality -> changeVideoQuality()
+            is PlayerScreenIntent.ChangeVideoQuality -> changeVideoQuality(intent.quality)
+            is PlayerScreenIntent.FetchVideoQuality -> fetchVideoQuality()
+            is PlayerScreenIntent.FetchShowSkipOpeningButton -> fetchShowSkipOpeningButton()
+            is PlayerScreenIntent.ChangeShowSkipOpeningButton -> setShowSkipOpeningButton()
         }
     }
 

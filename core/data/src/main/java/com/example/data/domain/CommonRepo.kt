@@ -25,4 +25,8 @@ interface CommonRepo {
     suspend fun saveSkipOpeningAutomatically(skip: Boolean)
 
     fun getSkipOpeningAutomatically(): Flow<Boolean>
+
+    suspend fun saveShowSkipOpeningButton(show: Boolean)
+
+    fun getShowSkipOpeningButton(): Flow<Boolean>
 }

@@ -52,4 +52,17 @@ class NekoViewDataStore(
             preferences[skipOpeningAutomaticallyKey] = skip
         }
     }
+
+    //Show skip opening button
+    private val showSkipOpeningButtonKey = booleanPreferencesKey("show_skip_opening_button")
+    val showSkipOpeningButton: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[showSkipOpeningButtonKey] == true
+        }
+
+    suspend fun saveShowSkipOpeningButton(show: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[showSkipOpeningButtonKey] = show
+        }
+    }
 }

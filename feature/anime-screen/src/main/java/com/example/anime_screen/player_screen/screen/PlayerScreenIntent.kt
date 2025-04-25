@@ -5,5 +5,8 @@ sealed class PlayerScreenIntent {
     data class UpdateScreenState(val state: PlayerScreenState): PlayerScreenIntent()
     data class RewindEpisode(val position: Long): PlayerScreenIntent()
     data object PlayPause: PlayerScreenIntent()
-    data object ChangeVideoQuality: PlayerScreenIntent()
+    data class ChangeVideoQuality(val quality: Int): PlayerScreenIntent()
+    data object FetchVideoQuality: PlayerScreenIntent()
+    data object FetchShowSkipOpeningButton: PlayerScreenIntent()
+    data object ChangeShowSkipOpeningButton: PlayerScreenIntent()
 }

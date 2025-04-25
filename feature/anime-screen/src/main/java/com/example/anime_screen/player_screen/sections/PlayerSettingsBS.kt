@@ -21,34 +21,48 @@ import com.example.design_system.theme.mShapes
 
 data class PlayerSettingsItem(
     val name: String,
-    val label: String
+    val label: String,
+    val type: SettingsItemType
 )
+
+enum class SettingsItemType {
+    Quality, Speed, ShowSkipOpeningButton, AutoSkipOpening, AutoStart
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PlayerSettingsBS(
+    showSkipOpeningButton: Boolean?,
+    currentVideoQuality: Int?,
     onDismissRequest: () -> Unit,
+    onChangeQualityClick: () -> Unit,
+    onShowSkipOpeningButtonClick: () -> Unit
 ) {
     val playerSettingsItems = listOf(
         PlayerSettingsItem(
             name = "Качество",
-            label = "480"
+            label = currentVideoQuality.toString(),
+            type = SettingsItemType.Quality
         ),
         PlayerSettingsItem(
             name = "Скорость",
-            label = "1"
+            label = "1",
+            type = SettingsItemType.Speed
         ),
         PlayerSettingsItem(
             name = "Кнопка пропуска опенинга",
-            label = "480"
+            label = if(showSkipOpeningButton!!) "Да" else "Нет",
+            type = SettingsItemType.ShowSkipOpeningButton
         ),
         PlayerSettingsItem(
             name = "Автоматически пропускать опенинг",
-            label = "Нет"
+            label = "Нет",
+            type = SettingsItemType.AutoSkipOpening
         ),
         PlayerSettingsItem(
             name = "Автовоспроизведение",
-            label = "Да"
+            label = "Да",
+            type = SettingsItemType.AutoStart
         ),
     )
 
@@ -69,7 +83,19 @@ fun PlayerSettingsBS(
                         .fillMaxWidth()
                         .clip(mShapes.extraSmall)
                         .clickable {
-
+                            when(item.type) {
+                                SettingsItemType.Quality -> {
+                                    onDismissRequest()
+                                    onChangeQualityClick()
+                                }
+                                SettingsItemType.Speed -> {}
+                                SettingsItemType.ShowSkipOpeningButton -> {
+                                    onDismissRequest()
+                                    onShowSkipOpeningButtonClick()
+                                }
+                                SettingsItemType.AutoSkipOpening -> {}
+                                SettingsItemType.AutoStart ->{}
+                            }
                         }
                         .padding(8.dp)
                 ) {

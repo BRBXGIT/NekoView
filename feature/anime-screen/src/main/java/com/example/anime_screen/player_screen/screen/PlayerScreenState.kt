@@ -14,6 +14,4 @@ data class PlayerScreenState(
     val showUnlockButton: Boolean = false,
     val isCropped: Boolean = false,
     val episodeDialogOpen: Boolean = false,
-    val videoQuality: Int = 480,
-    val skipOpeningAutomatically: Boolean = false
 )

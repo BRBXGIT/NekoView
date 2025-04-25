@@ -3,6 +3,7 @@ package com.example.anime_screen.player_screen.screen
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
@@ -36,6 +37,7 @@ import com.example.anime_screen.player_screen.sections.PlayerTopBar
 import com.example.anime_screen.player_screen.sections.PlayerUnlockButtonBottomBar
 import com.example.anime_screen.player_screen.sections.PlusSecondsBox
 import com.example.anime_screen.player_screen.sections.SkipOpeningButton
+import com.example.anime_screen.player_screen.sections.VideoQualityBS
 import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -60,11 +62,24 @@ fun PlayerScreen(
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
 
     val systemUiController = rememberSystemUiController()
-    LaunchedEffect(episodeIndex) {
-        val episodeLinks = title.player.list.values.toList()[episodeIndex]
-        val selectedEpisodeLink = "https://${title.player.host}${episodeLinks.hls.fhd}"
-        viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
-        systemUiController.isSystemBarsVisible = false
+    val videoQuality by viewModel.videoQuality.collectAsStateWithLifecycle()
+    LaunchedEffect(episodeIndex, videoQuality) {
+        if(videoQuality != null) {
+            val episodeLinks = title.player.list.values.toList()[episodeIndex]
+            val selectedEpisodeLink = "https://${title.player.host}${
+                if(videoQuality == 480) {
+                    episodeLinks.hls.sd
+                } else if(videoQuality == 720) {
+                    episodeLinks.hls.hd
+                } else {
+                    episodeLinks.hls.fhd
+                }
+            }"
+            viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
+            systemUiController.isSystemBarsVisible = false
+        } else {
+            viewModel.sendIntent(PlayerScreenIntent.FetchVideoQuality)
+        }
     }
 
     val player = viewModel.player
@@ -131,16 +146,32 @@ fun PlayerScreen(
         }
     }
 
-    LaunchedEffect(playerScreenState.videoQuality) {
-        if(playerScreenState.videoQuality == 480) {
-            viewModel.sendIntent(PlayerScreenIntent.ChangeVideoQuality)
+    val showSkipOpeningButton by viewModel.showSkipOpeningButton.collectAsStateWithLifecycle()
+    LaunchedEffect(showSkipOpeningButton) {
+        Log.d("CCCC", showSkipOpeningButton.toString())
+        if(showSkipOpeningButton == null) {
+            viewModel.sendIntent(PlayerScreenIntent.FetchShowSkipOpeningButton)
         }
     }
-
+    var qualityBSOpen by rememberSaveable { mutableStateOf(false) }
+    if(qualityBSOpen) {
+        VideoQualityBS(
+            onDismissRequest = { qualityBSOpen = false },
+            onSetQualityClick = {
+                viewModel.sendIntent(
+                    PlayerScreenIntent.ChangeVideoQuality(it)
+                )
+            }
+        )
+    }
     var settingsBSOpen by rememberSaveable { mutableStateOf(false) }
     if(settingsBSOpen) {
         PlayerSettingsBS(
-            onDismissRequest = { settingsBSOpen = false }
+            currentVideoQuality = videoQuality,
+            onDismissRequest = { settingsBSOpen = false },
+            onChangeQualityClick = { qualityBSOpen = true },
+            onShowSkipOpeningButtonClick = { viewModel.sendIntent(PlayerScreenIntent.ChangeShowSkipOpeningButton) },
+            showSkipOpeningButton = showSkipOpeningButton
         )
     }
     Scaffold(
@@ -365,28 +396,30 @@ fun PlayerScreen(
 
             val openingSkips = title.player.list.values.toList()[episodeIndex].skips.opening
             var timer by rememberSaveable { mutableIntStateOf(10) }
-            if((openingSkips[0] != null) and (openingSkips[1] != null) and (!playerScreenState.isScreenLocked)) {
-                val showButton = (playerScreenState.currentPosition in (openingSkips[0]!! * 1000)..(openingSkips[1]!! * 1000)) && timer > 0
+            if((openingSkips[0] != null) and (openingSkips[1] != null) and (!playerScreenState.isScreenLocked) and (showSkipOpeningButton != null)) {
+                if(showSkipOpeningButton!!) {
+                    val showButton = (playerScreenState.currentPosition in (openingSkips[0]!! * 1000)..(openingSkips[1]!! * 1000)) && timer > 0
 
-                LaunchedEffect(showButton, playerScreenState.isPlaying) {
-                    while(showButton and (timer > 0) and (playerScreenState.isPlaying)) {
-                        delay(1000)
-                        timer--
+                    LaunchedEffect(showButton, playerScreenState.isPlaying) {
+                        while(showButton and (timer > 0) and (playerScreenState.isPlaying)) {
+                            delay(1000)
+                            timer--
+                        }
                     }
-                }
 
-                SkipOpeningButton(
-                    onClick = {
-                        viewModel.sendIntent(
-                            PlayerScreenIntent.RewindEpisode(
-                                (openingSkips[1]!! * 1000).toLong().coerceAtMost(playerScreenState.duration)
+                    SkipOpeningButton(
+                        onClick = {
+                            viewModel.sendIntent(
+                                PlayerScreenIntent.RewindEpisode(
+                                    (openingSkips[1]!! * 1000).toLong().coerceAtMost(playerScreenState.duration)
+                                )
                             )
-                        )
-                    },
-                    showButton = showButton,
-                    timer = timer,
-                    bottomPadding = innerPadding.calculateBottomPadding()
-                )
+                        },
+                        showButton = showButton,
+                        timer = timer,
+                        bottomPadding = innerPadding.calculateBottomPadding()
+                    )
+                }
             }
 
             //Cover all screen except player features
