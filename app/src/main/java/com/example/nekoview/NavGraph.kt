@@ -11,6 +11,7 @@ import com.example.anime_screen.navigation.playerScreenRoute
 import com.example.common.CommonVM
 import com.example.navbar_screens.featured_screen.navigation.featuredScreen
 import com.example.navbar_screens.featured_screen.screen.FeaturedScreenVM
+import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
 import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.home_screen.screen.HomeScreenVM
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
@@ -31,7 +32,7 @@ fun NavGraph(
 
     NavHost(
         navController = navController,
-        startDestination = AnimeScreenRoute(9900)
+        startDestination = HomeScreenRoute
     ) {
         homeScreen(
             navController = navController,

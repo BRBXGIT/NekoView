@@ -36,7 +36,9 @@ fun PlayerSettingsBS(
     currentVideoQuality: Int?,
     onDismissRequest: () -> Unit,
     onChangeQualityClick: () -> Unit,
-    onShowSkipOpeningButtonClick: () -> Unit
+    onShowSkipOpeningButtonClick: () -> Unit,
+    autoSkipOpening: Boolean?,
+    onAutoSkipOpeningClick: () -> Unit
 ) {
     val playerSettingsItems = listOf(
         PlayerSettingsItem(
@@ -56,7 +58,7 @@ fun PlayerSettingsBS(
         ),
         PlayerSettingsItem(
             name = "Автоматически пропускать опенинг",
-            label = "Нет",
+            label = if(autoSkipOpening!!) "Да" else "Нет",
             type = SettingsItemType.AutoSkipOpening
         ),
         PlayerSettingsItem(
@@ -93,7 +95,10 @@ fun PlayerSettingsBS(
                                     onDismissRequest()
                                     onShowSkipOpeningButtonClick()
                                 }
-                                SettingsItemType.AutoSkipOpening -> {}
+                                SettingsItemType.AutoSkipOpening -> {
+                                    onDismissRequest()
+                                    onAutoSkipOpeningClick()
+                                }
                                 SettingsItemType.AutoStart ->{}
                             }
                         }

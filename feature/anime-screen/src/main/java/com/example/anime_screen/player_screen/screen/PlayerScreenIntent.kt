@@ -9,4 +9,6 @@ sealed class PlayerScreenIntent {
     data object FetchVideoQuality: PlayerScreenIntent()
     data object FetchShowSkipOpeningButton: PlayerScreenIntent()
     data object ChangeShowSkipOpeningButton: PlayerScreenIntent()
+    data object FetchAutoSkipOpening: PlayerScreenIntent()
+    data object ChangeAutoSkipOpening: PlayerScreenIntent()
 }

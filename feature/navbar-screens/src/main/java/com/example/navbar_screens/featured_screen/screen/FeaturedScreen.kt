@@ -31,6 +31,7 @@ import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.common.AuthBS
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
+import com.example.design_system.sections.EmptyContentSection
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarAction
 import com.example.design_system.snackbars.SnackbarController
@@ -74,14 +75,15 @@ fun FeaturedScreen(
     val commonState by commonVM.commonState.collectAsStateWithLifecycle()
     LaunchedEffect(commonState.sessionToken) {
         if(commonState.sessionToken != "") {
-            Log.d("CCCC", commonState.sessionToken)
             viewModel.setUserSessionToken(commonState.sessionToken)
         }
     }
 
+    var isError by rememberSaveable { mutableStateOf(false) }
     val userFavorites = viewModel.userFavorites.collectAsLazyPagingItems()
     LaunchedEffect(userFavorites.loadState.refresh, commonState.sessionToken) {
         if((userFavorites.loadState.refresh is LoadState.Error) and (commonState.sessionToken != "")) {
+            isError = true
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = (userFavorites.loadState.refresh as LoadState.Error).error.message.toString(),
@@ -91,6 +93,12 @@ fun FeaturedScreen(
                     )
                 )
             )
+        }
+    }
+
+    LaunchedEffect(userFavorites.itemCount) {
+        if(userFavorites.itemCount != 0) {
+            isError = false
         }
     }
 
@@ -148,10 +156,16 @@ fun FeaturedScreen(
             }
 
             if(commonState.sessionToken.isNotEmpty()) {
-                UserFeaturedLVGSection(
-                    titles = userFavorites,
-                    onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
-                )
+                if(isError) {
+                    EmptyContentSection(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    UserFeaturedLVGSection(
+                        titles = userFavorites,
+                        onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                    )
+                }
             } else {
                 UserNotAuthorizedSection(
                     onAuthButtonClick = { authBSOpened = true }

@@ -11,7 +11,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -67,6 +66,29 @@ class PlayerScreenVM @Inject constructor(
         fetchShowSkipOpeningButton()
     }
 
+    private val _autoSkipOpening = MutableStateFlow<Boolean?>(null)
+    val autoSkipOpening = _autoSkipOpening.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun fetchAutoSkipOpening() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.getSkipOpeningAutomatically().collect {
+                _autoSkipOpening.value = it
+            }
+        }
+    }
+
+    private fun changeAutoSkipOpening() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.saveSkipOpeningAutomatically(!_autoSkipOpening.value!!)
+        }
+        fetchAutoSkipOpening()
+    }
+
+
     private fun playEpisode(episodeLink: String) {
         val mediaItem = MediaItem.fromUri(episodeLink)
         player.setMediaItem(mediaItem)
@@ -111,10 +133,15 @@ class PlayerScreenVM @Inject constructor(
             is PlayerScreenIntent.FetchVideoQuality -> fetchVideoQuality()
             is PlayerScreenIntent.FetchShowSkipOpeningButton -> fetchShowSkipOpeningButton()
             is PlayerScreenIntent.ChangeShowSkipOpeningButton -> setShowSkipOpeningButton()
+            is PlayerScreenIntent.FetchAutoSkipOpening -> fetchAutoSkipOpening()
+            is PlayerScreenIntent.ChangeAutoSkipOpening -> changeAutoSkipOpening()
         }
     }
 
     init {
+        sendIntent(PlayerScreenIntent.FetchVideoQuality)
+        sendIntent(PlayerScreenIntent.FetchShowSkipOpeningButton)
+        sendIntent(PlayerScreenIntent.FetchAutoSkipOpening)
         player.prepare()
     }
 }

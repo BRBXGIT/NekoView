@@ -14,8 +14,11 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -26,6 +29,7 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
+import com.example.design_system.sections.EmptyContentSection
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarAction
 import com.example.design_system.snackbars.SnackbarController
@@ -65,9 +69,11 @@ fun HomeScreen(
         }
     }
 
+    var isError by rememberSaveable { mutableStateOf(false) }
     val titlesUpdates = viewModel.titlesUpdates.collectAsLazyPagingItems()
     LaunchedEffect(titlesUpdates.loadState.refresh) {
         if(titlesUpdates.loadState.refresh is LoadState.Error) {
+            isError = true
             SnackbarController.sendEvent(
                 SnackbarEvent(
                     message = (titlesUpdates.loadState.refresh as LoadState.Error).error.message.toString(),
@@ -77,6 +83,12 @@ fun HomeScreen(
                     )
                 )
             )
+        }
+    }
+
+    LaunchedEffect(titlesUpdates.itemCount) {
+        if(titlesUpdates.itemCount != 0) {
+            isError = false
         }
     }
 
@@ -121,10 +133,16 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            TitlesUpdatesLVGSection(
-                titles = titlesUpdates,
-                onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
-            )
+            if(isError) {
+                EmptyContentSection(
+                    modifier = Modifier.fillMaxSize()
+                )
+            } else {
+                TitlesUpdatesLVGSection(
+                    titles = titlesUpdates,
+                    onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                )
+            }
         }
     }
 
