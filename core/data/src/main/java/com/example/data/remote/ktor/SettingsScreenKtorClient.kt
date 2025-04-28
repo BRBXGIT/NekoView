@@ -10,6 +10,7 @@ import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.network.sockets.SocketTimeoutException
 import kotlinx.io.IOException
+import kotlinx.serialization.SerializationException
 
 class SettingsScreenKtorClient(
     private val httpClient: HttpClient
@@ -26,6 +27,8 @@ class SettingsScreenKtorClient(
                 is SocketTimeoutException -> Result.Error(NetworkError.REQUEST_TIMEOUT)
                 else -> Result.Error(NetworkError.NO_INTERNET)
             }
+        } catch(e: SerializationException) {
+            return Result.Error(NetworkError.SERIALIZATION)
         }
 
         return if(response.status.value in 200..299) {

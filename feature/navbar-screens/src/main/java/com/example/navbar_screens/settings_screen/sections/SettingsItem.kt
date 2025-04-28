@@ -1,6 +1,5 @@
 package com.example.navbar_screens.settings_screen.sections
 
-import android.R
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -20,6 +19,7 @@ import com.example.design_system.theme.NekoViewIcons
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
+import com.example.navbar_screens.settings_screen.additional_screens.help_screen.HelpScreenRoute
 
 enum class ProjectItemType {
     PROJECT_GROUP, SUPPORT
@@ -28,19 +28,22 @@ enum class ProjectItemType {
 data class ProjectItem(
     val type: ProjectItemType,
     val name: String,
-    val icon: Int
+    val icon: Int,
+    val route: Any
 )
 
 val projectItems = listOf(
     ProjectItem(
         type = ProjectItemType.PROJECT_GROUP,
         name = "Команда проекта",
-        icon = NekoViewIcons.Group
+        icon = NekoViewIcons.Group,
+        route = HelpScreenRoute
     ),
     ProjectItem(
         type = ProjectItemType.SUPPORT,
         name = "Поддержать",
-        icon = NekoViewIcons.Gift
+        icon = NekoViewIcons.Gift,
+        route = HelpScreenRoute
     )
 )
 

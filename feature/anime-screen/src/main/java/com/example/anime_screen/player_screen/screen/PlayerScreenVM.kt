@@ -139,9 +139,6 @@ class PlayerScreenVM @Inject constructor(
     }
 
     init {
-        sendIntent(PlayerScreenIntent.FetchVideoQuality)
-        sendIntent(PlayerScreenIntent.FetchShowSkipOpeningButton)
-        sendIntent(PlayerScreenIntent.FetchAutoSkipOpening)
         player.prepare()
     }
 }

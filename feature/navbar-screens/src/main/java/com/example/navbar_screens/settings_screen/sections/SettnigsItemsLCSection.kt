@@ -29,7 +29,7 @@ fun SettingsItemsLCSection(
             SettingsItem(
                 name = projectItem.name,
                 icon = projectItem.icon,
-                onClick = {  },
+                onClick = { onSettingsItemClick(projectItem.route) },
             )
         }
 
