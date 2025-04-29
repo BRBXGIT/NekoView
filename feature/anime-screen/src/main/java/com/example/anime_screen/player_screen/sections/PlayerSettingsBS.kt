@@ -26,7 +26,7 @@ data class PlayerSettingsItem(
 )
 
 enum class SettingsItemType {
-    Quality, Speed, ShowSkipOpeningButton, AutoSkipOpening, AutoStart
+    Quality, ShowSkipOpeningButton, AutoSkipOpening, Autoplay
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,18 +38,15 @@ fun PlayerSettingsBS(
     onChangeQualityClick: () -> Unit,
     onShowSkipOpeningButtonClick: () -> Unit,
     autoSkipOpening: Boolean?,
-    onAutoSkipOpeningClick: () -> Unit
+    onAutoSkipOpeningClick: () -> Unit,
+    autoPlay: Boolean?,
+    onAutoPlayClick: () -> Unit
 ) {
     val playerSettingsItems = listOf(
         PlayerSettingsItem(
             name = "Качество",
             label = currentVideoQuality.toString(),
             type = SettingsItemType.Quality
-        ),
-        PlayerSettingsItem(
-            name = "Скорость",
-            label = "1",
-            type = SettingsItemType.Speed
         ),
         PlayerSettingsItem(
             name = "Кнопка пропуска опенинга",
@@ -63,8 +60,8 @@ fun PlayerSettingsBS(
         ),
         PlayerSettingsItem(
             name = "Автовоспроизведение",
-            label = "Да",
-            type = SettingsItemType.AutoStart
+            label = if(autoPlay!!) "Да" else "Нет",
+            type = SettingsItemType.Autoplay
         ),
     )
 
@@ -90,7 +87,6 @@ fun PlayerSettingsBS(
                                     onDismissRequest()
                                     onChangeQualityClick()
                                 }
-                                SettingsItemType.Speed -> {}
                                 SettingsItemType.ShowSkipOpeningButton -> {
                                     onDismissRequest()
                                     onShowSkipOpeningButtonClick()
@@ -99,7 +95,10 @@ fun PlayerSettingsBS(
                                     onDismissRequest()
                                     onAutoSkipOpeningClick()
                                 }
-                                SettingsItemType.AutoStart ->{}
+                                SettingsItemType.Autoplay -> {
+                                    onDismissRequest()
+                                    onAutoPlayClick()
+                                }
                             }
                         }
                         .padding(8.dp)

@@ -3,6 +3,7 @@ package com.example.anime_screen.player_screen.screen
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
+import android.util.Log
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
@@ -133,9 +134,9 @@ fun PlayerScreen(
         }
     }
 
-    LaunchedEffect(playerScreenState.showPlayerFeatures, playerScreenState.isUserSeeking) {
-        if((playerScreenState.showPlayerFeatures) and (!playerScreenState.isUserSeeking)) {
-            delay(4000)
+    LaunchedEffect(playerScreenState.showPlayerFeatures, playerScreenState.isUserSeeking, playerScreenState.episodeDialogOpen) {
+        if((playerScreenState.showPlayerFeatures) and (!playerScreenState.isUserSeeking) and (!playerScreenState.episodeDialogOpen)) {
+            delay(6000)
             viewModel.sendIntent(
                 PlayerScreenIntent.UpdateScreenState(
                     playerScreenState.copy(showPlayerFeatures = false)
@@ -163,6 +164,12 @@ fun PlayerScreen(
         )
     }
 
+    val autoPlay by viewModel.autoPlay.collectAsStateWithLifecycle()
+    LaunchedEffect(autoPlay) {
+        if(autoPlay == null) {
+            viewModel.sendIntent(PlayerScreenIntent.FetchAutoPlay)
+        }
+    }
     val autoSkipOpening by viewModel.autoSkipOpening.collectAsStateWithLifecycle()
     LaunchedEffect(autoSkipOpening) {
         if(autoSkipOpening == null) {
@@ -179,6 +186,8 @@ fun PlayerScreen(
             showSkipOpeningButton = showSkipOpeningButton,
             autoSkipOpening = autoSkipOpening,
             onAutoSkipOpeningClick = { viewModel.sendIntent(PlayerScreenIntent.ChangeAutoSkipOpening) },
+            autoPlay = autoPlay,
+            onAutoPlayClick = { viewModel.sendIntent(PlayerScreenIntent.ChangeAutoplay) },
         )
     }
     Scaffold(
@@ -375,7 +384,7 @@ fun PlayerScreen(
                 isPlaying = playerScreenState.isPlaying,
                 onPreviousClick = { if (episodeIndex > 0) episodeIndex-- },
                 onNextClick = {
-                    if (episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
+                    if(episodeIndex + 1 < animeScreenState.title.player.list.values.size) episodeIndex++
                 },
                 onPlayClick = {
                     viewModel.sendIntent(PlayerScreenIntent.PlayPause)
@@ -408,7 +417,7 @@ fun PlayerScreen(
                     if(autoSkipOpening != null) {
                         if(autoSkipOpening!!) {
                             LaunchedEffect(playerScreenState.currentPosition) {
-                                if((playerScreenState.currentPosition in (openingSkips[0]!! * 1000)..(openingSkips[1]!! * 1000))) {
+                                if((playerScreenState.currentPosition in (openingSkips[0]!! * 1000)..(openingSkips[1]!! * 1000)) and (!playerScreenState.isUserSeeking)) {
                                     viewModel.sendIntent(
                                         PlayerScreenIntent.RewindEpisode(
                                             (openingSkips[1]!! * 1000).toLong().coerceAtMost(playerScreenState.duration)
@@ -462,6 +471,18 @@ fun PlayerScreen(
                     .background(Color.Black)
                     .zIndex(1f)
             )
+
+            LaunchedEffect(playerScreenState.currentPosition, autoPlay) {
+                if(autoPlay == true && playerScreenState.duration > 0) {
+                    val remainingTime = playerScreenState.duration - playerScreenState.currentPosition
+                    if (remainingTime <= 1000 && playerScreenState.currentPosition > 0) {
+                        delay(1000)
+                        if (episodeIndex < title.player.list.values.size - 1) {
+                            episodeIndex += 1
+                        }
+                    }
+                }
+            }
         }
     }
 }

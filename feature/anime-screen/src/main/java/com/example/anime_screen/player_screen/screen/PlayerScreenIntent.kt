@@ -11,4 +11,6 @@ sealed class PlayerScreenIntent {
     data object ChangeShowSkipOpeningButton: PlayerScreenIntent()
     data object FetchAutoSkipOpening: PlayerScreenIntent()
     data object ChangeAutoSkipOpening: PlayerScreenIntent()
+    data object ChangeAutoplay: PlayerScreenIntent()
+    data object FetchAutoPlay: PlayerScreenIntent()
 }

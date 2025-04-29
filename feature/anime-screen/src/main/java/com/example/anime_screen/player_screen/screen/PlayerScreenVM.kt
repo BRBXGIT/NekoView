@@ -88,6 +88,27 @@ class PlayerScreenVM @Inject constructor(
         fetchAutoSkipOpening()
     }
 
+    private val _autoPlay = MutableStateFlow<Boolean?>(null)
+    val autoPlay = _autoPlay.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun changeAutoplay() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.saveAutoPlay(!_autoPlay.value!!)
+        }
+        fetchAutoSkipOpening()
+    }
+
+    private fun fetchAutoplay() {
+        viewModelScope.launch(dispatcherIo) {
+            commonRepo.getAutoplay().collect {
+                _autoPlay.value = it
+            }
+        }
+    }
 
     private fun playEpisode(episodeLink: String) {
         val mediaItem = MediaItem.fromUri(episodeLink)
@@ -135,6 +156,8 @@ class PlayerScreenVM @Inject constructor(
             is PlayerScreenIntent.ChangeShowSkipOpeningButton -> setShowSkipOpeningButton()
             is PlayerScreenIntent.FetchAutoSkipOpening -> fetchAutoSkipOpening()
             is PlayerScreenIntent.ChangeAutoSkipOpening -> changeAutoSkipOpening()
+            is PlayerScreenIntent.ChangeAutoplay -> changeAutoplay()
+            is PlayerScreenIntent.FetchAutoPlay -> fetchAutoplay()
         }
     }
 

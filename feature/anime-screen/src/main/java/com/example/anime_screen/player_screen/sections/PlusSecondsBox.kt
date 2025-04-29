@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.zIndex
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import kotlinx.coroutines.delay
@@ -74,7 +75,8 @@ fun BoxScope.PlusSecondsBox(
                 },
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() }
-            ),
+            )
+            .zIndex(2f),
         contentAlignment = Alignment.Center
     ) {
         Text(

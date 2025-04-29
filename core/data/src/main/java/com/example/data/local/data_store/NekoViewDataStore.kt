@@ -65,4 +65,17 @@ class NekoViewDataStore(
             preferences[showSkipOpeningButtonKey] = show
         }
     }
+
+    //Autoplay key
+    private val autoplayKey = booleanPreferencesKey("autoplay_key")
+    val autoPlay: Flow<Boolean> = context.dataStore.data
+        .map { preferences ->
+            preferences[autoplayKey] == true
+        }
+
+    suspend fun saveAutoplay(autoPlay: Boolean) {
+        context.dataStore.edit { preferences ->
+            preferences[autoplayKey] = autoPlay
+        }
+    }
 }

@@ -52,4 +52,12 @@ class CommonRepoImpl @Inject constructor(
     override suspend fun saveShowSkipOpeningButton(show: Boolean) {
         dataStore.saveShowSkipOpeningButton(show)
     }
+
+    override fun getAutoplay(): Flow<Boolean> {
+        return dataStore.autoPlay
+    }
+
+    override suspend fun saveAutoPlay(autoPlay: Boolean) {
+        dataStore.saveAutoplay(autoPlay)
+    }
 }
