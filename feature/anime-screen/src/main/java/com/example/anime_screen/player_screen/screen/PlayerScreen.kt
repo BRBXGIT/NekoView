@@ -216,7 +216,11 @@ fun PlayerScreen(
             } else {
                 PlayerFeaturesBottomBar(
                     showPlayerFeatures = playerScreenState.showPlayerFeatures,
-                    episodeTime = formatTime(playerScreenState.currentPosition) + " / " + formatTime(playerScreenState.duration),
+                    episodeTime = if(playerScreenState.duration > 0) {
+                        formatTime(playerScreenState.currentPosition) + " / " + formatTime(playerScreenState.duration)
+                    } else {
+                        "? / ?"
+                    },
                     onQuitFullScreenClick = {
                         if(playerScreenState.isLandscape) {
                             viewModel.sendIntent(
