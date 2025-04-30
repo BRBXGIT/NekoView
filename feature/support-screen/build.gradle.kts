@@ -5,14 +5,10 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     //Nav
     alias(libs.plugins.kotlin.serialization)
-    //Hilt
-    alias(libs.plugins.hilt.android)
-    //Ksp
-    alias(libs.plugins.ksp)
 }
 
 android {
-    namespace = "com.example.navbar_screens"
+    namespace = "com.example.support_screen"
     compileSdk = 35
 
     defaultConfig {
@@ -28,38 +24,19 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
 
     //Modules
-    implementation(project(":feature:support-screen"))
     implementation(project(":core:design-system"))
-    implementation(project(":core:data"))
-    implementation(project(":core:common"))
-    implementation(project(":feature:common"))
-    implementation(project(":feature:anime-screen"))
 
-    //Hilt
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
     //Material 3
     implementation(libs.androidx.material3)
     //Compose
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
-    //Paging
-    implementation(libs.androidx.paging.compose)
-    implementation(libs.androidx.paging.runtime.ktx)
     //Nav
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
-    //Coil
-    implementation(libs.coil.compose)
-    //Animated icons(compose animation graphics)
-    implementation(libs.androidx.animation.graphics)
 }

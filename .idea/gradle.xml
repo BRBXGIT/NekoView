@@ -19,6 +19,7 @@
             <option value="$PROJECT_DIR$/feature/anime-screen" />
             <option value="$PROJECT_DIR$/feature/common" />
             <option value="$PROJECT_DIR$/feature/navbar-screens" />
+            <option value="$PROJECT_DIR$/feature/support-screen" />
           </set>
         </option>
       </GradleProjectSettings>

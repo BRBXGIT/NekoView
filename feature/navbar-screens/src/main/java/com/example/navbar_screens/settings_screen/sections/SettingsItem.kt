@@ -19,7 +19,7 @@ import com.example.design_system.theme.NekoViewIcons
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.navigation.SupportScreenRoute
+import com.example.support_screen.navigation.SupportScreenRoute
 
 enum class ProjectItemType {
     PROJECT_GROUP, SUPPORT

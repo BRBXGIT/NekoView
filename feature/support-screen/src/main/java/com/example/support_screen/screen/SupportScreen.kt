@@ -1,4 +1,4 @@
-package com.example.navbar_screens.settings_screen.additional_screens.help_screen.screen
+package com.example.support_screen.screen
 
 import android.content.Intent
 import androidx.compose.foundation.background
@@ -27,12 +27,12 @@ import androidx.navigation.NavController
 import com.example.design_system.theme.NekoViewIcons
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mTypography
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections.AboutAniLibriaSection
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections.AniLibriaDefinitionSection
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections.DonateItem
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections.JoinTeamBS
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections.SupportScreenTopBar
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections.WhatsBadSection
+import com.example.support_screen.sections.AboutAniLibriaSection
+import com.example.support_screen.sections.AniLibriaDefinitionSection
+import com.example.support_screen.sections.DonateItem
+import com.example.support_screen.sections.JoinTeamBS
+import com.example.support_screen.sections.SupportScreenTopBar
+import com.example.support_screen.sections.WhatsBadSection
 
 data class DonateItem(
     val text: String,

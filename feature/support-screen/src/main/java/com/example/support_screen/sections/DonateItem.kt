@@ -1,4 +1,4 @@
-package com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections
+package com.example.support_screen.sections
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
