@@ -1,5 +1,6 @@
 package com.example.design_system.cards
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -28,7 +29,6 @@ import com.example.design_system.theme.mTypography
 
 @Composable
 fun AnimeCard(
-    index: Int, //To don't show AnimatedShimmer for next cards(it looks ugly)
     posterPath: String,
     genresString: String,
     title: String,
@@ -36,10 +36,10 @@ fun AnimeCard(
 ) {
     Box(
         modifier = Modifier
-            .size(170.dp, 270.dp)
+            .size(150.dp, 270.dp)
             .clip(mShapes.small)
             .background(mColors.surfaceVariant)
-            .clickable { onCardClick() } //TODO maybe have to rewrite to `combined clickable`
+            .clickable { onCardClick() }
     ) {
         SubcomposeAsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
@@ -51,7 +51,7 @@ fun AnimeCard(
             modifier = Modifier.fillMaxSize(),
             filterQuality = FilterQuality.Low,
             contentScale = ContentScale.Crop,
-            loading = { if(index <= 6) AnimatedShimmer(100.dp, 130.dp) }
+            loading = { AnimatedShimmer(100.dp, 130.dp) }
         )
 
         Column(

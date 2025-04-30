@@ -22,7 +22,7 @@ fun UserFeaturedLVGSection(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Adaptive(170.dp),
+        columns = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(
             horizontal = 16.dp,
             vertical = 16.dp
@@ -33,7 +33,6 @@ fun UserFeaturedLVGSection(
 
             currentTitle?.let {
                 AnimeCard(
-                    index = index,
                     posterPath = DesignUtils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,

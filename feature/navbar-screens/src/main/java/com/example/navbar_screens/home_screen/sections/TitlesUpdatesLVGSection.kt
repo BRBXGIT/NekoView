@@ -1,5 +1,6 @@
 package com.example.navbar_screens.home_screen.sections
 
+import android.util.Log
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,13 +17,13 @@ import com.example.design_system.cards.DesignUtils
 @Composable
 fun TitlesUpdatesLVGSection(
     titles: LazyPagingItems<Item1>,
-    onTitleClick: (Int) -> Unit
+    onTitleClick: (Int) -> Unit,
 ) {
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Adaptive(170.dp),
+        columns = GridCells.Adaptive(150.dp),
         contentPadding = PaddingValues(
             horizontal = 16.dp,
             vertical = 16.dp
@@ -33,7 +34,6 @@ fun TitlesUpdatesLVGSection(
 
             currentTitle?.let {
                 AnimeCard(
-                    index = index,
                     posterPath = DesignUtils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,
