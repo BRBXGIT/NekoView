@@ -6,10 +6,10 @@ import androidx.navigation.compose.composable
 import kotlinx.serialization.Serializable
 
 @Serializable
-data object HelpScreenRoute
+data object SupportScreenRoute
 
-fun NavGraphBuilder.helpScreen(
+fun NavGraphBuilder.supportScreen(
     navController: NavController
-) = composable<HelpScreenRoute> {
-    HelpScreen(navController)
+) = composable<SupportScreenRoute> {
+    SupportScreen(navController)
 }

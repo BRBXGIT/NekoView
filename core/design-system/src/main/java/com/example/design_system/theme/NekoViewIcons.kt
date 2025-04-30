@@ -35,4 +35,7 @@ object NekoViewIcons {
     val Settings = R.drawable.ic_settings
     val CropAnimated = R.drawable.ic_crop_animated
     val FullScreenAnimated = R.drawable.ic_full_screen_animated
+    val BoostyMulticolored = R.drawable.ic_boosty_multicolored
+    val YooMoneyMulticolored = R.drawable.ic_yoomoney_multicolored
+    val DonationAlertsMulticolored = R.drawable.ic_donationalerts_multicolored
 }
