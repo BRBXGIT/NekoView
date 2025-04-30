@@ -3,7 +3,7 @@ package com.example.anime_screen.player_screen.screen
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.ActivityInfo
-import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.graphics.ExperimentalAnimationGraphicsApi
@@ -110,6 +110,13 @@ fun PlayerScreen(
                 delay(10L)
             }
         }
+    }
+
+    BackHandler {
+        player.release()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+        systemUiController.isSystemBarsVisible = true
+        navController.navigateUp()
     }
 
     //TODO change screen orientation when user navigates back with native android
@@ -358,7 +365,16 @@ fun PlayerScreen(
                     },
                     currentEpisodeIndex = episodeIndex,
                     episodes = episodesNamesList,
-                    onConfirmClick = { episodeIndex = it }
+                    onConfirmClick = {
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    episodeDialogOpen = false
+                                )
+                            )
+                        )
+                        episodeIndex = it
+                    }
                 )
             }
 
