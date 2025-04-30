@@ -1,0 +1,41 @@
+package com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections
+
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
+import com.example.design_system.theme.mColors
+import com.example.design_system.theme.mTypography
+
+@Composable
+fun WhatsBadSection() {
+    Text(
+        buildAnnotatedString {
+            withStyle(
+                style = SpanStyle(
+                    color = mColors.primary,
+                    fontSize = mTypography.titleMedium.fontSize,
+                    fontFamily = mTypography.titleMedium.fontFamily,
+                    fontWeight = FontWeight.Bold
+                )
+            ) {
+                append("Что не круто\n")
+            }
+
+            withStyle(
+                style = SpanStyle(
+                    color = mColors.onBackground,
+                    fontSize = mTypography.bodyLarge.fontSize,
+                    fontFamily = mTypography.bodyLarge.fontFamily,
+                    fontWeight = FontWeight.Normal
+                )
+            ) {
+                append(
+                    "-- Наш сайт заблокировал РосКомНадзор, поэтому у проекта сократились доходы"
+                )
+            }
+        }
+    )
+}

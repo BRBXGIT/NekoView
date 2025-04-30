@@ -1,4 +1,4 @@
-package com.example.navbar_screens.settings_screen.additional_screens.help_screen
+package com.example.navbar_screens.settings_screen.additional_screens.help_screen.sections
 
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api

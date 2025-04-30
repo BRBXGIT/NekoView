@@ -13,7 +13,7 @@ import com.example.navbar_screens.featured_screen.screen.FeaturedScreenVM
 import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
 import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.home_screen.screen.HomeScreenVM
-import com.example.navbar_screens.settings_screen.additional_screens.help_screen.supportScreen
+import com.example.navbar_screens.settings_screen.additional_screens.help_screen.navigation.supportScreen
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
 import com.example.navbar_screens.settings_screen.screen.SettingsScreenVM
 
