@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/feature/navbar-screens" />
             <option value="$PROJECT_DIR$/feature/project-team-screen" />
             <option value="$PROJECT_DIR$/feature/support-screen" />
+            <option value="$PROJECT_DIR$/feature/tuning-screen" />
           </set>
         </option>
       </GradleProjectSettings>

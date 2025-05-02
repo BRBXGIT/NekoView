@@ -17,6 +17,7 @@ import com.example.navbar_screens.settings_screen.navigation.settingsScreen
 import com.example.navbar_screens.settings_screen.screen.SettingsScreenVM
 import com.example.project_team.navigation.projectTeamScreen
 import com.example.support_screen.navigation.supportScreen
+import com.example.tuning_screen.navigation.tuningScreen
 
 @Composable
 fun NavGraph(
@@ -69,5 +70,7 @@ fun NavGraph(
         supportScreen(navController)
 
         projectTeamScreen(navController)
+
+        tuningScreen(navController)
     }
 }
