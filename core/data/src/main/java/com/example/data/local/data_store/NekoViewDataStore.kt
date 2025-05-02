@@ -78,4 +78,28 @@ class NekoViewDataStore(
             preferences[autoplayKey] = autoPlay
         }
     }
+
+    //Theme
+    private val themeKey = stringPreferencesKey("theme_key")
+    val themeFlow: Flow<String> = context.dataStore.data
+        .map { preferences ->
+            preferences[themeKey] ?: "default"
+        }
+    suspend fun saveTheme(theme: String) {
+        context.dataStore.edit { preferences ->
+            preferences[themeKey] = theme
+        }
+    }
+
+    //Color system
+    private val colorSystemKey = stringPreferencesKey("color_system_key")
+    val colorSystemFlow: Flow<String> = context.dataStore.data
+        .map { preferences ->
+            preferences[colorSystemKey] ?: "default"
+        }
+    suspend fun saveColorSystem(colorSystem: String) {
+        context.dataStore.edit { preferences ->
+            preferences[colorSystemKey] = colorSystem
+        }
+    }
 }

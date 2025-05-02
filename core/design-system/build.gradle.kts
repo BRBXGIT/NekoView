@@ -3,6 +3,10 @@ plugins {
     alias(libs.plugins.kotlin.android)
     //Compose
     alias(libs.plugins.kotlin.compose)
+    //Ksp
+    alias(libs.plugins.ksp)
+    //Hilt
+    alias(libs.plugins.hilt.android)
 }
 
 android {
@@ -29,6 +33,13 @@ android {
 
 dependencies {
 
+    //Modules
+    implementation(project(":core:data"))
+    implementation(project(":core:common"))
+
+    //Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
     //Material 3
     implementation(libs.androidx.material3)
     //Coil
