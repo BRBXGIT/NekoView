@@ -8,24 +8,31 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import com.example.design_system.theme.AppThemeVM
 import com.example.design_system.theme.mColors
+import com.example.tuning_screen.sections.SettingsLCSection
 import com.example.tuning_screen.sections.TuningScreenTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TuningScreen(
     navController: NavController,
-    viewModel: TuningScreenVM
+    viewModel: TuningScreenVM,
+    appThemeVM: AppThemeVM
 ) {
     val videoQuality by viewModel.videoQuality.collectAsStateWithLifecycle()
     val autoPlay by viewModel.autoPlay.collectAsStateWithLifecycle()
     val autoSkipOpening by viewModel.autoSkipOpening.collectAsStateWithLifecycle()
     val showSkipOpeningButton by viewModel.showSkipOpeningButton.collectAsStateWithLifecycle()
+
+    val chosenTheme by appThemeVM.theme.collectAsState(initial = "default")
+    val chosenColorSystem by appThemeVM.colorSystem.collectAsState(initial = "default")
 
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
@@ -45,7 +52,10 @@ fun TuningScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
+            SettingsLCSection(
+                appThemeVM = appThemeVM,
+                chosenTheme = chosenTheme
+            )
         }
     }
 }

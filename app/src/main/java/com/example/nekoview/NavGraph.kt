@@ -8,6 +8,7 @@ import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.navigation.animeScreen
 import com.example.anime_screen.navigation.playerScreenRoute
 import com.example.common.CommonVM
+import com.example.design_system.theme.AppThemeVM
 import com.example.navbar_screens.featured_screen.navigation.featuredScreen
 import com.example.navbar_screens.featured_screen.screen.FeaturedScreenVM
 import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
@@ -21,7 +22,8 @@ import com.example.tuning_screen.navigation.tuningScreen
 
 @Composable
 fun NavGraph(
-    bigScreen: Boolean
+    bigScreen: Boolean,
+    appThemeVM: AppThemeVM
 ) {
     val navController = rememberNavController()
 
@@ -71,6 +73,9 @@ fun NavGraph(
 
         projectTeamScreen(navController)
 
-        tuningScreen(navController)
+        tuningScreen(
+            navController = navController,
+            appThemeVM = appThemeVM
+        )
     }
 }

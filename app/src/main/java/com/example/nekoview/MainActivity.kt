@@ -44,7 +44,10 @@ class MainActivity : ComponentActivity() {
                 val windowSize = calculateWindowSizeClass(this)
                 val bigScreen = windowSize.widthSizeClass != WindowWidthSizeClass.Compact
 
-                NavGraph(bigScreen)
+                NavGraph(
+                    bigScreen = bigScreen,
+                    appThemeVM = appThemeVM
+                )
             }
         }
     }

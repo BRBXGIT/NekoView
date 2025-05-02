@@ -43,6 +43,7 @@ dependencies {
     implementation(project(":feature:common"))
     implementation(project(":feature:anime-screen"))
     implementation(project(":feature:project-team-screen"))
+    implementation(project(":feature:tuning-screen"))
 
     //Hilt
     implementation(libs.androidx.hilt.navigation.compose)

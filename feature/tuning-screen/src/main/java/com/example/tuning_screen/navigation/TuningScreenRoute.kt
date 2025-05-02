@@ -4,6 +4,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import com.example.design_system.theme.AppThemeVM
 import com.example.tuning_screen.screen.TuningScreen
 import com.example.tuning_screen.screen.TuningScreenVM
 import kotlinx.serialization.Serializable
@@ -12,12 +13,14 @@ import kotlinx.serialization.Serializable
 data object TuningScreenRoute
 
 fun NavGraphBuilder.tuningScreen(
-    navController: NavController
+    navController: NavController,
+    appThemeVM: AppThemeVM
 ) = composable<TuningScreenRoute> {
     val tuningScreenVM = hiltViewModel<TuningScreenVM>()
 
     TuningScreen(
         navController = navController,
-        viewModel = tuningScreenVM
+        viewModel = tuningScreenVM,
+        appThemeVM = appThemeVM
     )
 }
