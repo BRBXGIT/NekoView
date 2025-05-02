@@ -116,9 +116,9 @@ fun PlayerScreen(
     }
 
     BackHandler {
+        systemUiController.isSystemBarsVisible = true
         player.release()
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
-        systemUiController.isSystemBarsVisible = true
         navController.navigateUp()
     }
 

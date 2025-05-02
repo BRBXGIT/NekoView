@@ -3,16 +3,21 @@ package com.example.tuning_screen.sections
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.AppThemeVM
+import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mTypography
 
 enum class PlayerSettingsItemType {
@@ -22,7 +27,8 @@ enum class PlayerSettingsItemType {
 data class PlayerSettingsItem(
     val name: String,
     val label: String,
-    val type: PlayerSettingsItemType
+    val type: PlayerSettingsItemType,
+    val isActive: Boolean
 )
 
 @Composable
@@ -30,28 +36,36 @@ fun SettingsLCSection(
     appThemeVM: AppThemeVM,
     chosenTheme: String,
     chosenColorSystem: String,
-    videoQuality: Int
+    videoQuality: Int?,
+    autoPlay: Boolean?,
+    showSkipOpeningButton: Boolean?,
+    autoSkipOpening: Boolean?,
+    onCheckChange: (PlayerSettingsItemType) -> Unit
 ) {
     val playerSettingsItems = listOf(
         PlayerSettingsItem(
             name = "Качество",
-            label = videoQuality.toString(),
-            type = PlayerSettingsItemType.VideoQuality
+            label = videoQuality?.toString() ?: "?",
+            type = PlayerSettingsItemType.VideoQuality,
+            isActive = true //Doesn't matter what value here :)
         ),
         PlayerSettingsItem(
             name = "Кнопка пропуска",
             label = "Показывать кнопку пропуска опенинга",
-            type = PlayerSettingsItemType.VideoQuality
+            type = PlayerSettingsItemType.ShowSkipOpeningButton,
+            isActive = showSkipOpeningButton!!
         ),
         PlayerSettingsItem(
             name = "Автоматический пропуск",
             label = "Автоматически пропускать опенинг",
-            type = PlayerSettingsItemType.VideoQuality
+            type = PlayerSettingsItemType.AutoSkipOpening,
+            isActive = autoSkipOpening!!
         ),
         PlayerSettingsItem(
             name = "Автовоспроизведение",
             label = "Автоматически воспроизводить следующий эпизод",
-            type = PlayerSettingsItemType.VideoQuality
+            type = PlayerSettingsItemType.AutoPlay,
+            isActive = autoPlay!!
         )
     )
 
@@ -95,6 +109,40 @@ fun SettingsLCSection(
                 style = mTypography.bodyLarge,
                 modifier = Modifier.padding(start = 16.dp)
             )
+        }
+
+        items(playerSettingsItems) { playerItem ->
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier.weight(1f)
+                ) {
+                    Text(
+                        text = playerItem.name,
+                        style = mTypography.bodyLarge
+                    )
+
+                    Text(
+                        text = playerItem.label,
+                        style = mTypography.bodyMedium.copy(
+                            color = mColors.secondary
+                        )
+                    )
+                }
+
+                if(playerItem.type != PlayerSettingsItemType.VideoQuality) {
+                    Switch(
+                        checked = playerItem.isActive,
+                        onCheckedChange = { onCheckChange(playerItem.type) },
+                    )
+                }
+            }
         }
     }
 }

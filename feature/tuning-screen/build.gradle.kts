@@ -36,6 +36,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:design-system"))
     implementation(project(":core:common"))
+    implementation(project(":feature:common"))
 
     //Compose
     implementation(libs.androidx.activity.compose)

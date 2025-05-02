@@ -76,7 +76,8 @@ fun NavGraph(
 
         tuningScreen(
             navController = navController,
-            appThemeVM = appThemeVM
+            appThemeVM = appThemeVM,
+            commonVM = commonVM
         )
     }
 }
