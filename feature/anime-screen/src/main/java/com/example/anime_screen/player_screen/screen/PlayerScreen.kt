@@ -418,6 +418,13 @@ fun PlayerScreen(
                     onDoubleClick = {
                         val newPosition = (playerScreenState.currentPosition - 5000).coerceAtMost(playerScreenState.duration)
                         viewModel.sendIntent(PlayerScreenIntent.RewindEpisode(newPosition))
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    currentPosition = newPosition,
+                                )
+                            )
+                        )
                     },
                     direction = Direction.Minus
                 )
@@ -426,6 +433,13 @@ fun PlayerScreen(
                     onDoubleClick = {
                         val newPosition = (playerScreenState.currentPosition + 5000).coerceAtMost(playerScreenState.duration)
                         viewModel.sendIntent(PlayerScreenIntent.RewindEpisode(newPosition))
+                        viewModel.sendIntent(
+                            PlayerScreenIntent.UpdateScreenState(
+                                playerScreenState.copy(
+                                    currentPosition = newPosition,
+                                )
+                            )
+                        )
                     },
                     direction = Direction.Plus
                 )
