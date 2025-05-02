@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":feature:common"))
     implementation(project(":feature:anime-screen"))
     implementation(project(":feature:support-screen"))
+    implementation(project(":feature:project-team-screen"))
 
     //Nav
     implementation(libs.navigation.compose)

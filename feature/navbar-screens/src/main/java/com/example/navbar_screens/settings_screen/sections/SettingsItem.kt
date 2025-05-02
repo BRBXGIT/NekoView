@@ -19,6 +19,7 @@ import com.example.design_system.theme.NekoViewIcons
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
+import com.example.project_team.navigation.ProjectTeamScreenRoute
 import com.example.support_screen.navigation.SupportScreenRoute
 
 enum class ProjectItemType {
@@ -37,7 +38,7 @@ val projectItems = listOf(
         type = ProjectItemType.PROJECT_GROUP,
         name = "Команда проекта",
         icon = NekoViewIcons.Group,
-        route = SupportScreenRoute
+        route = ProjectTeamScreenRoute
     ),
     ProjectItem(
         type = ProjectItemType.SUPPORT,

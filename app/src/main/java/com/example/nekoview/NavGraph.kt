@@ -15,6 +15,7 @@ import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.home_screen.screen.HomeScreenVM
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
 import com.example.navbar_screens.settings_screen.screen.SettingsScreenVM
+import com.example.project_team.navigation.projectTeamScreen
 import com.example.support_screen.navigation.supportScreen
 
 @Composable
@@ -66,5 +67,7 @@ fun NavGraph(
         )
 
         supportScreen(navController)
+
+        projectTeamScreen(navController)
     }
 }

@@ -305,6 +305,7 @@ fun PlayerScreen(
 
             PlayerTopBar(
                 onBackClick = {
+                    player.release()
                     activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
                     navController.navigateUp()
                 },
