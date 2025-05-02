@@ -12,7 +12,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.design_system.theme.AppThemeVM
 import com.example.design_system.theme.mColors
@@ -23,14 +22,8 @@ import com.example.tuning_screen.sections.TuningScreenTopBar
 @Composable
 fun TuningScreen(
     navController: NavController,
-    viewModel: TuningScreenVM,
-    appThemeVM: AppThemeVM
+    appThemeVM: AppThemeVM,
 ) {
-    val videoQuality by viewModel.videoQuality.collectAsStateWithLifecycle()
-    val autoPlay by viewModel.autoPlay.collectAsStateWithLifecycle()
-    val autoSkipOpening by viewModel.autoSkipOpening.collectAsStateWithLifecycle()
-    val showSkipOpeningButton by viewModel.showSkipOpeningButton.collectAsStateWithLifecycle()
-
     val chosenTheme by appThemeVM.theme.collectAsState(initial = "default")
     val chosenColorSystem by appThemeVM.colorSystem.collectAsState(initial = "default")
 
@@ -55,7 +48,8 @@ fun TuningScreen(
             SettingsLCSection(
                 appThemeVM = appThemeVM,
                 chosenTheme = chosenTheme,
-                chosenColorSystem = chosenColorSystem
+                chosenColorSystem = chosenColorSystem,
+                videoQuality = 480 //TODO
             )
         }
     }

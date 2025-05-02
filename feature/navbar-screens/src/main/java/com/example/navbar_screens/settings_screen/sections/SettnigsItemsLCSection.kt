@@ -41,7 +41,7 @@ fun SettingsItemsLCSection(
         item {
             SettingsItem(
                 name = "Настройки",
-                icon = NekoViewIcons.SettingsFilled,
+                icon = NekoViewIcons.Settings,
                 onClick = { onSettingsItemClick(TuningScreenRoute) }
             )
         }
