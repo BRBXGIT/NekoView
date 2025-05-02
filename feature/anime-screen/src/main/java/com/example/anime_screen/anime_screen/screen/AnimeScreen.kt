@@ -1,6 +1,8 @@
 package com.example.anime_screen.anime_screen.screen
 
 import android.content.Intent
+import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Spacer
@@ -18,6 +20,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -74,10 +77,9 @@ fun AnimeScreen(
 
     //Analogue for viewModel init block
     val animeScreenState by viewModel.animeScreenState.collectAsStateWithLifecycle()
-    LaunchedEffect(animeScreenState.title.id) {
-        if(animeScreenState.title.id == 0) {
-            viewModel.sendIntent(AnimeScreenIntent.FetchTitleDetails(titleId))
-        }
+    LaunchedEffect(titleId) {
+        viewModel.sendIntent(AnimeScreenIntent.ResetScreenState)
+        viewModel.sendIntent(AnimeScreenIntent.FetchTitleDetails(titleId))
     }
 
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -85,7 +87,9 @@ fun AnimeScreen(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             AnimeScreenTopBar(
-                onBackClick = { navController.navigateUp() },
+                onBackClick = {
+                    navController.navigateUp()
+                },
                 onHeartIconClick = {  },
                 loadingState = animeScreenState.isLoading,
                 scrollBehavior = topBarScrollBehavior,

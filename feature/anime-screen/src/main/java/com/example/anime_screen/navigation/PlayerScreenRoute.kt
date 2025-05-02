@@ -1,7 +1,6 @@
 package com.example.anime_screen.navigation
 
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -9,6 +8,7 @@ import androidx.navigation.toRoute
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.player_screen.screen.PlayerScreen
 import com.example.anime_screen.player_screen.screen.PlayerScreenVM
+import com.example.common.CommonVM
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,7 +18,8 @@ data class PlayerScreenRoute(
 
 fun NavGraphBuilder.playerScreenRoute(
     navController: NavController,
-    sharedAnimePlayerScreenVM: SharedAnimePlayerScreenVM
+    sharedAnimePlayerScreenVM: SharedAnimePlayerScreenVM,
+    commonVM: CommonVM
 ) = composable<PlayerScreenRoute> {
     val index = it.toRoute<PlayerScreenRoute>().selectedEpisodeIndex
     val playerScreenVM = hiltViewModel<PlayerScreenVM>()
@@ -27,6 +28,7 @@ fun NavGraphBuilder.playerScreenRoute(
         sharedViewModel = sharedAnimePlayerScreenVM,
         selectedEpisodeIndex = index,
         navController = navController,
-        viewModel = playerScreenVM
+        viewModel = playerScreenVM,
+        commonVM = commonVM
     )
 }

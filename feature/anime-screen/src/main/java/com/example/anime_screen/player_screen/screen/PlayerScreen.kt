@@ -38,6 +38,8 @@ import com.example.anime_screen.player_screen.sections.PlayerUnlockButtonBottomB
 import com.example.anime_screen.player_screen.sections.PlusSecondsBox
 import com.example.anime_screen.player_screen.sections.SkipOpeningButton
 import com.example.anime_screen.player_screen.sections.VideoQualityBS
+import com.example.common.CommonIntent
+import com.example.common.CommonVM
 import com.example.design_system.custom_modifiers.noRippleClickable
 import com.example.design_system.theme.mColors
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
@@ -50,7 +52,8 @@ fun PlayerScreen(
     sharedViewModel: SharedAnimePlayerScreenVM,
     selectedEpisodeIndex: Int,
     navController: NavController,
-    viewModel: PlayerScreenVM
+    viewModel: PlayerScreenVM,
+    commonVM: CommonVM
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
@@ -62,7 +65,7 @@ fun PlayerScreen(
     var episodeIndex by rememberSaveable { mutableIntStateOf(selectedEpisodeIndex) }
 
     val systemUiController = rememberSystemUiController()
-    val videoQuality by viewModel.videoQuality.collectAsStateWithLifecycle()
+    val videoQuality by commonVM.videoQuality.collectAsStateWithLifecycle()
     LaunchedEffect(episodeIndex, videoQuality) {
         if(videoQuality != null) {
             val episodeLinks = title.player.list.values.toList()[episodeIndex]
@@ -78,7 +81,7 @@ fun PlayerScreen(
             viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
             systemUiController.isSystemBarsVisible = false
         } else {
-            viewModel.sendIntent(PlayerScreenIntent.FetchVideoQuality)
+            commonVM.sendIntent(CommonIntent.FetchVideoQuality)
         }
     }
 
@@ -119,7 +122,6 @@ fun PlayerScreen(
         navController.navigateUp()
     }
 
-    //TODO change screen orientation when user navigates back with native android
     LaunchedEffect(playerScreenState.isLandscape) {
         if(playerScreenState.isLandscape) {
             activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
@@ -153,10 +155,10 @@ fun PlayerScreen(
         }
     }
 
-    val showSkipOpeningButton by viewModel.showSkipOpeningButton.collectAsStateWithLifecycle()
+    val showSkipOpeningButton by commonVM.showSkipOpeningButton.collectAsStateWithLifecycle()
     LaunchedEffect(showSkipOpeningButton) {
         if(showSkipOpeningButton == null) {
-            viewModel.sendIntent(PlayerScreenIntent.FetchShowSkipOpeningButton)
+            commonVM.sendIntent(CommonIntent.FetchShowSkipOpeningButton)
         }
     }
     var qualityBSOpen by rememberSaveable { mutableStateOf(false) }
@@ -164,23 +166,23 @@ fun PlayerScreen(
         VideoQualityBS(
             onDismissRequest = { qualityBSOpen = false },
             onSetQualityClick = {
-                viewModel.sendIntent(
-                    PlayerScreenIntent.ChangeVideoQuality(it)
+                commonVM.sendIntent(
+                    CommonIntent.ChangeVideoQuality(it)
                 )
             }
         )
     }
 
-    val autoPlay by viewModel.autoPlay.collectAsStateWithLifecycle()
+    val autoPlay by commonVM.autoPlay.collectAsStateWithLifecycle()
     LaunchedEffect(autoPlay) {
         if(autoPlay == null) {
-            viewModel.sendIntent(PlayerScreenIntent.FetchAutoPlay)
+            commonVM.sendIntent(CommonIntent.FetchAutoPlay)
         }
     }
-    val autoSkipOpening by viewModel.autoSkipOpening.collectAsStateWithLifecycle()
+    val autoSkipOpening by commonVM.autoSkipOpening.collectAsStateWithLifecycle()
     LaunchedEffect(autoSkipOpening) {
         if(autoSkipOpening == null) {
-            viewModel.sendIntent(PlayerScreenIntent.FetchAutoSkipOpening)
+            commonVM.sendIntent(CommonIntent.FetchAutoSkipOpening)
         }
     }
     var settingsBSOpen by rememberSaveable { mutableStateOf(false) }
@@ -189,12 +191,12 @@ fun PlayerScreen(
             currentVideoQuality = videoQuality,
             onDismissRequest = { settingsBSOpen = false },
             onChangeQualityClick = { qualityBSOpen = true },
-            onShowSkipOpeningButtonClick = { viewModel.sendIntent(PlayerScreenIntent.ChangeShowSkipOpeningButton) },
+            onShowSkipOpeningButtonClick = { commonVM.sendIntent(CommonIntent.ChangeShowSkipOpeningButton) },
             showSkipOpeningButton = showSkipOpeningButton,
             autoSkipOpening = autoSkipOpening,
-            onAutoSkipOpeningClick = { viewModel.sendIntent(PlayerScreenIntent.ChangeAutoSkipOpening) },
+            onAutoSkipOpeningClick = { commonVM.sendIntent(CommonIntent.ChangeAutoSkipOpening) },
             autoPlay = autoPlay,
-            onAutoPlayClick = { viewModel.sendIntent(PlayerScreenIntent.ChangeAutoplay) },
+            onAutoPlayClick = { commonVM.sendIntent(CommonIntent.ChangeAutoplay) },
         )
     }
     Scaffold(

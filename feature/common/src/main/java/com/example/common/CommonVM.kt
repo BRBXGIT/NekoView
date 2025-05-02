@@ -107,12 +107,110 @@ class CommonVM @Inject constructor(
 
     fun sendIntent(intent: CommonIntent) {
         when(intent) {
-            is CommonIntent.SetNavIndex -> setNavIndex(intent.index)
+            is CommonIntent.SetNavIndex -> {
+                setNavIndex(intent.index)
+            }
             is CommonIntent.GetUserToken -> {
                 getUserToken(
                     email = intent.email,
                     password = intent.password
                 )
+            }
+            is CommonIntent.ChangeAutoSkipOpening -> { changeAutoSkipOpening() }
+            is CommonIntent.ChangeAutoplay -> { changeAutoplay() }
+            is CommonIntent.ChangeShowSkipOpeningButton -> { changeShowSkipOpeningButton() }
+            is CommonIntent.ChangeVideoQuality -> { changeVideoQuality(intent.quality) }
+            is CommonIntent.FetchAutoPlay -> { fetchAutoplay() }
+            is CommonIntent.FetchAutoSkipOpening -> { fetchAutoSkipOpening() }
+            is CommonIntent.FetchShowSkipOpeningButton -> { fetchShowSkipOpeningButton() }
+            is CommonIntent.FetchVideoQuality -> { fetchVideoQuality() }
+        }
+    }
+
+    private val _videoQuality = MutableStateFlow<Int?>(null)
+    val videoQuality = _videoQuality.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun fetchVideoQuality() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getVideoQuality().collect {
+                _videoQuality.value = it
+            }
+        }
+    }
+
+    private fun changeVideoQuality(quality: Int) {
+        viewModelScope.launch(dispatcherIo) {
+            repository.saveVideoQuality(quality)
+        }
+        fetchVideoQuality()
+    }
+
+    private val _showSkipOpeningButton = MutableStateFlow<Boolean?>(null)
+    val showSkipOpeningButton = _showSkipOpeningButton.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun fetchShowSkipOpeningButton() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getShowSkipOpeningButton().collect {
+                _showSkipOpeningButton.value = it
+            }
+        }
+    }
+
+    private fun changeShowSkipOpeningButton() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.saveShowSkipOpeningButton(!_showSkipOpeningButton.value!!)
+        }
+        fetchShowSkipOpeningButton()
+    }
+
+    private val _autoSkipOpening = MutableStateFlow<Boolean?>(null)
+    val autoSkipOpening = _autoSkipOpening.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun fetchAutoSkipOpening() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getSkipOpeningAutomatically().collect {
+                _autoSkipOpening.value = it
+            }
+        }
+    }
+
+    private fun changeAutoSkipOpening() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.saveSkipOpeningAutomatically(!_autoSkipOpening.value!!)
+        }
+        fetchAutoSkipOpening()
+    }
+
+    private val _autoPlay = MutableStateFlow<Boolean?>(null)
+    val autoPlay = _autoPlay.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5_000),
+        null
+    )
+
+    private fun changeAutoplay() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.saveAutoPlay(!_autoPlay.value!!)
+        }
+        fetchAutoSkipOpening()
+    }
+
+    private fun fetchAutoplay() {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getAutoplay().collect {
+                _autoPlay.value = it
             }
         }
     }

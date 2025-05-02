@@ -31,7 +31,7 @@ class SharedAnimePlayerScreenVM @Inject constructor(
     private val _animeScreenState = MutableStateFlow(AnimeScreenState())
     val animeScreenState = _animeScreenState.stateIn(
         viewModelScope,
-        SharingStarted.Companion.WhileSubscribed(5_000),
+        SharingStarted.WhileSubscribed(5_000),
         AnimeScreenState()
     )
 
@@ -69,10 +69,15 @@ class SharedAnimePlayerScreenVM @Inject constructor(
         }
     }
 
+    private fun resetState() {
+        _animeScreenState.value = AnimeScreenState()
+    }
+
     fun sendIntent(intent: AnimeScreenIntent) {
         when(intent) {
             is AnimeScreenIntent.FetchTitleDetails -> fetchAnimeDetails(intent.id)
             is AnimeScreenIntent.RetryTitleDetails -> fetchAnimeDetails(intent.id)
+            is AnimeScreenIntent.ResetScreenState -> resetState()
         }
     }
 }
