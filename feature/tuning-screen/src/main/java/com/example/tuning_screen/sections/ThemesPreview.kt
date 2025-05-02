@@ -45,21 +45,21 @@ fun ThemePreviewsSection(
     ) {
         ThemeElement(
             type = "default",
-            text = "Default",
+            text = "Система",
             onClick = { viewModel.changeTheme("default") },
             chosenTheme = chosenTheme
         )
 
         ThemeElement(
             type = "light",
-            text = "Light",
+            text = "Светлая",
             onClick = { viewModel.changeTheme("light") },
             chosenTheme = chosenTheme
         )
 
         ThemeElement(
             type = "dark",
-            text = "Dark",
+            text = "Тёмная",
             onClick = { viewModel.changeTheme("dark") },
             chosenTheme = chosenTheme
         )
@@ -67,7 +67,7 @@ fun ThemePreviewsSection(
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             ThemeElement(
                 type = "dynamic",
-                text = "Dynamic",
+                text = "Динамическая",
                 onClick = { viewModel.changeTheme("dynamic") },
                 chosenTheme = chosenTheme
             )

@@ -1,6 +1,5 @@
 package com.example.design_system.cards
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,7 +37,7 @@ fun AnimeCard(
         modifier = Modifier
             .size(150.dp, 270.dp)
             .clip(mShapes.small)
-            .background(mColors.surfaceVariant)
+            .background(mColors.surfaceContainerHighest)
             .clickable { onCardClick() }
     ) {
         SubcomposeAsyncImage(

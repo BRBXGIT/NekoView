@@ -16,7 +16,8 @@ import com.example.design_system.theme.mTypography
 @Composable
 fun SettingsLCSection(
     appThemeVM: AppThemeVM,
-    chosenTheme: String
+    chosenTheme: String,
+    chosenColorSystem: String
 ) {
     LazyColumn(
         contentPadding = PaddingValues(vertical = 16.dp),
@@ -36,6 +37,12 @@ fun SettingsLCSection(
                 ThemePreviewsSection(
                     viewModel = appThemeVM,
                     chosenTheme = chosenTheme
+                )
+
+                ColorSystemElements(
+                    chosenTheme = chosenTheme,
+                    onColorSystemClick = { appThemeVM.changeColorSystem(it) },
+                    chosenColorSystem = chosenColorSystem
                 )
             }
         }

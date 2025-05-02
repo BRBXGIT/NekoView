@@ -54,7 +54,8 @@ fun TuningScreen(
         ) {
             SettingsLCSection(
                 appThemeVM = appThemeVM,
-                chosenTheme = chosenTheme
+                chosenTheme = chosenTheme,
+                chosenColorSystem = chosenColorSystem
             )
         }
     }
