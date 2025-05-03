@@ -17,10 +17,11 @@ fun NavGraphBuilder.tuningScreen(
     appThemeVM: AppThemeVM,
     commonVM: CommonVM
 ) = composable<TuningScreenRoute> {
-    commonVM.sendIntent(CommonIntent.FetchAutoPlay)
+
     commonVM.sendIntent(CommonIntent.FetchVideoQuality)
-    commonVM.sendIntent(CommonIntent.FetchShowSkipOpeningButton)
     commonVM.sendIntent(CommonIntent.FetchAutoSkipOpening)
+    commonVM.sendIntent(CommonIntent.FetchShowSkipOpeningButton)
+    commonVM.sendIntent(CommonIntent.FetchAutoPlay)
 
     TuningScreen(
         navController = navController,

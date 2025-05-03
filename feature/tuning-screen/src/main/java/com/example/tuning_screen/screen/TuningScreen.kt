@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -22,6 +25,7 @@ import com.example.design_system.theme.mColors
 import com.example.tuning_screen.sections.PlayerSettingsItemType
 import com.example.tuning_screen.sections.SettingsLCSection
 import com.example.tuning_screen.sections.TuningScreenTopBar
+import com.example.tuning_screen.sections.VideoQualityBS
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,6 +55,14 @@ fun TuningScreen(
             .background(mColors.background)
             .nestedScroll(topBarScrollBehavior.nestedScrollConnection)
     ) { innerPadding ->
+        var videoQualityBSOpen by rememberSaveable { mutableStateOf(false) }
+        if(videoQualityBSOpen) {
+            VideoQualityBS(
+                onDismissRequest = { videoQualityBSOpen = false },
+                onSetQualityClick = { commonVM.sendIntent(CommonIntent.ChangeVideoQuality(it)) }
+            )
+        }
+
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -66,18 +78,20 @@ fun TuningScreen(
                 autoSkipOpening = autoSkipOpening,
                 onCheckChange = {
                     when(it) {
-                        PlayerSettingsItemType.VideoQuality -> {  }
+                        PlayerSettingsItemType.VideoQuality -> {
+                            videoQualityBSOpen = true
+                        }
                         PlayerSettingsItemType.ShowSkipOpeningButton -> {
-                            commonVM.sendIntent(CommonIntent.FetchShowSkipOpeningButton)
+                            commonVM.sendIntent(CommonIntent.ChangeShowSkipOpeningButton)
                         }
                         PlayerSettingsItemType.AutoSkipOpening -> {
-                            commonVM.sendIntent(CommonIntent.FetchAutoSkipOpening)
+                            commonVM.sendIntent(CommonIntent.ChangeAutoSkipOpening)
                         }
                         PlayerSettingsItemType.AutoPlay -> {
                             commonVM.sendIntent(CommonIntent.ChangeAutoplay)
                         }
                     }
-                }
+                },
             )
         }
     }

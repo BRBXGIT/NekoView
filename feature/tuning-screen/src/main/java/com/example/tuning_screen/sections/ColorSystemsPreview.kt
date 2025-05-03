@@ -312,7 +312,7 @@ private fun ColorSystemPreview(
                 )
                 .border(
                     width = if(chosen) 2.dp else 1.dp,
-                    color = mColors.secondary,
+                    color = if(chosen) mColors.primary else mColors.secondary,
                     shape = mShapes.small
                 )
                 .clip(mShapes.small)
