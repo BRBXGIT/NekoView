@@ -29,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.NekoViewIcons
 import com.example.design_system.theme.mColors
@@ -123,7 +124,10 @@ private fun EpisodeItem(
     ) {
         Text(
             text = episode,
-            style = mTypography.bodyMedium
+            style = mTypography.bodyMedium,
+            modifier = Modifier.weight(1f),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
 
         val animatedIconAlpha by animateFloatAsState(

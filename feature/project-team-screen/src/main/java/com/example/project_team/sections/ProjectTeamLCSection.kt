@@ -3,8 +3,15 @@ package com.example.project_team.sections
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -18,12 +25,16 @@ fun ProjectTeamLCSection(
     projectTeam: ProjectTeamResponse
 ) {
     if(projectTeam != ProjectTeamResponse()) {
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(16.dp),
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            item {
+            item(
+                span = { GridItemSpan(maxLineSpan) }
+            ) {
                 Text(
                     text = "Тайминги:",
                     style = mTypography.titleLarge.copy(
@@ -33,13 +44,24 @@ fun ProjectTeamLCSection(
             }
 
             items(projectTeam.timing) { timing ->
-                Text(
-                    text = timing,
-                    style = mTypography.bodyLarge
-                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    tonalElevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(
+                        text = timing,
+                        style = mTypography.bodyLarge,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
 
-            item {
+            item(
+                span = { GridItemSpan(maxLineSpan) }
+            )  {
                 Text(
                     text = "Субтитры:",
                     style = mTypography.titleLarge.copy(
@@ -49,13 +71,24 @@ fun ProjectTeamLCSection(
             }
 
             items(projectTeam.decor) { decor ->
-                Text(
-                    text = decor,
-                    style = mTypography.bodyLarge
-                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    tonalElevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(
+                        text = decor,
+                        style = mTypography.bodyLarge,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
 
-            item {
+            item(
+                span = { GridItemSpan(maxLineSpan) }
+            )  {
                 Text(
                     text = "Озвучка:",
                     style = mTypography.titleLarge.copy(
@@ -65,13 +98,24 @@ fun ProjectTeamLCSection(
             }
 
             items(projectTeam.voice) { voice ->
-                Text(
-                    text = voice,
-                    style = mTypography.bodyLarge
-                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    tonalElevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(
+                        text = voice,
+                        style = mTypography.bodyLarge,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
 
-            item {
+            item(
+                span = { GridItemSpan(maxLineSpan) }
+            )  {
                 Text(
                     text = "Правки:",
                     style = mTypography.titleLarge.copy(
@@ -80,14 +124,25 @@ fun ProjectTeamLCSection(
                 )
             }
 
-            items(projectTeam.editing) {editors ->
-                Text(
-                    text = editors,
-                    style = mTypography.bodyLarge
-                )
+            items(projectTeam.editing) { editors ->
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    tonalElevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(
+                        text = editors,
+                        style = mTypography.bodyLarge,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
 
-            item {
+            item(
+                span = { GridItemSpan(maxLineSpan) }
+            )  {
                 Text(
                     text = "Перевод:",
                     style = mTypography.titleLarge.copy(
@@ -97,13 +152,24 @@ fun ProjectTeamLCSection(
             }
 
             items(projectTeam.translator) { translators ->
-                Text(
-                    text = translators,
-                    style = mTypography.bodyLarge
-                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    tonalElevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(
+                        text = translators,
+                        style = mTypography.bodyLarge,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
 
-            item {
+            item(
+                span = { GridItemSpan(maxLineSpan) }
+            )  {
                 Text(
                     text = "Ну и я, разработчик приложения:",
                     style = mTypography.titleLarge.copy(
@@ -113,10 +179,19 @@ fun ProjectTeamLCSection(
             }
 
             item {
-                Text(
-                    text = "BRBX",
-                    style = mTypography.bodyLarge
-                )
+                Surface(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
+                    tonalElevation = 2.dp,
+                    shape = RoundedCornerShape(8.dp),
+                ) {
+                    Text(
+                        text = "BRBX",
+                        style = mTypography.bodyLarge,
+                        modifier = Modifier.padding(8.dp)
+                    )
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ object NekoViewIcons {
     val HomeAnimated = R.drawable.ic_home_animated
     val HeartAnimated = R.drawable.ic_heart_animated
     val SettingsAnimated = R.drawable.ic_settings_animated
+    val MagnifierAnimated = R.drawable.ic_magnifier_animated
     val SettingsFilled = R.drawable.ic_settings_filled
     val Magnifier = R.drawable.ic_magnifier
     val Password = R.drawable.ic_password
