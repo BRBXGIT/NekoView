@@ -61,7 +61,7 @@ fun PlayerTopBar(
                     onClick = onMenuClick
                 ) {
                     Icon(
-                        painter = painterResource(NekoViewIcons.Menu),
+                        painter = painterResource(NekoViewIcons.Playlist),
                         contentDescription = null,
                         tint = Color(0xffffffff)
                     )

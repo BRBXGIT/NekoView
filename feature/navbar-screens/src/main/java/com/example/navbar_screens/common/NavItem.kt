@@ -3,6 +3,7 @@ package com.example.navbar_screens.common
 import com.example.design_system.theme.NekoViewIcons
 import com.example.navbar_screens.featured_screen.navigation.FeaturedScreenRoute
 import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
+import com.example.navbar_screens.search_screen.navigation.SearchScreenRoute
 import com.example.navbar_screens.settings_screen.navigation.SettingsScreenRoute
 
 data class NavItem(
@@ -21,6 +22,11 @@ val navItems = listOf(
         label = "Избранное",
         icon = NekoViewIcons.HeartAnimated,
         destination = FeaturedScreenRoute
+    ),
+    NavItem(
+        label = "Поиск",
+        icon = NekoViewIcons.MagnifierAnimated,
+        destination = SearchScreenRoute
     ),
     NavItem(
         label = "Настройки",

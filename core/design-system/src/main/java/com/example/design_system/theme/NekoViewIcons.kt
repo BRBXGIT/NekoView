@@ -30,7 +30,8 @@ object NekoViewIcons {
     val SquareFilled = R.drawable.ic_square_filled
     val NextFilled = R.drawable.ic_next_filled
     val PreviousFilled = R.drawable.ic_previous_filled
-    val Menu = R.drawable.ic_menu
+    val Next = R.drawable.ic_next
+    val Playlist = R.drawable.ic_playlist
     val Lock = R.drawable.ic_lock
     val Unlock = R.drawable.ic_unlock
     val Settings = R.drawable.ic_settings
@@ -39,4 +40,8 @@ object NekoViewIcons {
     val BoostyMulticolored = R.drawable.ic_boosty_multicolored
     val YooMoneyMulticolored = R.drawable.ic_yoomoney_multicolored
     val DonationAlertsMulticolored = R.drawable.ic_donationalerts_multicolored
+    val Filters = R.drawable.ic_filters
+    val Quality = R.drawable.ic_quality
+    val AutoPlay = R.drawable.ic_auto_play
+    val Stopwatch = R.drawable.ic_stopwatch
 }

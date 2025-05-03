@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,8 +23,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.AppThemeVM
+import com.example.design_system.theme.NekoViewIcons
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
@@ -36,7 +39,8 @@ data class PlayerSettingsItem(
     val name: String,
     val label: String,
     val type: PlayerSettingsItemType,
-    val isActive: Boolean
+    val isActive: Boolean,
+    val icon: Int
 )
 
 @Composable
@@ -55,25 +59,29 @@ fun SettingsLCSection(
             name = "Качество",
             label = videoQuality?.toString() ?: "?",
             type = PlayerSettingsItemType.VideoQuality,
-            isActive = true //Doesn't matter what value here :)
+            isActive = true, //Doesn't matter what value here :)
+            icon = NekoViewIcons.Quality
         ),
         PlayerSettingsItem(
             name = "Кнопка пропуска",
             label = "Показывать кнопку пропуска опенинга",
             type = PlayerSettingsItemType.ShowSkipOpeningButton,
-            isActive = showSkipOpeningButton == true
+            isActive = showSkipOpeningButton == true,
+            icon = NekoViewIcons.Next
         ),
         PlayerSettingsItem(
             name = "Автоматический пропуск",
             label = "Автоматически пропускать опенинг",
             type = PlayerSettingsItemType.AutoSkipOpening,
-            isActive = autoSkipOpening == true
+            isActive = autoSkipOpening == true,
+            icon = NekoViewIcons.Stopwatch
         ),
         PlayerSettingsItem(
             name = "Автовоспроизведение",
             label = "Автоматически воспроизводить следующий эпизод",
             type = PlayerSettingsItemType.AutoPlay,
-            isActive = autoPlay == true
+            isActive = autoPlay == true,
+            icon = NekoViewIcons.AutoPlay
         )
     )
 
@@ -133,6 +141,11 @@ fun SettingsLCSection(
                     }
                     .padding(8.dp)
             ) {
+                Icon(
+                    painter = painterResource(playerItem.icon),
+                    contentDescription = null
+                )
+
                 Column(
                     verticalArrangement = Arrangement.spacedBy(2.dp),
                     modifier = Modifier.weight(1f)
