@@ -7,4 +7,6 @@ import kotlinx.coroutines.flow.Flow
 interface HomeScreenRepo {
 
     fun getTitleUpdates(): Flow<PagingData<Item1>>
+
+    suspend fun getTitleByQuery(query: String): Flow<PagingData<Item1>>
 }

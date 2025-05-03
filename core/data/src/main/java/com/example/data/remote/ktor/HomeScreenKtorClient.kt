@@ -35,4 +35,27 @@ class HomeScreenKtorClient(
             processNetworkErrors(response.status.value)
         }
     }
+
+    suspend fun getTitleByQuery(
+        limit: Int,
+        page: Int,
+        query: String
+    ): Result<TitlesListResponse, NetworkError> {
+        val response = try {
+            httpClient.get(
+                urlString = "${Utils.BASE_URL}/title/search?search=$query&limit=${limit}&page=${page}"
+            )
+        } catch(e: IOException) {
+            return when(e) {
+                is SocketTimeoutException -> Result.Error(NetworkError.REQUEST_TIMEOUT)
+                else -> Result.Error(NetworkError.NO_INTERNET)
+            }
+        }
+
+        return if(response.status.value in 200..299) {
+            Result.Success(response.body<TitlesListResponse>())
+        } else {
+            processNetworkErrors(response.status.value)
+        }
+    }
 }
