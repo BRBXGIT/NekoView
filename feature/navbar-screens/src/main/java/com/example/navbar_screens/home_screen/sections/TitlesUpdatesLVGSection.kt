@@ -16,12 +16,14 @@ import androidx.paging.compose.LazyPagingItems
 import com.example.data.remote.models.titles_list_response.Item1
 import com.example.design_system.cards.AnimeCard
 import com.example.design_system.cards.DesignUtils
+import com.example.design_system.sections.EmptyContentSection
 import com.example.design_system.theme.mShapes
 
 @Composable
 fun TitlesUpdatesLVGSection(
     titles: LazyPagingItems<Item1>,
     onTitleClick: (Int) -> Unit,
+    showRandomButton: Boolean = true,
 ) {
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -33,17 +35,21 @@ fun TitlesUpdatesLVGSection(
             vertical = 16.dp
         )
     ) {
-        item(
-            span = { GridItemSpan(maxLineSpan) }
-        ) {
-            Button(
-                modifier = Modifier.fillMaxWidth(),
-                shape = mShapes.small,
-                onClick = {  }
-            ) {
-                Text(
-                    text = "Случайный релиз"
-                )
+        if(showRandomButton) {
+            if(titles.itemCount > 0) {
+                item(
+                    span = { GridItemSpan(maxLineSpan) }
+                ) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        shape = mShapes.small,
+                        onClick = {  }
+                    ) {
+                        Text(
+                            text = "Случайный релиз"
+                        )
+                    }
+                }
             }
         }
 

@@ -71,7 +71,7 @@ fun HomeScreen(
 
     var isError by rememberSaveable { mutableStateOf(false) }
     val titlesUpdates = viewModel.titlesUpdates.collectAsLazyPagingItems()
-    LaunchedEffect(titlesUpdates.loadState.refresh) {
+    LaunchedEffect(titlesUpdates.loadState.refresh, titlesUpdates.itemCount) {
         if(titlesUpdates.loadState.refresh is LoadState.Error) {
             isError = true
             SnackbarController.sendEvent(
@@ -84,23 +84,47 @@ fun HomeScreen(
                 )
             )
         }
-    }
 
-    LaunchedEffect(titlesUpdates.itemCount) {
         if(titlesUpdates.itemCount != 0) {
             isError = false
         }
     }
 
+    var isTitlesByQueryError by rememberSaveable { mutableStateOf(false) }
+    val titlesByQuery = viewModel.animeByQuery.collectAsLazyPagingItems()
+    LaunchedEffect(titlesByQuery.loadState.refresh, titlesByQuery.itemCount) {
+        if(titlesByQuery.loadState.refresh is LoadState.Error) {
+            isTitlesByQueryError = true
+            SnackbarController.sendEvent(
+                SnackbarEvent(
+                    message = (titlesByQuery.loadState.refresh as LoadState.Error).error.message.toString(),
+                    action = SnackbarAction(
+                        name = "Retry",
+                        action = { titlesUpdates.retry() }
+                    )
+                )
+            )
+        }
+
+        if(titlesByQuery.itemCount != 0) {
+            isTitlesByQueryError = false
+        }
+    }
+
+
+    val homeScreenState by viewModel.homeScreenState.collectAsStateWithLifecycle()
     val commonState by commonVM.commonState.collectAsStateWithLifecycle()
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             HomeScreenTopBar(
-                onSearchClick = {},
+                onSearchIconClick = { viewModel.sendIntent(HomeScreenIntent.ChangeSearchingMode) },
                 scrollBehavior = topBarScrollBehavior,
-                loadingState = titlesUpdates.loadState.refresh is LoadState.Loading
+                titlesUpdatesLoadingState = titlesUpdates.loadState.refresh is LoadState.Loading,
+                isSearching = homeScreenState.isSearching,
+                onSearchClick = { viewModel.sendIntent(HomeScreenIntent.SetQuery(it)) },
+                titleByQueryLoadingState = titlesByQuery.loadState.refresh is LoadState.Loading
             )
         },
         bottomBar = {
@@ -133,15 +157,29 @@ fun HomeScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            if(isError) {
-                EmptyContentSection(
-                    modifier = Modifier.fillMaxSize()
-                )
+            if(homeScreenState.isSearching) {
+                if(isError) {
+                    EmptyContentSection(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    TitlesUpdatesLVGSection(
+                        showRandomButton = false,
+                        titles = titlesByQuery,
+                        onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                    )
+                }
             } else {
-                TitlesUpdatesLVGSection(
-                    titles = titlesUpdates,
-                    onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
-                )
+                if(isTitlesByQueryError) {
+                    EmptyContentSection(
+                        modifier = Modifier.fillMaxSize()
+                    )
+                } else {
+                    TitlesUpdatesLVGSection(
+                        titles = titlesUpdates,
+                        onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                    )
+                }
             }
         }
     }
