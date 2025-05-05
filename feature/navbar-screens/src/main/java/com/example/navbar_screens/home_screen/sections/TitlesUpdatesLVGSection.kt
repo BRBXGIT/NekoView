@@ -52,7 +52,7 @@ fun TitlesUpdatesLVGSection(
             }
         }
 
-        items(titles.itemCount) { index ->
+        items(titles.itemCount, key = { it }) { index ->
             val currentTitle = titles[index]
 
             currentTitle?.let {
@@ -60,7 +60,8 @@ fun TitlesUpdatesLVGSection(
                     posterPath = DesignUtils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,
-                    onCardClick = { onTitleClick(currentTitle.id) }
+                    onCardClick = { onTitleClick(currentTitle.id) },
+                    modifier = Modifier.animateItem()
                 )
             }
         }

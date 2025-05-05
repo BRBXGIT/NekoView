@@ -8,8 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
@@ -31,12 +29,17 @@ class HomeScreenVM @Inject constructor(
 
     val titlesUpdates = repository.getTitleUpdates().cachedIn(viewModelScope)
 
-    private val query = MutableStateFlow("")
+    private val _query = MutableStateFlow("")
+    val query = _query.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        ""
+    )
     private fun setQuery(searchBarQuery: String) {
-        query.value = searchBarQuery
+        _query.value = searchBarQuery
     }
     @OptIn(ExperimentalCoroutinesApi::class)
-    val animeByQuery = query
+    val animeByQuery = _query
         .flatMapLatest { query ->
             repository.getTitleByQuery(query).cachedIn(viewModelScope)
         }

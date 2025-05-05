@@ -131,7 +131,18 @@ fun SearchScreen(
                 )
             },
             genresLoadState = searchScreenState.genresLoading,
-            yearsLoadState = searchScreenState.yearsLoading
+            yearsLoadState = searchScreenState.yearsLoading,
+            onApplyClick = {
+                viewModel.sendIntent(
+                    SearchScreenIntent.FetchTitlesByFilters(
+                        releaseEnd = searchScreenState.releaseEnd,
+                        sortType = if(searchScreenState.sortType == SortType.ByPopularity) "in_favorites" else "-updated",
+                        years = searchScreenState.selectedYears,
+                        selectedSeasons = searchScreenState.selectedSeasons,
+                        genres = searchScreenState.selectedGenres
+                    )
+                )
+            }
         )
     }
 

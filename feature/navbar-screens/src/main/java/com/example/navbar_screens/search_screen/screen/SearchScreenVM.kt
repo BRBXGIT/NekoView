@@ -104,6 +104,18 @@ class SearchScreenVM @Inject constructor(
         }
     }
 
+    private fun fetchTitlesByFilters(
+        releaseEnd: Boolean,
+        sortType: String,
+        years: List<Int>,
+        seasonsCodes: List<Int>,
+        genres: List<String>
+    ) {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getTitlesByFilters(releaseEnd, sortType, years, seasonsCodes, genres)
+        }
+    }
+
     fun sendIntent(intent: SearchScreenIntent) {
         when(intent) {
             is SearchScreenIntent.FetchTitlesGenres -> fetchTitlesGenres()
@@ -111,6 +123,19 @@ class SearchScreenVM @Inject constructor(
             is SearchScreenIntent.FetchTitleYears -> fetchTitlesYears()
             is SearchScreenIntent.RetryFetchTitlesYears -> fetchTitlesYears()
             is SearchScreenIntent.UpdateScreenState -> updateScreenState(intent.state)
+            is SearchScreenIntent.FetchTitlesByFilters -> {
+                var seasonsCodes = mutableListOf<Int>()
+                intent.selectedSeasons.forEach {
+                    seasonsCodes += when(it) {
+                        "Зима" -> 1
+                        "Весна" -> 2
+                        "Лето" -> 3
+                        else -> 4
+                    }
+                }
+
+                fetchTitlesByFilters(intent.releaseEnd, intent.sortType, intent.years, seasonsCodes, intent.genres)
+            }
         }
     }
 

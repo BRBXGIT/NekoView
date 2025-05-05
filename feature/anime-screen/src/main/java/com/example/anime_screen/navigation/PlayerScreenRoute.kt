@@ -1,5 +1,8 @@
 package com.example.anime_screen.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
@@ -20,7 +23,10 @@ fun NavGraphBuilder.playerScreenRoute(
     navController: NavController,
     sharedAnimePlayerScreenVM: SharedAnimePlayerScreenVM,
     commonVM: CommonVM
-) = composable<PlayerScreenRoute> {
+) = composable<PlayerScreenRoute>(
+    enterTransition = { fadeIn(tween(400)) },
+    exitTransition = { fadeOut(tween(400)) }
+) {
     val index = it.toRoute<PlayerScreenRoute>().selectedEpisodeIndex
     val playerScreenVM = hiltViewModel<PlayerScreenVM>()
 

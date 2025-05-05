@@ -1,6 +1,7 @@
 package com.example.navbar_screens.home_screen.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
+import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,8 +21,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
@@ -35,6 +39,7 @@ import com.example.design_system.snackbars.SnackbarAction
 import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.snackbars.SnackbarEvent
 import com.example.design_system.theme.mColors
+import com.example.design_system.theme.mTypography
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
 import com.example.navbar_screens.home_screen.sections.HomeScreenTopBar
@@ -113,18 +118,21 @@ fun HomeScreen(
 
 
     val homeScreenState by viewModel.homeScreenState.collectAsStateWithLifecycle()
+    val query by viewModel.query.collectAsStateWithLifecycle()
     val commonState by commonVM.commonState.collectAsStateWithLifecycle()
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             HomeScreenTopBar(
+                query = query,
                 onSearchIconClick = { viewModel.sendIntent(HomeScreenIntent.ChangeSearchingMode) },
                 scrollBehavior = topBarScrollBehavior,
                 titlesUpdatesLoadingState = titlesUpdates.loadState.refresh is LoadState.Loading,
                 isSearching = homeScreenState.isSearching,
-                onSearchClick = { viewModel.sendIntent(HomeScreenIntent.SetQuery(it)) },
-                titleByQueryLoadingState = titlesByQuery.loadState.refresh is LoadState.Loading
+                onSearchInput = { viewModel.sendIntent(HomeScreenIntent.SetQuery(it)) },
+                titleByQueryLoadingState = titlesByQuery.loadState.refresh is LoadState.Loading,
+                onClearButtonClick = { viewModel.sendIntent(HomeScreenIntent.SetQuery("")) }
             )
         },
         bottomBar = {
@@ -158,19 +166,34 @@ fun HomeScreen(
                 .padding(innerPadding)
         ) {
             if(homeScreenState.isSearching) {
-                if(isError) {
+                if(isTitlesByQueryError) {
                     EmptyContentSection(
                         modifier = Modifier.fillMaxSize()
                     )
                 } else {
-                    TitlesUpdatesLVGSection(
-                        showRandomButton = false,
-                        titles = titlesByQuery,
-                        onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
-                    )
+                    if(query == "") {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = 16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = "Кажется ещё ничего нет, начните вводить название тайтла :)",
+                                textAlign = TextAlign.Center,
+                                style = mTypography.titleMedium
+                            )
+                        }
+                    } else {
+                        TitlesUpdatesLVGSection(
+                            showRandomButton = false,
+                            titles = titlesByQuery,
+                            onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                        )
+                    }
                 }
             } else {
-                if(isTitlesByQueryError) {
+                if(isError) {
                     EmptyContentSection(
                         modifier = Modifier.fillMaxSize()
                     )

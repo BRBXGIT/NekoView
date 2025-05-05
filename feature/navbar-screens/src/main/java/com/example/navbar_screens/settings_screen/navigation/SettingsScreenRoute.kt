@@ -21,8 +21,8 @@ fun NavGraphBuilder.settingsScreen(
     commonVM: CommonVM,
     settingsScreenVM: SettingsScreenVM
 ) = composable<SettingsScreenRoute>(
-    enterTransition = { fadeIn(tween(300)) },
-    exitTransition = { fadeOut(tween(300)) }
+    enterTransition = { fadeIn(tween(400)) },
+    exitTransition = { fadeOut(tween(400)) }
 ) {
     SettingsScreen(
         navController = navController,

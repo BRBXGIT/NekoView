@@ -28,7 +28,7 @@ fun UserFeaturedLVGSection(
             vertical = 16.dp
         )
     ) {
-        items(titles.itemCount) { index ->
+        items(titles.itemCount, key = { it }) { index ->
             val currentTitle = titles[index]
 
             currentTitle?.let {
@@ -36,7 +36,8 @@ fun UserFeaturedLVGSection(
                     posterPath = DesignUtils.BASE_POSTERS_URL + currentTitle.posters.small.url,
                     genresString = currentTitle.genres.joinToString(", "),
                     title = currentTitle.names.ru,
-                    onCardClick = { onTitleClick(currentTitle.id) }
+                    onCardClick = { onTitleClick(currentTitle.id) },
+                    modifier = Modifier.animateItem()
                 )
             }
         }

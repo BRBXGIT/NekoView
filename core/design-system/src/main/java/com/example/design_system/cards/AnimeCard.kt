@@ -31,10 +31,11 @@ fun AnimeCard(
     posterPath: String,
     genresString: String,
     title: String,
-    onCardClick: () -> Unit
+    onCardClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .size(150.dp, 270.dp)
             .clip(mShapes.small)
             .background(mColors.surfaceContainerHighest)
