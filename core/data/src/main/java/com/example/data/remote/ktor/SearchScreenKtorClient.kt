@@ -1,6 +1,5 @@
 package com.example.data.remote.ktor
 
-import android.util.Log
 import com.example.data.remote.models.titles_list_response.TitlesListResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
@@ -70,22 +69,19 @@ class SearchScreenKtorClient(
         genres: List<String>
     ): Result<TitlesListResponse, NetworkError> {
         val queryParams = buildList {
-            if (years.isNotEmpty()) {
+            if(years.isNotEmpty()) {
                 add("({season.year}==${years.joinToString(" or {season.year}==")})")
             }
-            if (seasonsCodes.isNotEmpty()) {
+            if(seasonsCodes.isNotEmpty()) {
                 add("({season.code}==${seasonsCodes.joinToString(" or {season.code}==")})")
             }
-            if (genres.isNotEmpty()) {
-                add("(${genres.joinToString(" and ") { "\"$it\" in {genres}" }})")
+            if(genres.isNotEmpty()) {
+                add("(${genres.joinToString(" or ") { "\"$it\" in {genres}" }})")
             }
             add("(released==${releaseEnd})")
         }.joinToString(" and ")
 
         val url = "${Utils.BASE_URL}/title/search/advanced?query=$queryParams&order_by=$sortType&sort_direction=1"
-
-
-        Log.d("CCCC", url)
 
         val response = try {
             httpClient.get(url)
