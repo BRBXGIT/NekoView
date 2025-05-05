@@ -66,7 +66,9 @@ class SearchScreenKtorClient(
         sortType: String,
         years: List<Int>,
         seasonsCodes: List<Int>,
-        genres: List<String>
+        genres: List<String>,
+        limit: Int,
+        page: Int
     ): Result<TitlesListResponse, NetworkError> {
         val queryParams = buildList {
             if(years.isNotEmpty()) {
@@ -81,7 +83,12 @@ class SearchScreenKtorClient(
             add("(released==${releaseEnd})")
         }.joinToString(" and ")
 
-        val url = "${Utils.BASE_URL}/title/search/advanced?query=$queryParams&order_by=$sortType&sort_direction=1"
+        val url = "${Utils.BASE_URL}/title/search/advanced?query=$queryParams&" +
+                "order_by=$sortType&" +
+                "sort_direction=1&" +
+                "limit=${limit}&" +
+                "page=${page}&" +
+                "filter=id,names,posters,genres"
 
         val response = try {
             httpClient.get(url)
