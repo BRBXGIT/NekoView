@@ -1,7 +1,6 @@
 package com.example.data.remote.ktor
 
 import io.ktor.client.HttpClient
-import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.okhttp.OkHttp
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -17,7 +16,10 @@ fun createHttpClient(): HttpClient {
             json(
                 json = Json {
                     ignoreUnknownKeys = true
+                    isLenient = true
+                    allowSpecialFloatingPointValues = true
                     coerceInputValues = true
+                    explicitNulls = false
                 }
             )
         }

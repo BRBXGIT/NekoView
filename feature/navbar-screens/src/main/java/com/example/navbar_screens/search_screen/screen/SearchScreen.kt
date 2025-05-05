@@ -13,8 +13,11 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
@@ -27,6 +30,7 @@ import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
+import com.example.navbar_screens.search_screen.sections.FiltersBS
 import com.example.navbar_screens.search_screen.sections.SearchScreenTopBar
 import kotlinx.coroutines.launch
 
@@ -35,7 +39,8 @@ import kotlinx.coroutines.launch
 fun SearchScreen(
     navController: NavController,
     bigScreen: Boolean,
-    commonVM: CommonVM
+    commonVM: CommonVM,
+    viewModel: SearchScreenVM
 ) {
     //Snackbars stuff
     val snackbarHostState = remember { SnackbarHostState() }
@@ -57,7 +62,49 @@ fun SearchScreen(
         }
     }
 
+    val searchScreenState by viewModel.searchScreenState.collectAsStateWithLifecycle()
     val commonState by commonVM.commonState.collectAsStateWithLifecycle()
+
+    var filterBSOpened by rememberSaveable { mutableStateOf(false) }
+    if(filterBSOpened) {
+        FiltersBS(
+            onDismissRequest = { filterBSOpened = false },
+            genres = searchScreenState.genres,
+            years = searchScreenState.years,
+            seasons = searchScreenState.seasons,
+            sort = searchScreenState.sortType,
+            releaseEnd = searchScreenState.releaseEnd,
+            onReleaseEndClick = {
+                viewModel.sendIntent(
+                    SearchScreenIntent.UpdateScreenState(
+                        searchScreenState.copy(releaseEnd = !searchScreenState.releaseEnd)
+                    )
+                )
+            },
+            onSortClick = {
+                viewModel.sendIntent(
+                    SearchScreenIntent.UpdateScreenState(
+                        searchScreenState.copy(sortType = it)
+                    )
+                )
+            },
+            selectedYears = searchScreenState.selectedYears,
+            onYearClick = {
+                viewModel.sendIntent(
+                    SearchScreenIntent.UpdateScreenState(
+                        searchScreenState.copy(
+                            selectedYears = if(it in searchScreenState.selectedYears) {
+                                searchScreenState.selectedYears - it
+                            } else {
+                                searchScreenState.selectedYears + it
+                            }
+                        )
+                    )
+                )
+            }
+        )
+    }
+
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
@@ -65,7 +112,7 @@ fun SearchScreen(
             SearchScreenTopBar(
                 scrollBehavior = topBarScrollBehavior,
                 loadingState = false,
-                onFilterClick = {  }
+                onFilterClick = { filterBSOpened = true }
             )
         },
         bottomBar = {

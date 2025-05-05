@@ -110,6 +110,12 @@ class SearchScreenVM @Inject constructor(
             is SearchScreenIntent.RetryFetchTitlesGenres -> fetchTitlesGenres()
             is SearchScreenIntent.FetchTitleYears -> fetchTitlesYears()
             is SearchScreenIntent.RetryFetchTitlesYears -> fetchTitlesYears()
+            is SearchScreenIntent.UpdateScreenState -> updateScreenState(intent.state)
         }
+    }
+
+    init {
+        sendIntent(SearchScreenIntent.FetchTitleYears)
+        sendIntent(SearchScreenIntent.FetchTitlesGenres)
     }
 }

@@ -5,4 +5,5 @@ sealed class SearchScreenIntent {
     data object RetryFetchTitlesGenres: SearchScreenIntent()
     data object RetryFetchTitlesYears: SearchScreenIntent()
     data object FetchTitleYears: SearchScreenIntent()
+    data class UpdateScreenState(val state: SearchScreenState): SearchScreenIntent()
 }

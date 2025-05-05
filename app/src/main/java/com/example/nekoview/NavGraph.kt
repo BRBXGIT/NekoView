@@ -15,6 +15,7 @@ import com.example.navbar_screens.home_screen.navigation.HomeScreenRoute
 import com.example.navbar_screens.home_screen.navigation.homeScreen
 import com.example.navbar_screens.home_screen.screen.HomeScreenVM
 import com.example.navbar_screens.search_screen.navigation.searchScreen
+import com.example.navbar_screens.search_screen.screen.SearchScreenVM
 import com.example.navbar_screens.settings_screen.navigation.settingsScreen
 import com.example.navbar_screens.settings_screen.screen.SettingsScreenVM
 import com.example.project_team.navigation.projectTeamScreen
@@ -33,6 +34,7 @@ fun NavGraph(
     val homeScreenVM = hiltViewModel<HomeScreenVM>()
     val featuredScreenVM = hiltViewModel<FeaturedScreenVM>()
     val settingsScreenVM = hiltViewModel<SettingsScreenVM>()
+    val searchScreenVM = hiltViewModel<SearchScreenVM>()
     val sharedAnimePlayerScreenVM = hiltViewModel<SharedAnimePlayerScreenVM>()
 
     NavHost(
@@ -56,7 +58,8 @@ fun NavGraph(
         searchScreen(
             navController = navController,
             bigScreen = bigScreen,
-            commonVM = commonVM
+            commonVM = commonVM,
+            searchScreenVM = searchScreenVM
         )
 
         settingsScreen(
