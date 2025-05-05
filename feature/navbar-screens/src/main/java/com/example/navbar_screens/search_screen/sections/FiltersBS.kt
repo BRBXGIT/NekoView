@@ -28,7 +28,9 @@ fun FiltersBS(
     onSeasonClick: (String) -> Unit,
     chosenSeasons: List<String>,
     onGenreClick: (String) -> Unit,
-    chosenGenres: List<String>
+    chosenGenres: List<String>,
+    yearsLoadState: Boolean,
+    genresLoadState: Boolean
 ) {
     ModalBottomSheet(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -54,7 +56,8 @@ fun FiltersBS(
             yearsSection(
                 years = years,
                 onYearClick = { onYearClick(it) },
-                chosenYears = selectedYears
+                chosenYears = selectedYears,
+                loadState = yearsLoadState
             )
 
             seasonSection(
@@ -66,7 +69,8 @@ fun FiltersBS(
             genresSection(
                 genres = genres,
                 onGenreClick = { onGenreClick(it) },
-                chosenGenres = chosenGenres
+                chosenGenres = chosenGenres,
+                loadState = genresLoadState
             )
         }
     }

@@ -115,7 +115,7 @@ fun HomeScreenTopBar(
         )
 
         AnimatedVisibility(
-            visible = titlesUpdatesLoadingState or titleByQueryLoadingState,
+            visible = titlesUpdatesLoadingState or (titleByQueryLoadingState and isSearching),
             enter = fadeIn(tween(300)) + expandVertically(tween(300)),
             exit = fadeOut(tween(300)) + shrinkVertically(tween(300))
         ) {

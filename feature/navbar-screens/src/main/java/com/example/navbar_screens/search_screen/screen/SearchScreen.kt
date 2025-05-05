@@ -129,7 +129,9 @@ fun SearchScreen(
                         )
                     )
                 )
-            }
+            },
+            genresLoadState = searchScreenState.genresLoading,
+            yearsLoadState = searchScreenState.yearsLoading
         )
     }
 
