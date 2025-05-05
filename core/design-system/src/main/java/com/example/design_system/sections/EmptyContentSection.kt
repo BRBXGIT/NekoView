@@ -45,7 +45,7 @@ fun EmptyContentSection(
                 style = mTypography.bodyMedium.copy(
                     lineBreak = LineBreak.Paragraph
                 ),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
         }
     }

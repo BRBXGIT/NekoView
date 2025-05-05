@@ -47,13 +47,12 @@ fun HomeScreenTopBar(
         }
     }
 
+    var query by rememberSaveable { mutableStateOf("") }
     Column {
         TopAppBar(
             scrollBehavior = scrollBehavior,
             title = {
                 if(isSearching) {
-                    var query by rememberSaveable { mutableStateOf("") }
-
                     TextField(
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
@@ -84,20 +83,33 @@ fun HomeScreenTopBar(
                         ),
                         keyboardActions = KeyboardActions(
                             onSearch = { onSearchClick(query) }
-                        )
+                        ),
                     )
                 } else {
                     Text(text = "Последние обновления")
                 }
             },
             actions = {
-                IconButton(
-                    onClick = onSearchIconClick
-                ) {
-                    Icon(
-                        painter = painterResource(NekoViewIcons.Magnifier),
-                        contentDescription = null
-                    )
+                if(!isSearching) {
+                    IconButton(
+                        onClick = onSearchIconClick
+                    ) {
+                        Icon(
+                            painter = painterResource(NekoViewIcons.Magnifier),
+                            contentDescription = null
+                        )
+                    }
+                } else {
+                    if(query.isNotBlank()) {
+                        IconButton(
+                            onClick = { query = "" }
+                        ) {
+                            Icon(
+                                painter = painterResource(NekoViewIcons.CloseCircle),
+                                contentDescription = null
+                            )
+                        }
+                    }
                 }
             }
         )

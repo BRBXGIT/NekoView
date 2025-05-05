@@ -44,4 +44,6 @@ object NekoViewIcons {
     val Quality = R.drawable.ic_quality
     val AutoPlay = R.drawable.ic_auto_play
     val Stopwatch = R.drawable.ic_stopwatch
+    val CloseCircle = R.drawable.ic_close_circle
+    val RewindCircle = R.drawable.ic_rewind_circle
 }

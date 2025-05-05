@@ -23,7 +23,6 @@ class HomeScreenVM @Inject constructor(
         SharingStarted.Lazily,
         HomeScreenState()
     )
-
     private fun changeHomeScreenState(state: HomeScreenState) {
         _homeScreenState.value = state
     }
