@@ -14,5 +14,6 @@ data class SearchScreenState(
     val genresLoading: Boolean = true,
     val selectedYears: List<Int> = emptyList(),
     val selectedGenres: List<String> = emptyList(),
-    val seasons: List<String> = listOf("Зима", "Весна", "Лето", "Осень")
+    val seasons: List<String> = listOf("Зима", "Весна", "Лето", "Осень"),
+    val selectedSeasons: List<String> = emptyList()
 )

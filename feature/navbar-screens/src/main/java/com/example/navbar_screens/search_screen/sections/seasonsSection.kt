@@ -16,38 +16,38 @@ import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
 
-fun LazyGridScope.yearsSection(
-    years: List<Int>,
-    onYearClick: (Int) -> Unit,
-    chosenYears: List<Int>
+fun LazyGridScope.seasonSection(
+    seasons: List<String>,
+    onSeasonClick: (String) -> Unit,
+    chosenSeasons: List<String>
 ) {
     item(
         span = { GridItemSpan(maxLineSpan) }
     ) {
         Text(
-            text = "Год",
+            text = "Сезон",
             style = mTypography.titleMedium
         )
     }
 
-    items(years) { year ->
+    items(seasons) { season ->
         val surfaceAnimatedColor by animateColorAsState(
-            targetValue = if(year in chosenYears) mColors.primary else mColors.surfaceContainerHigh,
+            targetValue = if(season in chosenSeasons) mColors.primary else mColors.surfaceContainerHigh,
             animationSpec = tween(200)
         )
         val onSurfaceAnimatedColor by animateColorAsState(
-            targetValue = if(year in chosenYears) mColors.onPrimary else mColors.onSurface,
+            targetValue = if(season in chosenSeasons) mColors.onPrimary else mColors.onSurface,
             animationSpec = tween(200)
         )
 
         Surface(
             color = surfaceAnimatedColor,
             shape = mShapes.small,
-            onClick = { onYearClick(year) }
+            onClick = { onSeasonClick(season) }
         ) {
             Text(
                 color = onSurfaceAnimatedColor,
-                text = year.toString(),
+                text = season.toString(),
                 modifier = Modifier.padding(4.dp),
                 textAlign = TextAlign.Center
             )

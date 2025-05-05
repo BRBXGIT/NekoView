@@ -101,6 +101,34 @@ fun SearchScreen(
                         )
                     )
                 )
+            },
+            onSeasonClick = {
+                viewModel.sendIntent(
+                    SearchScreenIntent.UpdateScreenState(
+                        searchScreenState.copy(
+                            selectedSeasons = if(it in searchScreenState.selectedSeasons) {
+                                searchScreenState.selectedSeasons - it
+                            } else {
+                                searchScreenState.selectedSeasons + it
+                            }
+                        )
+                    )
+                )
+            },
+            chosenSeasons = searchScreenState.selectedSeasons,
+            chosenGenres = searchScreenState.selectedGenres,
+            onGenreClick = {
+                viewModel.sendIntent(
+                    SearchScreenIntent.UpdateScreenState(
+                        searchScreenState.copy(
+                            selectedGenres = if(it in searchScreenState.selectedGenres) {
+                                searchScreenState.selectedGenres - it
+                            } else {
+                                searchScreenState.selectedGenres + it
+                            }
+                        )
+                    )
+                )
             }
         )
     }

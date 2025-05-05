@@ -1,4 +1,4 @@
-package com.example.navbar_screens.home_screen.sections
+package com.example.navbar_screens.search_screen.sections
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

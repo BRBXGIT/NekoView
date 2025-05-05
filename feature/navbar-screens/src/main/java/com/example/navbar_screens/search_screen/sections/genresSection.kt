@@ -11,45 +11,48 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
 
-fun LazyGridScope.yearsSection(
-    years: List<Int>,
-    onYearClick: (Int) -> Unit,
-    chosenYears: List<Int>
+fun LazyGridScope.genresSection(
+    genres: List<String>,
+    onGenreClick: (String) -> Unit,
+    chosenGenres: List<String>
 ) {
     item(
         span = { GridItemSpan(maxLineSpan) }
     ) {
         Text(
-            text = "Год",
+            text = "Жанр",
             style = mTypography.titleMedium
         )
     }
 
-    items(years) { year ->
+    items(genres) { season ->
         val surfaceAnimatedColor by animateColorAsState(
-            targetValue = if(year in chosenYears) mColors.primary else mColors.surfaceContainerHigh,
+            targetValue = if(season in chosenGenres) mColors.primary else mColors.surfaceContainerHigh,
             animationSpec = tween(200)
         )
         val onSurfaceAnimatedColor by animateColorAsState(
-            targetValue = if(year in chosenYears) mColors.onPrimary else mColors.onSurface,
+            targetValue = if(season in chosenGenres) mColors.onPrimary else mColors.onSurface,
             animationSpec = tween(200)
         )
 
         Surface(
             color = surfaceAnimatedColor,
             shape = mShapes.small,
-            onClick = { onYearClick(year) }
+            onClick = { onGenreClick(season) }
         ) {
             Text(
                 color = onSurfaceAnimatedColor,
-                text = year.toString(),
+                text = season.toString(),
                 modifier = Modifier.padding(4.dp),
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }

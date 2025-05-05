@@ -10,8 +10,6 @@ import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.mShapes
-import com.example.navbar_screens.home_screen.sections.filterSection
-import com.example.navbar_screens.home_screen.sections.sortSection
 import com.example.navbar_screens.search_screen.screen.SortType
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +24,11 @@ fun FiltersBS(
     onReleaseEndClick: () -> Unit,
     onSortClick: (SortType) -> Unit,
     selectedYears: List<Int>,
-    onYearClick: (Int) -> Unit
+    onYearClick: (Int) -> Unit,
+    onSeasonClick: (String) -> Unit,
+    chosenSeasons: List<String>,
+    onGenreClick: (String) -> Unit,
+    chosenGenres: List<String>
 ) {
     ModalBottomSheet(
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
@@ -34,7 +36,7 @@ fun FiltersBS(
         shape = mShapes.small
     ) {
         LazyVerticalGrid(
-            columns = GridCells.Adaptive(60.dp),
+            columns = GridCells.Adaptive(90.dp),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -53,6 +55,18 @@ fun FiltersBS(
                 years = years,
                 onYearClick = { onYearClick(it) },
                 chosenYears = selectedYears
+            )
+
+            seasonSection(
+                seasons = seasons,
+                onSeasonClick = { onSeasonClick(it) },
+                chosenSeasons = chosenSeasons
+            )
+
+            genresSection(
+                genres = genres,
+                onGenreClick = { onGenreClick(it) },
+                chosenGenres = chosenGenres
             )
         }
     }
