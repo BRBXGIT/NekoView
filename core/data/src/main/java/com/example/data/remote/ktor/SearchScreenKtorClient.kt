@@ -70,19 +70,20 @@ class SearchScreenKtorClient(
         genres: List<String>
     ): Result<TitlesListResponse, NetworkError> {
         val queryParams = buildList {
-            if(years.isNotEmpty()) {
+            if (years.isNotEmpty()) {
                 add("({season.year}==${years.joinToString(" or {season.year}==")})")
             }
-            if(seasonsCodes.isNotEmpty()) {
+            if (seasonsCodes.isNotEmpty()) {
                 add("({season.code}==${seasonsCodes.joinToString(" or {season.code}==")})")
             }
-            if(genres.isNotEmpty()) {
-                add("(${genres.joinToString(" or ") { "{genres}==\"$it\"" }})")
+            if (genres.isNotEmpty()) {
+                add("(${genres.joinToString(" and ") { "\"$it\" in {genres}" }})")
             }
-            add("released==${releaseEnd}")
+            add("(released==${releaseEnd})")
         }.joinToString(" and ")
 
-        val url = "${Utils.BASE_URL}/title/search/advanced?query=$queryParams&order_by=in_favorites"
+        val url = "${Utils.BASE_URL}/title/search/advanced?query=$queryParams&order_by=$sortType&sort_direction=1"
+
 
         Log.d("CCCC", url)
 
