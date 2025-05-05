@@ -9,13 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.compose.LazyPagingItems
-import com.example.data.remote.models.titles_list_response.Item1
+import com.example.data.remote.models.titles_list_response.Item0
 import com.example.design_system.cards.AnimeCard
 import com.example.design_system.cards.DesignUtils
 
 @Composable
 fun UserFeaturedLVGSection(
-    titles: LazyPagingItems<Item1>,
+    titles: LazyPagingItems<Item0>,
     onTitleClick: (Int) -> Unit
 ) {
     LazyVerticalGrid(

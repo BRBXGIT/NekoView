@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class NamesX(
+data class Names(
     @SerialName("alternative")
     val alternative: String? = null,
     @SerialName("en")

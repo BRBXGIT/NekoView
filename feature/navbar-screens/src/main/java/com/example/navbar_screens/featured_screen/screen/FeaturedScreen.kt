@@ -1,6 +1,5 @@
 package com.example.navbar_screens.featured_screen.screen
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize

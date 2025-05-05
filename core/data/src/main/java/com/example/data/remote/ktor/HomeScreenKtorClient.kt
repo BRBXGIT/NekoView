@@ -20,7 +20,7 @@ class HomeScreenKtorClient(
     ): Result<TitlesListResponse, NetworkError> {
         val response = try {
             httpClient.get(
-                urlString = "${Utils.BASE_URL}/title/updates?limit=${limit}&page=${page}"
+                urlString = "${Utils.BASE_URL}/title/updates?limit=$limit&page=$page&filter=id,names,posters,genres"
             )
         } catch(e: IOException) {
             return when(e) {
@@ -43,7 +43,7 @@ class HomeScreenKtorClient(
     ): Result<TitlesListResponse, NetworkError> {
         val response = try {
             httpClient.get(
-                urlString = "${Utils.BASE_URL}/title/search?search=$query&limit=${limit}&page=${page}"
+                urlString = "${Utils.BASE_URL}/title/search?search=$query&limit=${limit}&page=${page}&filter=id,names,posters,genres"
             )
         } catch(e: IOException) {
             return when(e) {

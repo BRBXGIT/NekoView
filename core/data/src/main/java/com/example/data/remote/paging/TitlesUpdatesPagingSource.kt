@@ -3,18 +3,18 @@ package com.example.data.remote.paging
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.example.data.remote.ktor.HomeScreenKtorClient
-import com.example.data.remote.models.titles_list_response.Item1
+import com.example.data.remote.models.titles_list_response.Item0
 import com.example.data.remote.utils.Result
 
 class TitlesUpdatesPagingSource(
     private val ktorClient: HomeScreenKtorClient,
-): PagingSource<Int, Item1>() {
+): PagingSource<Int, Item0>() {
 
-    override fun getRefreshKey(state: PagingState<Int, Item1>): Int? {
+    override fun getRefreshKey(state: PagingState<Int, Item0>): Int? {
         return state.anchorPosition
     }
 
-    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item1> {
+    override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Item0> {
         val startPage = params.key ?: 1
         val limit = 5
 

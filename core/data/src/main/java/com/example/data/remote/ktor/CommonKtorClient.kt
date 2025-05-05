@@ -1,6 +1,5 @@
 package com.example.data.remote.ktor
 
-import android.util.Log
 import com.example.data.remote.models.user_session_token_response.UserSessionTokenResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result

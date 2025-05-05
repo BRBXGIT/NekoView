@@ -5,12 +5,9 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.data.domain.HomeScreenRepo
 import com.example.data.remote.ktor.HomeScreenKtorClient
-import com.example.data.remote.models.titles_list_response.Item1
-import com.example.data.remote.models.titles_list_response.TitlesListResponse
+import com.example.data.remote.models.titles_list_response.Item0
 import com.example.data.remote.paging.TitlesByQueryPagingSource
 import com.example.data.remote.paging.TitlesUpdatesPagingSource
-import com.example.data.remote.utils.NetworkError
-import com.example.data.remote.utils.Result
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -18,7 +15,7 @@ class HomeScreenRepoImpl @Inject constructor(
     private val ktorClient: HomeScreenKtorClient
 ): HomeScreenRepo {
 
-    override fun getTitleUpdates(): Flow<PagingData<Item1>> {
+    override fun getTitleUpdates(): Flow<PagingData<Item0>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,
@@ -28,7 +25,7 @@ class HomeScreenRepoImpl @Inject constructor(
         ).flow
     }
 
-    override suspend fun getTitleByQuery(query: String): Flow<PagingData<Item1>> {
+    override suspend fun getTitleByQuery(query: String): Flow<PagingData<Item0>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 10,

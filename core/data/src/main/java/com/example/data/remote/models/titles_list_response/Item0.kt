@@ -5,13 +5,13 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Release(
-    @SerialName("code")
-    val code: String = "",
+data class Item0(
+    @SerialName("genres")
+    val genres: List<String> = listOf(),
     @SerialName("id")
     val id: Int = 0,
     @SerialName("names")
-    val names: NamesX = NamesX(),
-    @SerialName("ordinal")
-    val ordinal: Int = 0
+    val names: Names = Names(),
+    @SerialName("posters")
+    val posters: Posters = Posters()
 )

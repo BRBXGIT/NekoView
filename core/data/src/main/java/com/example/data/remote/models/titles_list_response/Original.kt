@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Original(
     @SerialName("raw_base64_file")
-    val rawBase64File: String? = null,
+    val rawBase64File: String? = "",
     @SerialName("url")
     val url: String = ""
 )

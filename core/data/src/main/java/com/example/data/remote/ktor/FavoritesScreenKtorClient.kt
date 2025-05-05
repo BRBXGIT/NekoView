@@ -21,7 +21,7 @@ class FavoritesScreenKtorClient(
     ): Result<TitlesListResponse, NetworkError> {
         val response = try {
             httpClient.get(
-                urlString = "${Utils.BASE_URL}/user/favorites?session=$sessionToken&limit=${limit}&page=${page}"
+                urlString = "${Utils.BASE_URL}/user/favorites?session=$sessionToken&limit=${limit}&page=${page}&filter=id,names,posters,genres"
             )
         } catch(e: IOException) {
             return when(e) {
