@@ -54,7 +54,7 @@ fun LazyGridScope.sortSection(
                 )
 
                 Text(
-                    text = "Релиз завершен",
+                    text = "По новизне",
                     style = mTypography.bodyLarge
                 )
             }
