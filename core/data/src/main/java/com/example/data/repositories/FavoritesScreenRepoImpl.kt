@@ -17,7 +17,7 @@ class FavoritesScreenRepoImpl @Inject constructor(
     override fun getUserFavorites(sessionToken: String): Flow<PagingData<Item0>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10,
+                pageSize = 5,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { UserFavoritesPagingSource(ktorClient, sessionToken) }

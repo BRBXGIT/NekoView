@@ -18,7 +18,7 @@ class HomeScreenRepoImpl @Inject constructor(
     override fun getTitleUpdates(): Flow<PagingData<Item0>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10,
+                pageSize = 5,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { TitlesUpdatesPagingSource(ktorClient) }
@@ -28,7 +28,7 @@ class HomeScreenRepoImpl @Inject constructor(
     override suspend fun getTitleByQuery(query: String): Flow<PagingData<Item0>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 10,
+                pageSize = 5,
                 enablePlaceholders = false
             ),
             pagingSourceFactory = { TitlesByQueryPagingSource(ktorClient, query) }

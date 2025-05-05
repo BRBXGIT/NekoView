@@ -2,6 +2,7 @@ package com.example.navbar_screens.search_screen.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.cachedIn
 import com.example.common.dispatchers.Dispatcher
 import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.data.domain.SearchScreenRepo
@@ -12,8 +13,11 @@ import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.snackbars.SnackbarEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -31,6 +35,29 @@ class SearchScreenVM @Inject constructor(
         SharingStarted.Lazily,
         SearchScreenState()
     )
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val titlesByAdvancedQuery = _searchScreenState
+        .filter { it != SearchScreenState() }
+        .flatMapLatest { state ->
+            var seasonsCodes = mutableListOf<Int>()
+            state.selectedSeasons.forEach {
+                seasonsCodes += when(it) {
+                    "Зима" -> 1
+                    "Весна" -> 2
+                    "Лето" -> 3
+                    else -> 4
+                }
+            }
+
+            repository.getTitlesByFilters(
+                releaseEnd = state.releaseEnd,
+                sortType = if(state.sortType == SortType.ByPopularity) "in_favorites" else "-updated",
+                years = state.selectedYears,
+                seasonsCodes = seasonsCodes,
+                genres = state.selectedGenres
+            ).cachedIn(viewModelScope)
+        }
 
     private fun updateScreenState(state: SearchScreenState) {
         _searchScreenState.value = state
@@ -104,18 +131,6 @@ class SearchScreenVM @Inject constructor(
         }
     }
 
-    private fun fetchTitlesByFilters(
-        releaseEnd: Boolean,
-        sortType: String,
-        years: List<Int>,
-        seasonsCodes: List<Int>,
-        genres: List<String>
-    ) {
-        viewModelScope.launch(dispatcherIo) {
-            repository.getTitlesByFilters(releaseEnd, sortType, years, seasonsCodes, genres)
-        }
-    }
-
     fun sendIntent(intent: SearchScreenIntent) {
         when(intent) {
             is SearchScreenIntent.FetchTitlesGenres -> fetchTitlesGenres()
@@ -123,19 +138,6 @@ class SearchScreenVM @Inject constructor(
             is SearchScreenIntent.FetchTitleYears -> fetchTitlesYears()
             is SearchScreenIntent.RetryFetchTitlesYears -> fetchTitlesYears()
             is SearchScreenIntent.UpdateScreenState -> updateScreenState(intent.state)
-            is SearchScreenIntent.FetchTitlesByFilters -> {
-                var seasonsCodes = mutableListOf<Int>()
-                intent.selectedSeasons.forEach {
-                    seasonsCodes += when(it) {
-                        "Зима" -> 1
-                        "Весна" -> 2
-                        "Лето" -> 3
-                        else -> 4
-                    }
-                }
-
-                fetchTitlesByFilters(intent.releaseEnd, intent.sortType, intent.years, seasonsCodes, intent.genres)
-            }
         }
     }
 

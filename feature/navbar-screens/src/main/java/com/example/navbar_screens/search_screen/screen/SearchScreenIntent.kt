@@ -6,11 +6,4 @@ sealed class SearchScreenIntent {
     data object RetryFetchTitlesYears: SearchScreenIntent()
     data object FetchTitleYears: SearchScreenIntent()
     data class UpdateScreenState(val state: SearchScreenState): SearchScreenIntent()
-    data class FetchTitlesByFilters(
-        val releaseEnd: Boolean,
-        val sortType: String,
-        val years: List<Int>,
-        val selectedSeasons: List<String>,
-        val genres: List<String>
-    ): SearchScreenIntent()
 }

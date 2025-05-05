@@ -38,22 +38,11 @@ fun FiltersBS(
     chosenGenres: List<String>,
     yearsLoadState: Boolean,
     genresLoadState: Boolean,
-    onApplyClick: () -> Unit
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         shape = mShapes.small
     ) {
-        Button(
-            shape = mShapes.small,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
-            onClick = onApplyClick
-        ) {
-            Text(text = "Применить")
-        }
-
         LazyVerticalGrid(
             columns = GridCells.Adaptive(90.dp),
             contentPadding = PaddingValues(16.dp),

@@ -15,5 +15,6 @@ data class SearchScreenState(
     val selectedYears: List<Int> = emptyList(),
     val selectedGenres: List<String> = emptyList(),
     val seasons: List<String> = listOf("Зима", "Весна", "Лето", "Осень"),
-    val selectedSeasons: List<String> = emptyList()
+    val selectedSeasons: List<String> = emptyList(),
+    val queryCompleted: Boolean = false
 )

@@ -12,6 +12,7 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,15 +24,22 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
+import com.example.design_system.sections.EmptyContentSection
 import com.example.design_system.snackbars.ObserveAsEvents
+import com.example.design_system.snackbars.SnackbarAction
 import com.example.design_system.snackbars.SnackbarController
+import com.example.design_system.snackbars.SnackbarEvent
 import com.example.design_system.theme.mColors
 import com.example.navbar_screens.common.NavBar
 import com.example.navbar_screens.common.NavRail
 import com.example.navbar_screens.search_screen.sections.FiltersBS
 import com.example.navbar_screens.search_screen.sections.SearchScreenTopBar
+import com.example.navbar_screens.search_screen.sections.TitlesByFiltersLCSection
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -131,19 +139,29 @@ fun SearchScreen(
                 )
             },
             genresLoadState = searchScreenState.genresLoading,
-            yearsLoadState = searchScreenState.yearsLoading,
-            onApplyClick = {
-                viewModel.sendIntent(
-                    SearchScreenIntent.FetchTitlesByFilters(
-                        releaseEnd = searchScreenState.releaseEnd,
-                        sortType = if(searchScreenState.sortType == SortType.ByPopularity) "in_favorites" else "-updated",
-                        years = searchScreenState.selectedYears,
-                        selectedSeasons = searchScreenState.selectedSeasons,
-                        genres = searchScreenState.selectedGenres
+            yearsLoadState = searchScreenState.yearsLoading
+        )
+    }
+
+    val titlesByFilters = viewModel.titlesByAdvancedQuery.collectAsLazyPagingItems()
+    var isError by rememberSaveable { mutableStateOf(false) }
+    LaunchedEffect(titlesByFilters.loadState.refresh, titlesByFilters.itemCount) {
+        if(titlesByFilters.loadState.refresh is LoadState.Error) {
+            isError = true
+            SnackbarController.sendEvent(
+                SnackbarEvent(
+                    message = (titlesByFilters.loadState.refresh as LoadState.Error).error.message.toString(),
+                    action = SnackbarAction(
+                        name = "Retry",
+                        action = { titlesByFilters.retry() }
                     )
                 )
-            }
-        )
+            )
+        }
+
+        if(titlesByFilters.itemCount != 0) {
+            isError = false
+        }
     }
 
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -152,7 +170,7 @@ fun SearchScreen(
         topBar = {
             SearchScreenTopBar(
                 scrollBehavior = topBarScrollBehavior,
-                loadingState = false,
+                loadingState = titlesByFilters.loadState.refresh is LoadState.Loading,
                 onFilterClick = { filterBSOpened = true }
             )
         },
@@ -186,7 +204,14 @@ fun SearchScreen(
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-
+            if(isError) {
+                EmptyContentSection(modifier = Modifier.fillMaxSize())
+            } else {
+                TitlesByFiltersLCSection(
+                    titles = titlesByFilters,
+                    onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
+                )
+            }
         }
     }
 
