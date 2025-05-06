@@ -7,7 +7,6 @@ object NekoViewIcons {
     val HeartAnimated = R.drawable.ic_heart_animated
     val SettingsAnimated = R.drawable.ic_settings_animated
     val MagnifierAnimated = R.drawable.ic_magnifier_animated
-    val SettingsFilled = R.drawable.ic_settings_filled
     val Magnifier = R.drawable.ic_magnifier
     val Password = R.drawable.ic_password
     val User = R.drawable.ic_user
@@ -30,7 +29,6 @@ object NekoViewIcons {
     val SquareFilled = R.drawable.ic_square_filled
     val NextFilled = R.drawable.ic_next_filled
     val PreviousFilled = R.drawable.ic_previous_filled
-    val Next = R.drawable.ic_next
     val Playlist = R.drawable.ic_playlist
     val Lock = R.drawable.ic_lock
     val Unlock = R.drawable.ic_unlock

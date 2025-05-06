@@ -67,6 +67,8 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
+    //Animated splashscreen
+    implementation(libs.androidx.core.splashscreen)
 
     //Basic dependencies
     implementation(libs.androidx.core.ktx)

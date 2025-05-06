@@ -12,11 +12,16 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.anime_screen.player_screen.sections.videoViewBounds
 import com.example.design_system.theme.AppThemeVM
 import com.example.design_system.theme.NekoViewTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -30,7 +35,21 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        //Avoid bug when theme doesn't want change after splashscreen
+        setTheme(R.style.Theme_NekoView)
+
         enableEdgeToEdge()
+
+        val splashScreen = installSplashScreen()
+
+        splashScreen.setKeepOnScreenCondition { true }
+        CoroutineScope(Dispatchers.Main).launch {
+            //Delay for longer animation
+            delay(700)
+            splashScreen.setKeepOnScreenCondition { false }
+        }
+
         setContent {
             val appThemeVM = hiltViewModel<AppThemeVM>()
 

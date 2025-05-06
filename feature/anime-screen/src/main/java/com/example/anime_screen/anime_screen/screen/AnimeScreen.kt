@@ -53,7 +53,7 @@ fun AnimeScreen(
     navController: NavController,
     titleId: Int,
     viewModel: SharedAnimePlayerScreenVM,
-    commonVM: CommonVM
+    commonVM: CommonVM,
 ) {
     //Snackbars stuff
     val snackbarHostState = remember { SnackbarHostState() }
@@ -102,7 +102,7 @@ fun AnimeScreen(
                 },
                 loadingState = animeScreenState.isLoading,
                 scrollBehavior = topBarScrollBehavior,
-                titleName = animeScreenState.title.names.ru
+                titleName = animeScreenState.title.names.ru,
             )
         },
         modifier = Modifier

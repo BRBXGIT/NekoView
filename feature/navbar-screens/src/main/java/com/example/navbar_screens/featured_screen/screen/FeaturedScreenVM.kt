@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class FeaturedScreenVM @Inject constructor(
-    repository: FavoritesScreenRepo
+    private val repository: FavoritesScreenRepo,
 ): ViewModel() {
 
     private val _userSessionToken = MutableStateFlow<String>("")
