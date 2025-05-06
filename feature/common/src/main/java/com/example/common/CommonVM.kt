@@ -25,6 +25,17 @@ class CommonVM @Inject constructor(
     @Dispatcher(NekoViewDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
 
+    private val _favoritesNeedReload = MutableStateFlow(false)
+    val favoritesNeedReload = _favoritesNeedReload.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        false
+    )
+
+    private fun setFavoritesReload(reload: Boolean) {
+        _favoritesNeedReload.value = reload
+    }
+
     private val _commonState = MutableStateFlow(CommonState())
     val commonState = _commonState.stateIn(
         viewModelScope,
@@ -124,6 +135,7 @@ class CommonVM @Inject constructor(
             is CommonIntent.FetchAutoSkipOpening -> { fetchAutoSkipOpening() }
             is CommonIntent.FetchShowSkipOpeningButton -> { fetchShowSkipOpeningButton() }
             is CommonIntent.FetchVideoQuality -> { fetchVideoQuality() }
+            is CommonIntent.FavoritesNeedReload -> { setFavoritesReload(intent.reload) }
         }
     }
 

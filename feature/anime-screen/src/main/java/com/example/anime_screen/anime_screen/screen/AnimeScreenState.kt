@@ -4,5 +4,6 @@ import com.example.data.remote.models.title_details_response.TitleDetailsRespons
 
 data class AnimeScreenState(
     val title: TitleDetailsResponse = TitleDetailsResponse(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val userSessionToken: String = ""
 )

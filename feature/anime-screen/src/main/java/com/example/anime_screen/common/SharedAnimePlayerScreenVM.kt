@@ -73,11 +73,62 @@ class SharedAnimePlayerScreenVM @Inject constructor(
         _animeScreenState.value = AnimeScreenState()
     }
 
+    private fun setUserSessionToken(token: String) {
+        _animeScreenState.value =_animeScreenState.value.copy(
+            userSessionToken = token
+        )
+    }
+
+    private fun addTitleToFavorites(id: Int) {
+        viewModelScope.launch(dispatcherIo) {
+            val response = repository.addTitleToFavorites(
+                sessionToken = _animeScreenState.value.userSessionToken,
+                id = id
+            )
+            response.onError { error ->
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        message = "$error",
+                        action = SnackbarAction(
+                            name = "Retry",
+                            action = {
+                                sendIntent(AnimeScreenIntent.AddTitleToFavorites(id))
+                            }
+                        )
+                    )
+                )
+            }
+            response.onSuccess { data ->
+                if(data.success) {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            message = "Добавлено в избранное",
+                        )
+                    )
+                } else {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            message = "Что-то пошло не так",
+                            action = SnackbarAction(
+                                name = "Retry",
+                                action = {
+                                    sendIntent(AnimeScreenIntent.AddTitleToFavorites(id))
+                                }
+                            )
+                        )
+                    )
+                }
+            }
+        }
+    }
+
     fun sendIntent(intent: AnimeScreenIntent) {
         when(intent) {
             is AnimeScreenIntent.FetchTitleDetails -> fetchAnimeDetails(intent.id)
             is AnimeScreenIntent.RetryTitleDetails -> fetchAnimeDetails(intent.id)
             is AnimeScreenIntent.ResetScreenState -> resetState()
+            is AnimeScreenIntent.SetUserSessionToken -> setUserSessionToken(intent.token)
+            is AnimeScreenIntent.AddTitleToFavorites -> addTitleToFavorites(intent.id)
         }
     }
 }

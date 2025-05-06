@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.example.anime_screen.anime_screen.screen.AnimeScreen
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
+import com.example.common.CommonVM
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,7 +19,8 @@ data class AnimeScreenRoute(
 
 fun NavGraphBuilder.animeScreen(
     navController: NavController,
-    sharedAnimePlayerScreenVM: SharedAnimePlayerScreenVM
+    sharedAnimePlayerScreenVM: SharedAnimePlayerScreenVM,
+    commonVM: CommonVM
 ) = composable<AnimeScreenRoute>(
     enterTransition = { fadeIn(tween(400)) },
     exitTransition = { fadeOut(tween(400)) }
@@ -28,6 +30,7 @@ fun NavGraphBuilder.animeScreen(
     AnimeScreen(
         navController = navController,
         titleId = titleId,
-        viewModel = sharedAnimePlayerScreenVM
+        viewModel = sharedAnimePlayerScreenVM,
+        commonVM = commonVM
     )
 }

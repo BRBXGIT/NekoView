@@ -36,6 +36,7 @@ import com.example.design_system.theme.mColors
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalAnimationGraphicsApi::class)
 @Composable
 fun AnimeScreenTopBar(
+    showHeartIcon: Boolean,
     titleName: String,
     onHeartIconClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -64,17 +65,22 @@ fun AnimeScreenTopBar(
                 }
             },
             actions = {
-                IconButton(
-                    onClick = { isFeatured = !isFeatured }
-                ) {
-                    val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.HeartAnimated)
-                    val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = isFeatured)
+                if(showHeartIcon) {
+                    IconButton(
+                        onClick = {
+                            isFeatured = !isFeatured
+                            onHeartIconClick()
+                        }
+                    ) {
+                        val animatedImage = AnimatedImageVector.animatedVectorResource(NekoViewIcons.HeartAnimated)
+                        val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = isFeatured)
 
-                    Image(
-                        painter = animatedPainter,
-                        contentDescription = null,
-                        colorFilter = ColorFilter.tint(mColors.onSurfaceVariant)
-                    )
+                        Image(
+                            painter = animatedPainter,
+                            contentDescription = null,
+                            colorFilter = ColorFilter.tint(mColors.onSurfaceVariant)
+                        )
+                    }
                 }
             },
             navigationIcon = {

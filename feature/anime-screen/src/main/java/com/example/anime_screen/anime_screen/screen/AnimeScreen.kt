@@ -38,6 +38,8 @@ import com.example.anime_screen.anime_screen.sections.TitleTeamSection
 import com.example.anime_screen.anime_screen.sections.TorrentsSection
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.navigation.PlayerScreenRoute
+import com.example.common.CommonIntent
+import com.example.common.CommonVM
 import com.example.data.remote.utils.Utils
 import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
@@ -50,7 +52,8 @@ import kotlinx.coroutines.launch
 fun AnimeScreen(
     navController: NavController,
     titleId: Int,
-    viewModel: SharedAnimePlayerScreenVM
+    viewModel: SharedAnimePlayerScreenVM,
+    commonVM: CommonVM
 ) {
     //Snackbars stuff
     val snackbarHostState = remember { SnackbarHostState() }
@@ -79,15 +82,24 @@ fun AnimeScreen(
         viewModel.sendIntent(AnimeScreenIntent.FetchTitleDetails(titleId))
     }
 
+    val commonState by commonVM.commonState.collectAsStateWithLifecycle()
+    LaunchedEffect(commonState.sessionToken) {
+        if(commonState.sessionToken != "") {
+            viewModel.sendIntent(AnimeScreenIntent.SetUserSessionToken(commonState.sessionToken))
+        }
+    }
+
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             AnimeScreenTopBar(
-                onBackClick = {
-                    navController.navigateUp()
+                showHeartIcon = animeScreenState.userSessionToken != "",
+                onBackClick = { navController.navigateUp() },
+                onHeartIconClick = {
+                    viewModel.sendIntent(AnimeScreenIntent.AddTitleToFavorites(titleId))
+                    commonVM.sendIntent(CommonIntent.FavoritesNeedReload(true))
                 },
-                onHeartIconClick = {  },
                 loadingState = animeScreenState.isLoading,
                 scrollBehavior = topBarScrollBehavior,
                 titleName = animeScreenState.title.names.ru

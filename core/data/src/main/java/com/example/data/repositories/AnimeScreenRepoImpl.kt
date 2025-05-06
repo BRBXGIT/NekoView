@@ -2,6 +2,7 @@ package com.example.data.repositories
 
 import com.example.data.domain.AnimeScreenRepo
 import com.example.data.remote.ktor.AnimeScreenKtorClient
+import com.example.data.remote.models.put_title_to_favorites_response.PutTitleToFavoritesResponse
 import com.example.data.remote.models.title_details_response.TitleDetailsResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
@@ -13,5 +14,12 @@ class AnimeScreenRepoImpl @Inject constructor(
 
     override suspend fun getTitleById(id: Int): Result<TitleDetailsResponse, NetworkError> {
         return ktorClient.getTitleById(id)
+    }
+
+    override suspend fun addTitleToFavorites(
+        sessionToken: String,
+        id: Int
+    ): Result<PutTitleToFavoritesResponse, NetworkError> {
+        return ktorClient.addTitleToFavorites(id, sessionToken)
     }
 }

@@ -101,6 +101,14 @@ fun FeaturedScreen(
         }
     }
 
+    val favoritesNeedReload by commonVM.favoritesNeedReload.collectAsStateWithLifecycle()
+    LaunchedEffect(favoritesNeedReload) {
+        if(favoritesNeedReload) {
+            userFavorites.refresh()
+            commonVM.sendIntent(CommonIntent.FavoritesNeedReload(false))
+        }
+    }
+
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     Scaffold(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },

@@ -14,4 +14,5 @@ sealed class CommonIntent {
     data object ChangeAutoSkipOpening: CommonIntent()
     data object ChangeAutoplay: CommonIntent()
     data object FetchAutoPlay: CommonIntent()
+    data class FavoritesNeedReload(val reload: Boolean): CommonIntent()
 }

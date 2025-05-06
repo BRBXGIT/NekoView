@@ -71,7 +71,8 @@ fun NavGraph(
 
         animeScreen(
             navController = navController,
-            sharedAnimePlayerScreenVM = sharedAnimePlayerScreenVM
+            sharedAnimePlayerScreenVM = sharedAnimePlayerScreenVM,
+            commonVM = commonVM
         )
 
         playerScreenRoute(
