@@ -45,7 +45,7 @@ coreSplashscreen = "1.0.1"
 hazeMaterials = "1.5.2"
 
 #Datastore
-datastorePreferences = "1.1.5"
+datastorePreferences = "1.1.0"
 appcompat = "1.7.0"
 material = "1.12.0"
 
