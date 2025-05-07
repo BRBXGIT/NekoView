@@ -4,9 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.anime_screen.anime_screen.screen.AnimeScreenIntent
 import com.example.anime_screen.anime_screen.screen.AnimeScreenState
-import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.common.dispatchers.Dispatcher
+import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.data.domain.AnimeScreenRepo
+import com.example.data.local.watched_eps_db.TitleWatchedEps
 import com.example.data.remote.utils.onError
 import com.example.data.remote.utils.onSuccess
 import com.example.design_system.snackbars.SnackbarAction
@@ -122,6 +123,28 @@ class SharedAnimePlayerScreenVM @Inject constructor(
         }
     }
 
+    private fun addTitleToWatchedEps(titleId: Int) {
+        viewModelScope.launch(dispatcherIo) {
+            repository.insertTitle(TitleWatchedEps(titleId))
+        }
+    }
+
+    private fun addEpisodeToWatchedEps(titleId: Int, episode: Int) {
+        viewModelScope.launch(dispatcherIo) {
+            repository.addWatchedEpisode(titleId, episode)
+        }
+    }
+
+    private fun fetchWatchedEps(titleId: Int) {
+        viewModelScope.launch(dispatcherIo) {
+            repository.getWatchedEps(titleId).collect {
+                _animeScreenState.value = _animeScreenState.value.copy(
+                    watchedEps = it[0].watchedEps
+                )
+            }
+        }
+    }
+
     fun sendIntent(intent: AnimeScreenIntent) {
         when(intent) {
             is AnimeScreenIntent.FetchTitleDetails -> fetchAnimeDetails(intent.id)
@@ -129,6 +152,9 @@ class SharedAnimePlayerScreenVM @Inject constructor(
             is AnimeScreenIntent.ResetScreenState -> resetState()
             is AnimeScreenIntent.SetUserSessionToken -> setUserSessionToken(intent.token)
             is AnimeScreenIntent.AddTitleToFavorites -> addTitleToFavorites(intent.id)
+            is AnimeScreenIntent.AddTitleToWatchedEps -> addTitleToWatchedEps(intent.titleId)
+            is AnimeScreenIntent.AddEpisodeToWatchedEps -> addEpisodeToWatchedEps(intent.titleId, intent.episode)
+            is AnimeScreenIntent.FetchWatchedEps -> fetchWatchedEps(intent.titleId)
         }
     }
 }

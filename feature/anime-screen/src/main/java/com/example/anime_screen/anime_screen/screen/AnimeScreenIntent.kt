@@ -8,4 +8,7 @@ sealed class AnimeScreenIntent {
     data object ResetScreenState: AnimeScreenIntent()
     data class SetUserSessionToken(val token: String): AnimeScreenIntent()
     data class AddTitleToFavorites(val id: Int): AnimeScreenIntent()
+    data class AddTitleToWatchedEps(val titleId: Int): AnimeScreenIntent()
+    data class AddEpisodeToWatchedEps(val titleId: Int, val episode: Int): AnimeScreenIntent()
+    data class FetchWatchedEps(val titleId: Int): AnimeScreenIntent()
 }

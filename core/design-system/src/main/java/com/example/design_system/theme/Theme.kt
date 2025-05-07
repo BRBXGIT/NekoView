@@ -472,7 +472,6 @@ fun NekoViewTheme(
     colorSystem: String,
     theme: String,
     darkTheme: Boolean = isSystemInDarkTheme(),
-    dynamicColor: Boolean = false,
     context: Context = LocalContext.current,
     content: @Composable () -> Unit,
 ) {

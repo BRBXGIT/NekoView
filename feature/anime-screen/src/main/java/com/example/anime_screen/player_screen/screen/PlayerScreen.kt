@@ -26,6 +26,7 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.media3.common.Player
 import androidx.navigation.NavController
+import com.example.anime_screen.anime_screen.screen.AnimeScreenIntent
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.player_screen.sections.AnimePlayer
 import com.example.anime_screen.player_screen.sections.Direction
@@ -53,7 +54,7 @@ fun PlayerScreen(
     selectedEpisodeIndex: Int,
     navController: NavController,
     viewModel: PlayerScreenVM,
-    commonVM: CommonVM
+    commonVM: CommonVM,
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
@@ -78,6 +79,7 @@ fun PlayerScreen(
                     episodeLinks.hls.fhd
                 }
             }"
+            sharedViewModel.sendIntent(AnimeScreenIntent.AddEpisodeToWatchedEps(title.id, episodeIndex))
             viewModel.sendIntent(PlayerScreenIntent.PlayEpisode(selectedEpisodeLink))
             systemUiController.isSystemBarsVisible = false
         } else {

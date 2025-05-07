@@ -1,6 +1,5 @@
 package com.example.anime_screen.anime_screen.sections
 
-import android.R
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -11,18 +10,19 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.mColors
 import com.example.design_system.theme.mShapes
 import com.example.design_system.theme.mTypography
-import java.nio.file.WatchEvent
 
 @Composable
 fun EpisodeItem(
     episode: Int,
     name: String,
-    onWatchButtonClick: () -> Unit
+    onWatchButtonClick: () -> Unit,
+    watched: Boolean
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -31,7 +31,7 @@ fun EpisodeItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(
-                color = mColors.surfaceContainerHigh,
+                color = if(watched) Color.Red else mColors.surfaceContainerHigh,
                 shape = mShapes.small
             )
             .padding(8.dp),

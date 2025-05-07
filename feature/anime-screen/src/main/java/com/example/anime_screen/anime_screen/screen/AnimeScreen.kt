@@ -55,6 +55,11 @@ fun AnimeScreen(
     viewModel: SharedAnimePlayerScreenVM,
     commonVM: CommonVM,
 ) {
+    LaunchedEffect(titleId) {
+        viewModel.sendIntent(AnimeScreenIntent.AddTitleToWatchedEps(titleId))
+        viewModel.sendIntent(AnimeScreenIntent.FetchWatchedEps(titleId))
+    }
+
     //Snackbars stuff
     val snackbarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
@@ -174,7 +179,8 @@ fun AnimeScreen(
                             navController.navigate(
                                 PlayerScreenRoute(index)
                             )
-                        }
+                        },
+                        watched = index in animeScreenState.watchedEps
                     )
                 }
 
