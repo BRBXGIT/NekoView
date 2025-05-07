@@ -10,7 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.design_system.theme.mColors
@@ -31,7 +31,7 @@ fun EpisodeItem(
             .fillMaxWidth()
             .padding(horizontal = 16.dp)
             .background(
-                color = if(watched) Color.Red else mColors.surfaceContainerHigh,
+                color = if(watched) mColors.surfaceContainer else mColors.surfaceContainerHigh,
                 shape = mShapes.small
             )
             .padding(8.dp),
@@ -42,14 +42,19 @@ fun EpisodeItem(
             overflow = TextOverflow.Ellipsis,
             style = mTypography.bodyLarge,
             modifier = Modifier
+                .alpha(if(watched) 0.8f else 1f)
                 .weight(1f)
                 .padding(end = 16.dp)
         )
 
         TextButton(
             onClick = onWatchButtonClick,
+            modifier = Modifier.alpha(if(watched) 0.8f else 1f)
         ) {
-            Text(text = "Смотреть")
+            Text(
+                text = "Смотреть",
+                modifier = Modifier.alpha(if(watched) 0.8f else 1f)
+            )
         }
     }
 }
