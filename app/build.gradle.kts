@@ -50,6 +50,7 @@ dependencies {
 
     //Core modules
     implementation(project(":core:design-system"))
+    implementation(project(":core:data"))
     //Feature modules
     implementation(project(":feature:navbar-screens"))
     implementation(project(":feature:common"))
@@ -69,6 +70,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     //Animated splashscreen
     implementation(libs.androidx.core.splashscreen)
+    //Paging impl
+    implementation(libs.androidx.paging.compose)
+    implementation(libs.androidx.paging.runtime.ktx)
 
     //Basic dependencies
     implementation(libs.androidx.core.ktx)

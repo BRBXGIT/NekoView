@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.navigation.animeScreen
 import com.example.anime_screen.navigation.playerScreenRoute
@@ -37,6 +38,9 @@ fun NavGraph(
     val searchScreenVM = hiltViewModel<SearchScreenVM>()
     val sharedAnimePlayerScreenVM = hiltViewModel<SharedAnimePlayerScreenVM>()
 
+    //Collect here to don't fetch every time user comes on screen
+    val titlesByFilters = searchScreenVM.titlesByAdvancedQuery.collectAsLazyPagingItems()
+
     NavHost(
         navController = navController,
         startDestination = HomeScreenRoute
@@ -59,7 +63,8 @@ fun NavGraph(
             navController = navController,
             bigScreen = bigScreen,
             commonVM = commonVM,
-            searchScreenVM = searchScreenVM
+            searchScreenVM = searchScreenVM,
+            titlesByFilters = titlesByFilters
         )
 
         settingsScreen(

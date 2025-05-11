@@ -25,10 +25,12 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.anime_screen.navigation.AnimeScreenRoute
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
+import com.example.data.remote.models.titles_list_response.Item0
 import com.example.design_system.sections.EmptyContentSection
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarAction
@@ -48,7 +50,8 @@ fun SearchScreen(
     navController: NavController,
     bigScreen: Boolean,
     commonVM: CommonVM,
-    viewModel: SearchScreenVM
+    viewModel: SearchScreenVM,
+    titlesByFilters: LazyPagingItems<Item0>
 ) {
     //Snackbars stuff
     val snackbarHostState = remember { SnackbarHostState() }
@@ -143,7 +146,6 @@ fun SearchScreen(
         )
     }
 
-    val titlesByFilters = viewModel.titlesByAdvancedQuery.collectAsLazyPagingItems()
     var isError by rememberSaveable { mutableStateOf(false) }
     LaunchedEffect(titlesByFilters.loadState.refresh, titlesByFilters.itemCount) {
         if(titlesByFilters.loadState.refresh is LoadState.Error) {

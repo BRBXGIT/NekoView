@@ -44,6 +44,7 @@ import com.example.anime_screen.common.SharedAnimePlayerScreenVM
 import com.example.anime_screen.navigation.PlayerScreenRoute
 import com.example.common.CommonIntent
 import com.example.common.CommonVM
+import com.example.data.remote.models.user_favorites_ids.Item0
 import com.example.data.remote.utils.Utils
 import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
@@ -131,12 +132,26 @@ fun AnimeScreen(
                                 userFavoritesIdsResponse.list.drop(dropIndex)
                             )
                         )
+                        val list = userFavoritesIdsResponse.list.toMutableList()
+                        list -= Item0(id = titleId)
+                        commonVM.sendIntent(
+                            CommonIntent.ChangeFeatured(
+                                featured = list
+                            )
+                        )
                         commonVM.sendIntent(CommonIntent.FavoritesNeedReload(true))
                     } else {
                         userFavoritesIds += titleId
                         isFeatured = true
                         viewModel.sendIntent(AnimeScreenIntent.AddTitleToFavorites(titleId))
+                        val list = userFavoritesIdsResponse.list.toMutableList()
+                        list += Item0(id = titleId)
                         commonVM.sendIntent(CommonIntent.FavoritesNeedReload(true))
+                        commonVM.sendIntent(
+                            CommonIntent.ChangeFeatured(
+                                featured = list
+                            )
+                        )
                     }
                 },
                 loadingState = animeScreenState.isLoading,
