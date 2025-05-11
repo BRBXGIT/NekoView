@@ -23,7 +23,6 @@ import com.example.design_system.theme.NekoViewIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FeatureScreenTopBar(
-    onSearchClick: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     loadingState: Boolean
 ) {
@@ -32,16 +31,6 @@ fun FeatureScreenTopBar(
             scrollBehavior = scrollBehavior,
             title = {
                 Text(text = "Избранное")
-            },
-            actions = {
-                IconButton(
-                    onClick = onSearchClick
-                ) {
-                    Icon(
-                        painter = painterResource(NekoViewIcons.Magnifier),
-                        contentDescription = null
-                    )
-                }
             }
         )
 

@@ -18,4 +18,5 @@ sealed class CommonIntent {
     data object FetchAutoPlay: CommonIntent()
     data class FavoritesNeedReload(val reload: Boolean): CommonIntent()
     data class ChangeFeatured(val featured: List<Item0>): CommonIntent()
+    data class ChangeSessionToken(val token: String): CommonIntent()
 }

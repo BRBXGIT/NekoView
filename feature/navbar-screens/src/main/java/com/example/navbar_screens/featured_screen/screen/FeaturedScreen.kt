@@ -114,7 +114,6 @@ fun FeaturedScreen(
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) },
         topBar = {
             FeatureScreenTopBar(
-                onSearchClick = {  },
                 scrollBehavior = topBarScrollBehavior,
                 loadingState = (userFavorites.loadState.refresh is LoadState.Loading) and (commonState.sessionToken != "")
             )

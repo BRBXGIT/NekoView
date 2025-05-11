@@ -13,6 +13,11 @@ import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
@@ -35,12 +40,21 @@ fun NavRail(
                 .fillMaxHeight(),
         ) {
             navItems.forEachIndexed { index, navItem ->
-                val selected = index == selectedItemIndex
+                val isSelected = index == selectedItemIndex
+                var animatedSelection by rememberSaveable { mutableStateOf(false) }
+
+                //Change local state to start animation
+                LaunchedEffect(isSelected) {
+                    animatedSelection = isSelected
+                }
+
+                val animatedImage = AnimatedImageVector.animatedVectorResource(navItem.icon)
+                val animatedPainter = rememberAnimatedVectorPainter(animatedImageVector = animatedImage, atEnd = animatedSelection)
 
                 NavigationRailItem(
-                    selected = selected,
+                    selected = isSelected,
                     onClick = {
-                        if(!selected) {
+                        if(!isSelected) {
                             onNavItemClick(index, navItem.destination)
                         }
                     },
@@ -48,9 +62,8 @@ fun NavRail(
                         val image = AnimatedImageVector.animatedVectorResource(navItem.icon)
                         Image(
                             colorFilter = ColorFilter.tint(mColors.onSecondaryContainer),
-                            painter = rememberAnimatedVectorPainter(image, selected),
+                            painter = animatedPainter,
                             contentDescription = null,
-                            contentScale = ContentScale.Crop
                         )
                     },
                     label = {

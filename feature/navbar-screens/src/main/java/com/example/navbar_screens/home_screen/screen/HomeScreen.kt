@@ -186,7 +186,6 @@ fun HomeScreen(
                         }
                     } else {
                         TitlesUpdatesLVGSection(
-                            showRandomButton = false,
                             titles = titlesByQuery,
                             onTitleClick = { navController.navigate(AnimeScreenRoute(it)) }
                         )

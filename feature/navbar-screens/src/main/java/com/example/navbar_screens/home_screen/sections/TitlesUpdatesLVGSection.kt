@@ -22,7 +22,6 @@ import com.example.design_system.theme.mShapes
 fun TitlesUpdatesLVGSection(
     titles: LazyPagingItems<Item0>,
     onTitleClick: (Int) -> Unit,
-    showRandomButton: Boolean = true,
 ) {
     LazyVerticalGrid(
         verticalArrangement = Arrangement.spacedBy(16.dp),
@@ -34,24 +33,6 @@ fun TitlesUpdatesLVGSection(
             vertical = 16.dp
         )
     ) {
-        if(showRandomButton) {
-            if(titles.itemCount > 0) {
-                item(
-                    span = { GridItemSpan(maxLineSpan) }
-                ) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = mShapes.small,
-                        onClick = {  }
-                    ) {
-                        Text(
-                            text = "Случайный релиз"
-                        )
-                    }
-                }
-            }
-        }
-
         items(titles.itemCount, key = { it }) { index ->
             val currentTitle = titles[index]
 

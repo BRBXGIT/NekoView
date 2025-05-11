@@ -195,6 +195,7 @@ class CommonVM @Inject constructor(
                     list = intent.featured
                 )
             }
+            is CommonIntent.ChangeSessionToken -> { changeSessionToken(intent.token) }
         }
     }
 
@@ -283,6 +284,12 @@ class CommonVM @Inject constructor(
             repository.getAutoplay().collect {
                 _autoPlay.value = it
             }
+        }
+    }
+
+    private fun changeSessionToken(token: String) {
+        viewModelScope.launch(dispatcherIo) {
+            repository.saveUserSessionToken(token)
         }
     }
 
