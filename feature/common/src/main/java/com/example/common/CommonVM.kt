@@ -2,9 +2,10 @@ package com.example.common
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.common.dispatchers.Dispatcher
+import com.example.common.dispatchers.NekoViewDispatchers
 import com.example.data.domain.CommonRepo
+import com.example.data.remote.models.user_favorites_ids.UserFavoritesIdsResponse
 import com.example.data.remote.utils.onError
 import com.example.data.remote.utils.onSuccess
 import com.example.design_system.snackbars.SnackbarAction
@@ -24,6 +25,56 @@ class CommonVM @Inject constructor(
     private val repository: CommonRepo,
     @Dispatcher(NekoViewDispatchers.IO) private val dispatcherIo: CoroutineDispatcher
 ): ViewModel() {
+
+    private val _userFavoritesIds = MutableStateFlow(UserFavoritesIdsResponse())
+    val userFavoritesIds = _userFavoritesIds.stateIn(
+        viewModelScope,
+        SharingStarted.Lazily,
+        UserFavoritesIdsResponse()
+    )
+
+    private fun fetchUserFavoriteTitleIds(
+        favoritesAmount: Int,
+        sessionToken: String
+    ) {
+        viewModelScope.launch(dispatcherIo) {
+            val response = repository.getUserFavoritesIds(sessionToken, favoritesAmount)
+            response.onError { error ->
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        message = "ERROR: $error, ошибка загрузки избранных",
+                        action = SnackbarAction(
+                            name = "Retry",
+                            action = { fetchUserFavoritesAmount(sessionToken) }
+                        )
+                    )
+                )
+            }
+            response.onSuccess { data ->
+                _userFavoritesIds.value = data
+            }
+        }
+    }
+
+    private fun fetchUserFavoritesAmount(sessionToken: String) {
+        viewModelScope.launch(dispatcherIo) {
+            val response = repository.getUserFavoritesAmount(sessionToken)
+            response.onError { error ->
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        message = "ERROR: $error, ошибка загрузки избранных",
+                        action = SnackbarAction(
+                            name = "Retry",
+                            action = { fetchUserFavoritesAmount(sessionToken) }
+                        )
+                    )
+                )
+            }
+            response.onSuccess { data ->
+                fetchUserFavoriteTitleIds(data.pagination.totalItems, sessionToken)
+            }
+        }
+    }
 
     private val _favoritesNeedReload = MutableStateFlow(false)
     val favoritesNeedReload = _favoritesNeedReload.stateIn(
@@ -50,6 +101,9 @@ class CommonVM @Inject constructor(
                     state.copy(
                         sessionToken = sessionToken
                     )
+                }
+                if(sessionToken != "") {
+                    fetchUserFavoritesAmount(_commonState.value.sessionToken)
                 }
             }
         }
@@ -136,6 +190,11 @@ class CommonVM @Inject constructor(
             is CommonIntent.FetchShowSkipOpeningButton -> { fetchShowSkipOpeningButton() }
             is CommonIntent.FetchVideoQuality -> { fetchVideoQuality() }
             is CommonIntent.FavoritesNeedReload -> { setFavoritesReload(intent.reload) }
+            is CommonIntent.ChangeFeatured -> {
+                _userFavoritesIds.value = _userFavoritesIds.value.copy(
+                    list = intent.featured
+                )
+            }
         }
     }
 

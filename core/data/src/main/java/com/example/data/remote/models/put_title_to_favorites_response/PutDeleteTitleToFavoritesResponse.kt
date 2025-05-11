@@ -5,7 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PutTitleToFavoritesResponse(
+data class PutDeleteTitleToFavoritesResponse(
     @SerialName("success")
     val success: Boolean = false
 )

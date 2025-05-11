@@ -10,6 +10,4 @@ import kotlinx.coroutines.flow.Flow
 interface FavoritesScreenRepo {
 
     fun getUserFavorites(sessionToken: String = ""): Flow<PagingData<Item0>>
-
-    suspend fun getUserFavoritesAmount(sessionToken: String): Result<FavouritesAmountResponse, NetworkError>
 }

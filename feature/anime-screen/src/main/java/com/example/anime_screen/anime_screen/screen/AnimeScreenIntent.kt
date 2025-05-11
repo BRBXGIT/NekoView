@@ -11,4 +11,5 @@ sealed class AnimeScreenIntent {
     data class AddTitleToWatchedEps(val titleId: Int): AnimeScreenIntent()
     data class AddEpisodeToWatchedEps(val titleId: Int, val episode: Int): AnimeScreenIntent()
     data class FetchWatchedEps(val titleId: Int): AnimeScreenIntent()
+    data class DeleteTitleFromFavorites(val titleId: Int): AnimeScreenIntent()
 }

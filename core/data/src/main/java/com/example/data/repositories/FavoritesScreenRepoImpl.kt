@@ -26,8 +26,4 @@ class FavoritesScreenRepoImpl @Inject constructor(
             pagingSourceFactory = { UserFavoritesPagingSource(ktorClient, sessionToken) }
         ).flow
     }
-
-    override suspend fun getUserFavoritesAmount(sessionToken: String): Result<FavouritesAmountResponse, NetworkError> {
-        return ktorClient.getUserFavoritesAmount(sessionToken)
-    }
 }

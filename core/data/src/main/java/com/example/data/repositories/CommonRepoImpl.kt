@@ -3,6 +3,8 @@ package com.example.data.repositories
 import com.example.data.domain.CommonRepo
 import com.example.data.local.data_store.NekoViewDataStore
 import com.example.data.remote.ktor.CommonKtorClient
+import com.example.data.remote.models.favourites_amount_response.FavouritesAmountResponse
+import com.example.data.remote.models.user_favorites_ids.UserFavoritesIdsResponse
 import com.example.data.remote.models.user_session_token_response.UserSessionTokenResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
@@ -19,6 +21,17 @@ class CommonRepoImpl @Inject constructor(
         password: String
     ): Result<UserSessionTokenResponse, NetworkError> {
         return ktorClient.getUserSessionToken(email, password)
+    }
+
+    override suspend fun getUserFavoritesIds(
+        sessionToken: String,
+        favoritesAmount: Int
+    ): Result<UserFavoritesIdsResponse, NetworkError> {
+        return ktorClient.getUserFavoritesIds(favoritesAmount, sessionToken)
+    }
+
+    override suspend fun getUserFavoritesAmount(sessionToken: String): Result<FavouritesAmountResponse, NetworkError> {
+        return ktorClient.getUserFavoritesAmount(sessionToken)
     }
 
     override suspend fun saveUserSessionToken(token: String) {

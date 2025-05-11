@@ -22,10 +22,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -41,10 +37,9 @@ fun AnimeScreenTopBar(
     onHeartIconClick: () -> Unit,
     onBackClick: () -> Unit,
     loadingState: Boolean,
-    scrollBehavior: TopAppBarScrollBehavior
+    scrollBehavior: TopAppBarScrollBehavior,
+    isFeatured: Boolean
 ) {
-    var isFeatured by rememberSaveable { mutableStateOf(false) }
-
     Column {
         TopAppBar(
             colors = TopAppBarDefaults.topAppBarColors(
@@ -68,7 +63,6 @@ fun AnimeScreenTopBar(
                 if(showHeartIcon) {
                     IconButton(
                         onClick = {
-                            isFeatured = !isFeatured
                             onHeartIconClick()
                         }
                     ) {

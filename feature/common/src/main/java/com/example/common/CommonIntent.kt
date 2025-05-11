@@ -1,5 +1,7 @@
 package com.example.common
 
+import com.example.data.remote.models.user_favorites_ids.Item0
+
 sealed class CommonIntent {
     data class SetNavIndex(val index: Int): CommonIntent()
     data class GetUserToken(
@@ -15,4 +17,5 @@ sealed class CommonIntent {
     data object ChangeAutoplay: CommonIntent()
     data object FetchAutoPlay: CommonIntent()
     data class FavoritesNeedReload(val reload: Boolean): CommonIntent()
+    data class ChangeFeatured(val featured: List<Item0>): CommonIntent()
 }

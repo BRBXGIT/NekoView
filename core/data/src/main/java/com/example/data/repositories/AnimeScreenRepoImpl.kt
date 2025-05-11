@@ -4,7 +4,7 @@ import com.example.data.domain.AnimeScreenRepo
 import com.example.data.local.watched_eps_db.TitleWatchedEps
 import com.example.data.local.watched_eps_db.TitleWatchedEpsDao
 import com.example.data.remote.ktor.AnimeScreenKtorClient
-import com.example.data.remote.models.put_title_to_favorites_response.PutTitleToFavoritesResponse
+import com.example.data.remote.models.put_title_to_favorites_response.PutDeleteTitleToFavoritesResponse
 import com.example.data.remote.models.title_details_response.TitleDetailsResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
@@ -24,8 +24,15 @@ class AnimeScreenRepoImpl @Inject constructor(
     override suspend fun addTitleToFavorites(
         sessionToken: String,
         id: Int
-    ): Result<PutTitleToFavoritesResponse, NetworkError> {
+    ): Result<PutDeleteTitleToFavoritesResponse, NetworkError> {
         return ktorClient.addTitleToFavorites(id, sessionToken)
+    }
+
+    override suspend fun deleteTitleToFavorites(
+        sessionToken: String,
+        id: Int
+    ): Result<PutDeleteTitleToFavoritesResponse, NetworkError> {
+        return ktorClient.deleteTitleToFavorites(id, sessionToken)
     }
 
     override suspend fun addWatchedEpisode(titleId: Int, episode: Int) {

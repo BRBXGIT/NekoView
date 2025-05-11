@@ -17,6 +17,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -137,10 +138,51 @@ class SharedAnimePlayerScreenVM @Inject constructor(
 
     private fun fetchWatchedEps(titleId: Int) {
         viewModelScope.launch(dispatcherIo) {
-            repository.getWatchedEps(titleId).collect {
-                _animeScreenState.value = _animeScreenState.value.copy(
-                    watchedEps = it[0].watchedEps
+            _animeScreenState.value = _animeScreenState.value.copy(
+                watchedEps = repository.getWatchedEps(titleId).first()[0].watchedEps
+            )
+        }
+    }
+
+    private fun deleteTitleFromFavorites(id: Int) {
+        viewModelScope.launch(dispatcherIo) {
+            val response = repository.deleteTitleToFavorites(
+                sessionToken = _animeScreenState.value.userSessionToken,
+                id = id
+            )
+            response.onError { error ->
+                SnackbarController.sendEvent(
+                    SnackbarEvent(
+                        message = "$error",
+                        action = SnackbarAction(
+                            name = "Retry",
+                            action = {
+                                sendIntent(AnimeScreenIntent.AddTitleToFavorites(id))
+                            }
+                        )
+                    )
                 )
+            }
+            response.onSuccess { data ->
+                if(data.success) {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            message = "Удалено из избранного",
+                        )
+                    )
+                } else {
+                    SnackbarController.sendEvent(
+                        SnackbarEvent(
+                            message = "Что-то пошло не так",
+                            action = SnackbarAction(
+                                name = "Retry",
+                                action = {
+                                    sendIntent(AnimeScreenIntent.AddTitleToFavorites(id))
+                                }
+                            )
+                        )
+                    )
+                }
             }
         }
     }
@@ -155,6 +197,7 @@ class SharedAnimePlayerScreenVM @Inject constructor(
             is AnimeScreenIntent.AddTitleToWatchedEps -> addTitleToWatchedEps(intent.titleId)
             is AnimeScreenIntent.AddEpisodeToWatchedEps -> addEpisodeToWatchedEps(intent.titleId, intent.episode)
             is AnimeScreenIntent.FetchWatchedEps -> fetchWatchedEps(intent.titleId)
+            is AnimeScreenIntent.DeleteTitleFromFavorites -> deleteTitleFromFavorites(intent.titleId)
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.data.remote.ktor
 
-import com.example.data.remote.models.favourites_amount_response.FavouritesAmountResponse
 import com.example.data.remote.models.titles_list_response.TitlesListResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
@@ -33,27 +32,6 @@ class FavoritesScreenKtorClient(
 
         return if(response.status.value in 200..299) {
             Result.Success(response.body<TitlesListResponse>())
-        } else {
-            processNetworkErrors(response.status.value)
-        }
-    }
-
-    suspend fun getUserFavoritesAmount(
-        sessionToken: String
-    ): Result<FavouritesAmountResponse, NetworkError> {
-        val response = try {
-            httpClient.get(
-                urlString = "${Utils.BASE_URL}/user/favorites?session=$sessionToken&filter=pagination"
-            )
-        } catch(e: IOException) {
-            return when(e) {
-                is SocketTimeoutException -> Result.Error(NetworkError.REQUEST_TIMEOUT)
-                else -> Result.Error(NetworkError.NO_INTERNET)
-            }
-        }
-
-        return if(response.status.value in 200..299) {
-            Result.Success(response.body<FavouritesAmountResponse>())
         } else {
             processNetworkErrors(response.status.value)
         }

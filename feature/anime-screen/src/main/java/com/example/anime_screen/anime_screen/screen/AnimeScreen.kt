@@ -20,8 +20,12 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
@@ -45,6 +49,7 @@ import com.example.design_system.cards.DesignUtils
 import com.example.design_system.snackbars.ObserveAsEvents
 import com.example.design_system.snackbars.SnackbarController
 import com.example.design_system.theme.mColors
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,6 +62,7 @@ fun AnimeScreen(
 ) {
     LaunchedEffect(titleId) {
         viewModel.sendIntent(AnimeScreenIntent.AddTitleToWatchedEps(titleId))
+        delay(1000)
         viewModel.sendIntent(AnimeScreenIntent.FetchWatchedEps(titleId))
     }
 
@@ -95,6 +101,19 @@ fun AnimeScreen(
     }
 
     val topBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+    val userFavoritesIdsResponse by commonVM.userFavoritesIds.collectAsStateWithLifecycle()
+
+    var isFeatured by rememberSaveable { mutableStateOf(false) }
+    val userFavoritesIds = emptyList<Int>().toMutableStateList()
+    LaunchedEffect(userFavoritesIdsResponse) {
+        if(userFavoritesIdsResponse.list.isNotEmpty()) {
+            userFavoritesIdsResponse.list.forEach {
+                userFavoritesIds += it.id
+            }
+        }
+        isFeatured = titleId in userFavoritesIds
+    }
+
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
@@ -102,12 +121,28 @@ fun AnimeScreen(
                 showHeartIcon = animeScreenState.userSessionToken != "",
                 onBackClick = { navController.navigateUp() },
                 onHeartIconClick = {
-                    viewModel.sendIntent(AnimeScreenIntent.AddTitleToFavorites(titleId))
-                    commonVM.sendIntent(CommonIntent.FavoritesNeedReload(true))
+                    if(isFeatured) {
+                        isFeatured = false
+                        viewModel.sendIntent(AnimeScreenIntent.DeleteTitleFromFavorites(titleId))
+                        val dropIndex = userFavoritesIds.indexOf(titleId)
+                        userFavoritesIds.drop(dropIndex)
+                        commonVM.sendIntent(
+                            CommonIntent.ChangeFeatured(
+                                userFavoritesIdsResponse.list.drop(dropIndex)
+                            )
+                        )
+                        commonVM.sendIntent(CommonIntent.FavoritesNeedReload(true))
+                    } else {
+                        userFavoritesIds += titleId
+                        isFeatured = true
+                        viewModel.sendIntent(AnimeScreenIntent.AddTitleToFavorites(titleId))
+                        commonVM.sendIntent(CommonIntent.FavoritesNeedReload(true))
+                    }
                 },
                 loadingState = animeScreenState.isLoading,
                 scrollBehavior = topBarScrollBehavior,
                 titleName = animeScreenState.title.names.ru,
+                isFeatured = isFeatured
             )
         },
         modifier = Modifier

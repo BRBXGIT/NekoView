@@ -1,5 +1,7 @@
 package com.example.data.domain
 
+import com.example.data.remote.models.favourites_amount_response.FavouritesAmountResponse
+import com.example.data.remote.models.user_favorites_ids.UserFavoritesIdsResponse
 import com.example.data.remote.models.user_session_token_response.UserSessionTokenResponse
 import com.example.data.remote.utils.NetworkError
 import com.example.data.remote.utils.Result
@@ -15,6 +17,15 @@ interface CommonRepo {
     suspend fun saveUserSessionToken(
         token: String
     )
+
+    suspend fun getUserFavoritesAmount(
+        sessionToken: String
+    ): Result<FavouritesAmountResponse, NetworkError>
+
+    suspend fun getUserFavoritesIds(
+        sessionToken: String,
+        favoritesAmount: Int
+    ): Result<UserFavoritesIdsResponse, NetworkError>
 
     fun getUserSessionTokenFromDataStore(): Flow<String>
 
